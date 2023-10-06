@@ -44,7 +44,7 @@ public class UsersController {
             usersService.saveUsers(users);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
-            return "member/memberForm";
+            return "users/usersForm";
         }
 
         return "redirect:/";
