@@ -20,26 +20,17 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/users")
 @RequiredArgsConstructor
-public class usersController {
+public class UsersController {
 
     private final PasswordEncoder passwordEncoder;
     private final UsersService usersService;
 
 
     @GetMapping(value = "/new")
-    public String usersForm(Model model){
+    public String memberForm(Model model){
         model.addAttribute("usersFormDto", new UsersFormDto());
         return "users/usersForm";
     }
-//
-//    @PostMapping(value = "/new")
-//    public String usersForm(UsersFormDto usersFormDto){
-//        Users users = Users.createUsers(usersFormDto,passwordEncoder);
-//        usersService.saveUsers(users);
-//
-//        return "redirect:/";
-//    }
-
 
     @PostMapping(value = "/new")
     public String newUsers(@Valid UsersFormDto usersFormDto, BindingResult bindingResult, Model model){
@@ -53,11 +44,12 @@ public class usersController {
             usersService.saveUsers(users);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
-            return "users/usersForm";
+            return "member/memberForm";
         }
 
         return "redirect:/";
     }
+
 
     @GetMapping(value = "/login")
     public String loginMember(){

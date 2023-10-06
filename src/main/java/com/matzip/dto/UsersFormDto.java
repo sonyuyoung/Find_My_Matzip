@@ -45,14 +45,16 @@ public class UsersFormDto {
     private String userid;
     private String user_pwd;
     private String user_name;
-    private LocalDateTime user_birth;
+
+//    private LocalDateTime user_birth;
     private String user_address;
-    private String user_image;
-    private int user_level;
+//    private String user_image;
+//    private int user_level;
     private UserRole user_role;
     private String user_phone;
-    private boolean user_sex;
-    private int user_following;
-    private int user_followed;
+//    private boolean user_sex;
+//    private int user_following;
+//    private int user_followed;
 
-    }
+
+}
