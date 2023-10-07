@@ -40,7 +40,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
             UsersFormDto usersFormDto = new UsersFormDto();
             usersFormDto.setUserid("john_doe");
             usersFormDto.setUser_name("John Doe");
-
             usersFormDto.setUser_address("123 Main Street, City");
             usersFormDto.setUser_phone("123-456-7890");
             usersFormDto.setUser_pwd(user_pwd);
@@ -52,20 +51,20 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
         @Test
         @DisplayName("로그인 성공 테스트")
         public void loginSuccessTest() throws Exception {
-            String userid = "test";
+            String user_name = "asd3205";
             String user_pwd = "1234";
-            this.createUsers(userid, user_pwd);
-            mockMvc.perform(formLogin().userParameter("userid")
+            this.createUsers(user_name, user_pwd);
+            mockMvc.perform(formLogin().userParameter("username")
                             .loginProcessingUrl("/users/login")
-                            .user(userid).password(user_pwd))
+                            .user(user_name).password(user_pwd))
                     .andExpect(SecurityMockMvcResultMatchers.authenticated());
         }
 
-    }
+//
 //        @Test
 //        @DisplayName("로그인 실패 테스트")
-//        public void loginFailTest() throws Exception{
-//            String userid = "test";
+//        public void loginFailTest() throws Exception {
+//            String userid = "asd3205";
 //            String user_pwd = "1234";
 //            this.createUsers(userid, user_pwd);
 //            mockMvc.perform(formLogin().userParameter("userid")
@@ -74,3 +73,4 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 //                    .andExpect(SecurityMockMvcResultMatchers.unauthenticated());
 //        }
 
+    }

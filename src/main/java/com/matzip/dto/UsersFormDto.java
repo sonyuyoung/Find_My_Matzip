@@ -53,8 +53,8 @@ public class UsersFormDto {
     private UserRole user_role;
     private String user_phone;
 //    private boolean user_sex;
-//    private int user_following;
-//    private int user_followed;
+    private int user_following;
+    private int user_followed;
 
 
 }

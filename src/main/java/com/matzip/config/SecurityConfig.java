@@ -33,15 +33,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
         ;
 
-        http.authorizeRequests()
-                .mvcMatchers("/", "/users/**").permitAll()
-                .mvcMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-        ;
-
-        http.exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-        ;
+//        http.authorizeRequests()
+//                .mvcMatchers("/", "/users/**").permitAll()
+//                .mvcMatchers("/admin/**").hasRole("ADMIN")
+//                .anyRequest().authenticated()
+//        ;
+//
+//        http.exceptionHandling()
+//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+//        ;
     }
 
     @Bean
