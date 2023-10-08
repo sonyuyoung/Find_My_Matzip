@@ -1,10 +1,10 @@
 package com.matzip.dto;
 
 import com.matzip.constant.UserRole;
+import com.matzip.entity.Users;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
+import org.modelmapper.ModelMapper;
 
 @Getter @Setter
 public class UsersFormDto {
@@ -45,16 +45,23 @@ public class UsersFormDto {
     private String userid;
     private String user_pwd;
     private String user_name;
-
-//    private LocalDateTime user_birth;
     private String user_address;
-//    private String user_image;
-//    private int user_level;
     private UserRole user_role;
     private String user_phone;
+    private String user_image;
+//    private LocalDateTime user_birth;
+//    private int user_level;
 //    private boolean user_sex;
-    private int user_following;
-    private int user_followed;
+
+    private static ModelMapper modelMapper = new ModelMapper();
+
+    public Users createUsers(){
+        return modelMapper.map(this, Users.class);
+    }
+
+    public static UsersFormDto of(Users users){
+        return modelMapper.map(users,UsersFormDto.class);
+    }
 
 
 }

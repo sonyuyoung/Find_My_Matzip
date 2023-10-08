@@ -1,18 +1,13 @@
 package com.matzip.entity;
 
 import com.matzip.constant.UserRole;
-
 import com.matzip.dto.UsersFormDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -32,26 +27,18 @@ public class Users {
     @Column(nullable = false)
     private String user_name; //회원 이름
 
-    @Column(nullable = false)
     private String user_address; //주소
 
-    @Column(nullable = false)
     private String user_phone; //전화번호
-
-
 
     @Enumerated(EnumType.STRING)
     private UserRole user_role; //역할(ADMIN,USER)
 
-//    private LocalDateTime regTime; //가입 날짜
-//
-@Column(nullable = true)
-private int user_following = 0; //팔로잉 수, set default value to 0
+    private String user_image; //프로필 이미지
+
+    //private LocalDateTime regTime; //가입 날짜
 
 
-
-    @Column(nullable = true)
-    private int user_followed = 0; //팔로워 수, set default value to 0
 
 
 
@@ -64,7 +51,7 @@ private int user_following = 0; //팔로잉 수, set default value to 0
         users.setUser_address(usersFormDto.getUser_address());
         users.setUser_phone(usersFormDto.getUser_phone());
         users.setUser_role(UserRole.ADMIN);
-
+        users.setUser_image(usersFormDto.getUser_image());
         return users;
     }
 }
