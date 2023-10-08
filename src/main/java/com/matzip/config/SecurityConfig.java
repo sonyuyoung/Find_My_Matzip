@@ -23,25 +23,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
-                .loginPage("/users/login")
-                .defaultSuccessUrl("/")
-                .usernameParameter("userid")
-                .failureUrl("/users/login/error")
+                .loginPage("/users/login") //사용자 정의 로그인 페이지
+                .defaultSuccessUrl("/") // 로그인 성공 후 이동 페이지
+                .usernameParameter("userid")// 아이디 파라미터명 설정
+                .passwordParameter("user_pwd")
+                .failureUrl("/users/login/error") // 로그인 실패 후 이동 페이지
                 .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
-                .logoutSuccessUrl("/")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout")) //사용자 정의 로그아웃 페이지
+                .logoutSuccessUrl("/") // 로그아웃 후 이동 페이지
         ;
 
-//        http.authorizeRequests()
-//                .mvcMatchers("/", "/users/**").permitAll()
-//                .mvcMatchers("/admin/**").hasRole("ADMIN")
-//                .anyRequest().authenticated()
-//        ;
-//
-//        http.exceptionHandling()
-//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-//        ;
+        http.authorizeRequests()
+                .mvcMatchers("/", "/users/**").permitAll()
+                .mvcMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+        ;
+
+        http.exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+        ;
     }
 
     @Bean

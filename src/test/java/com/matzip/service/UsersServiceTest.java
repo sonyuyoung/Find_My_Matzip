@@ -7,11 +7,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import static com.matzip.entity.Users.createUsers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -36,32 +37,43 @@ class UsersServiceTest {
         return Users.createUsers(usersFormDto, passwordEncoder);
 
     }
+
+    //멀티 파트로 이미지 파일 생성
+    MultipartFile createMultipartFile() throws Exception{
+        //임시 저장소에, 경로 및 , 파일명 확장자 지정
+        String path = "C:/matzip/users/";
+        String imageName = "image.jpg";
+        MockMultipartFile multipartFile;
+        multipartFile = new MockMultipartFile(path, imageName, "image/jpg", new byte[1]);
+
+        return multipartFile;
+    }
+
 @Test
     @DisplayName("회원가입테스트")
-    public void saveUserTest(){
+    public void saveUserTest() throws Exception {
     Users users = createUsers();
-    Users saveUsers = usersService.saveUsers(users);
+    Users savedUsers = usersService.saveUsers(users,createMultipartFile());
     System.out.println("users.getUserid(): "+users.getUserid());
     System.out.println("users.getUser_pwd(): "+users.getUser_pwd());
-    System.out.println("saveUsers(): "+saveUsers.getUserid());
-    assertEquals(users.getUserid(),saveUsers.getUserid());
-    assertEquals(users.getUser_name(),saveUsers.getUser_name());
-    assertEquals(users.getUser_pwd(),saveUsers.getUser_pwd());
-    assertEquals(users.getUser_address(),saveUsers.getUser_address());
-    assertEquals(users.getUser_phone(),saveUsers.getUser_phone());
-    assertEquals(users.getUser_role(),saveUsers.getUser_role());
-
-
+    System.out.println("saveUsers(): "+savedUsers.getUserid());
+    assertEquals(users.getUserid(),savedUsers.getUserid());
+    assertEquals(users.getUser_name(),savedUsers.getUser_name());
+    assertEquals(users.getUser_pwd(),savedUsers.getUser_pwd());
+    assertEquals(users.getUser_address(),savedUsers.getUser_address());
+    assertEquals(users.getUser_phone(),savedUsers.getUser_phone());
+    assertEquals(users.getUser_role(),savedUsers.getUser_role());
+    assertEquals(users.getUser_image(), savedUsers.getUser_image());
 }
 
     @Test
     @DisplayName("중복 회원 가입 테스트")
-    public void saveDuplicateMemberTest(){
-        Users user1 = createUsers();
-        Users user2 = createUsers();
-        usersService.saveUsers(user1);
+    public void saveDuplicateUsersTest() throws Exception {
+        Users users1 = createUsers();
+        Users users2 = createUsers();
+        usersService.saveUsers(users1,createMultipartFile());
         Throwable e = assertThrows(IllegalStateException.class, () -> {
-            usersService.saveUsers(user2);});
+            usersService.saveUsers(users2,createMultipartFile());});
         assertEquals("이미 가입된 회원입니다.", e.getMessage());
     }
 }
