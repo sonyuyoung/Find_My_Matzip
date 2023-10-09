@@ -49,7 +49,7 @@ public class UsersController {
             throw new RuntimeException(e);
         }
 
-        return "redirect:/";
+        return "/users/usersLoginForm";
     }
 
 
