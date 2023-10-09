@@ -3,6 +3,10 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
     <meta charset="UTF-8">
+
+    <!--뷰포트 설정 : 너비를 기기의 너비로 설정-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Title</title>
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
 
@@ -32,7 +36,9 @@
 
 <div th:replace="fragments/header::header"></div>
 
-<div layout:fragment="content" class="content">
+<div class="body_content">
+    <div layout:fragment="content" class="content">
+</div>
 
 </div>
 

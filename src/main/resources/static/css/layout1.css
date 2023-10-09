@@ -28,8 +28,8 @@ body {
     top: 48px; /* Height of navbar */
     height: calc(100vh - 48px);
     padding-top: .5rem;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    overflow-x: hidden; /* x축 : viewport  < content 의 경우 숨기기 */
+    overflow-y: auto; /* y축 : viewport < content 일때 Scrollable contents */
 }
 
 .sidebar .nav-link {

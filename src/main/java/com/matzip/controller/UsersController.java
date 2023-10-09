@@ -62,6 +62,10 @@ public class UsersController {
     public String loginError(Model model){
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
         return "/users/usersLoginForm";
+    }
 
-}
+    @GetMapping(value = "/profile")
+    public String profileForm(){
+        return "users/profileForm";
+    }
 }
