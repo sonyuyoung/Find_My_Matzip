@@ -19,7 +19,7 @@ public class FileService {
         FileOutputStream fos = new FileOutputStream(fileUploadFullUrl);
         fos.write(fileData);
         fos.close();
-        return savedFileName;
+        return fileUploadFullUrl;
     }
 
     public void deleteFile(String filePath) throws Exception{

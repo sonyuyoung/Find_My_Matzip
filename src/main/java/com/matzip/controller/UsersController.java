@@ -55,6 +55,30 @@ public class UsersController {
         return "/users/usersLoginForm";
     }
 
+    //modUsers폼 호출
+    @GetMapping(value = "/modUsersForm")
+    public String modUsersForm(Principal principal,Model model){
+        String userid = principal.getName();
+        Users users = usersRepository.findByUserid(userid);
+        UsersFormDto usersFormDto = UsersFormDto.of(users);
+
+        model.addAttribute("usersFormDto", usersFormDto);
+        return "users/modUsersForm";
+    }
+
+    /*@Override
+    @RequestMapping(value = "/member/updateMember.do", method = RequestMethod.POST)
+    public ModelAndView updateMember(@ModelAttribute("memberVO") MemberVO memberVO, HttpServletRequest request,
+                                     HttpServletResponse response) throws Exception {
+        request.setCharacterEncoding("utf-8");
+//			MemberVO memberVO = new MemberVO();
+//			bind(request, memberVO);
+        int result = 0;
+        result = memberService.updateMember(memberVO);
+        ModelAndView mav = new ModelAndView("redirect:/member/listMembers.do");
+        return mav;
+    }*/
+
 
     @GetMapping(value = "/login")
     public String loginMember(){
@@ -69,9 +93,16 @@ public class UsersController {
 
     @GetMapping(value = "/profile")
     public String profileForm(Principal principal,Model model){
-        String userid = principal.getName(); //회원 id 받기
-        Users users = usersRepository.findByUserid(userid);
-        model.addAttribute("users",users);
+        //myBoardList : 내 게시글 리스트
+       /* List<BoardDto> myBoardList = boardService.getBoardList(principal.getName());
+        model.addAttribute("myBoardList", myBoardList);*/
+
+
+        //현재 로그인된 users 객체 model에 추가
+        /*String userid = principal.getName();
+        Users users = usersRepository.findByUserid(userid);*/
+
+        model.addAttribute("userid",principal.getName());
         return "users/profileForm";
     }
 }

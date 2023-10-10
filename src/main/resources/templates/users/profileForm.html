@@ -21,9 +21,9 @@
                     <div class="col-8">
                         <div class="card-body">
                             <div class = "detail">
-                                <h2 th:text="${users.userid}"></h2>
+                                <h2 th:text="${userid}"></h2>
                                 <button type="button"  class="btn btn-secondary">팔로잉</button>
-                                <button type="button"  class="btn btn-secondary">프로필 편집</button>
+                                <button type="button" onClick="location.href='/users/modUsersForm'"  class="btn btn-secondary">프로필 편집</button>
                                 <button type="button" onClick="location.href='/board/boardForm'" class="btn btn-secondary">게시글 작성</button>
                             </div>
                             <div class ="detail_list">
@@ -57,5 +57,5 @@
 
 
 </div>
-
+</div>
 </html>

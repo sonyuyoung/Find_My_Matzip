@@ -63,12 +63,12 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
         @Test
         @DisplayName("로그인 성공 테스트")
         public void loginSuccessTest() throws Exception {
-            String user_name = "asd3205";
+            String userid = "asd3205";
             String user_pwd = "1234";
-            this.createUsers(user_name, user_pwd);
+            this.createUsers(userid, user_pwd);
             mockMvc.perform(formLogin().userParameter("userid")
                             .loginProcessingUrl("/users/login")
-                            .user(user_name).password(user_pwd))
+                            .user(userid).password(user_pwd))
                             .andExpect(SecurityMockMvcResultMatchers.authenticated());
         }
 
