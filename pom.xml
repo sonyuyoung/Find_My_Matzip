@@ -8,11 +8,11 @@
         <version>2.7.16</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>ch6-test1</artifactId>
+    <groupId>com.matzip</groupId>
+    <artifactId>Find_My_Matzip</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ch6-test1</name>
-    <description>ch6-test1</description>
+    <name>Find_My_Matzip</name>
+    <description>Find_My_Matzip</description>
     <properties>
         <java.version>11</java.version>
     </properties>
