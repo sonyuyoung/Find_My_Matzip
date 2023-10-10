@@ -83,6 +83,7 @@
 
     <div class="form-group">
       <!--<label class = "profile-image-label" th:for="user_image">이미지</label>-->
+      <input  type= "hidden" name="originalFileName" th:value="*{user_image}" />
       <input type="file" name="userImgFile" class="profile-image-input" onchange="readURL(this)" />
       <img id="preview" th:src="*{user_image}" width=200 height=200 th:alt="*{user_image}">
 

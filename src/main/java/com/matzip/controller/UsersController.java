@@ -69,14 +69,14 @@ public class UsersController {
     //Users 업데이트
     @PostMapping(value = "/updateUsers")
     public String updateUsers(@Valid UsersFormDto usersFormDto, BindingResult bindingResult, Model model,
-                              @RequestParam("userImgFile") MultipartFile userImgFile) throws Exception {
+                              @RequestParam("originalFileName") MultipartFile originalFileName) throws Exception {
         if(bindingResult.hasErrors()){
             return "users/modUsersForm";
         }
 
         try {
             //Users users = usersRepository.findByUserid(usersFormDto.getUserid());
-            usersService.updateUsers(usersFormDto,userImgFile);
+            usersService.updateUsers(usersFormDto,originalFileName);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
             return "users/modUsersForm";
