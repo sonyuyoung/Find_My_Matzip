@@ -28,7 +28,7 @@ public class BoardController {
         String userid = principal.getName(); //회원 id 받기
         Users users = usersRepository.findByUserid(userid);
         model.addAttribute("users",users);
-        return "/board/boardForm";
+        return "board/boardForm";
     }
 
     //게시글 작성
@@ -38,7 +38,7 @@ public class BoardController {
         //model.addAttribute("boardFormDto",boardFormDto);
         //model.addAttribute("userid",userid);
         //model.addAttribute("res_id",res_id);
-        return "/users/profile";
+        return "users/profile";
     }
 
 }

@@ -69,20 +69,27 @@ public class UsersController {
     //Users 업데이트
     @PostMapping(value = "/updateUsers")
     public String updateUsers(@Valid UsersFormDto usersFormDto, BindingResult bindingResult, Model model,
-                              @RequestParam("originalFileName") MultipartFile originalFileName) throws Exception {
+                              @RequestParam("userImgFile") MultipartFile userImgFile,
+                              Principal principal) throws Exception {
         if(bindingResult.hasErrors()){
             return "users/modUsersForm";
         }
 
         try {
             //Users users = usersRepository.findByUserid(usersFormDto.getUserid());
-            usersService.updateUsers(usersFormDto,originalFileName);
+            usersService.updateUsers(usersFormDto,userImgFile);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
             return "users/modUsersForm";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        //현재 로그인된 users 객체 model에 추가
+        String userid = principal.getName();
+        Users users = usersRepository.findByUserid(userid);
+
+        model.addAttribute("users",users);
 
         return "users/profileForm";
     }
