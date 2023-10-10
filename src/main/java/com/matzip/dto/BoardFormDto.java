@@ -17,7 +17,7 @@ import java.util.List;
 public class BoardFormDto {
 
     //1. 게시글(일반 데이터) 입력 부분
-    private Long board_No;
+    private Long boardNo;
 
     private Restaurant res_id;
 

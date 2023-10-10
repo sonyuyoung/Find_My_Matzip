@@ -2,6 +2,7 @@ package com.matzip.controller;
 
 import com.matzip.dto.UsersFormDto;
 import com.matzip.entity.Users;
+import com.matzip.repository.UsersRepository;
 import com.matzip.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UsersController {
 
+    private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsersService usersService;
 
@@ -65,7 +68,10 @@ public class UsersController {
     }
 
     @GetMapping(value = "/profile")
-    public String profileForm(){
+    public String profileForm(Principal principal,Model model){
+        String userid = principal.getName(); //회원 id 받기
+        Users users = usersRepository.findByUserid(userid);
+        model.addAttribute("users",users);
         return "users/profileForm";
     }
 }

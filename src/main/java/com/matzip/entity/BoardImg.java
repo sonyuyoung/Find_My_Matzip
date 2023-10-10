@@ -24,7 +24,7 @@ public class BoardImg{
     private String repimgYn; //대표 이미지 여부
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_No")
+    @JoinColumn(name = "boardNo")
     private Board board;
 
     public void updateBoardImg(String oriImgName, String imgName, String imgUrl){
