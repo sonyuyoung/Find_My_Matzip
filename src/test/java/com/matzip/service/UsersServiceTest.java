@@ -53,6 +53,7 @@ class UsersServiceTest {
     @DisplayName("회원가입테스트")
     public void saveUserTest() throws Exception {
     Users users = createUsers();
+    //users.setUser_image(createMultipartFile());
     Users savedUsers = usersService.saveUsers(users,createMultipartFile());
     System.out.println("users.getUserid(): "+users.getUserid());
     System.out.println("users.getUser_pwd(): "+users.getUser_pwd());

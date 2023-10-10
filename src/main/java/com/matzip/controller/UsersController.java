@@ -52,7 +52,7 @@ public class UsersController {
             throw new RuntimeException(e);
         }
 
-        return "/users/usersLoginForm";
+        return "users/usersLoginForm";
     }
 
     //modUsers폼 호출
@@ -65,30 +65,38 @@ public class UsersController {
         model.addAttribute("usersFormDto", usersFormDto);
         return "users/modUsersForm";
     }
+    
+    //Users 업데이트
+    @PostMapping(value = "/updateUsers")
+    public String updateUsers(@Valid UsersFormDto usersFormDto, BindingResult bindingResult, Model model,
+                              @RequestParam("userImgFile") MultipartFile userImgFile) throws Exception {
+        if(bindingResult.hasErrors()){
+            return "users/modUsersForm";
+        }
 
-    /*@Override
-    @RequestMapping(value = "/member/updateMember.do", method = RequestMethod.POST)
-    public ModelAndView updateMember(@ModelAttribute("memberVO") MemberVO memberVO, HttpServletRequest request,
-                                     HttpServletResponse response) throws Exception {
-        request.setCharacterEncoding("utf-8");
-//			MemberVO memberVO = new MemberVO();
-//			bind(request, memberVO);
-        int result = 0;
-        result = memberService.updateMember(memberVO);
-        ModelAndView mav = new ModelAndView("redirect:/member/listMembers.do");
-        return mav;
-    }*/
+        try {
+            //Users users = usersRepository.findByUserid(usersFormDto.getUserid());
+            usersService.updateUsers(usersFormDto,userImgFile);
+        } catch (IllegalStateException e){
+            model.addAttribute("errorMessage", e.getMessage());
+            return "users/modUsersForm";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return "users/profileForm";
+    }
 
 
     @GetMapping(value = "/login")
     public String loginMember(){
-        return "/users/usersLoginForm";
+        return "users/usersLoginForm";
     }
 
     @GetMapping(value = "/login/error")
     public String loginError(Model model){
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
-        return "/users/usersLoginForm";
+        return "users/usersLoginForm";
     }
 
     @GetMapping(value = "/profile")
@@ -99,10 +107,10 @@ public class UsersController {
 
 
         //현재 로그인된 users 객체 model에 추가
-        /*String userid = principal.getName();
-        Users users = usersRepository.findByUserid(userid);*/
+        String userid = principal.getName();
+        Users users = usersRepository.findByUserid(userid);
 
-        model.addAttribute("userid",principal.getName());
+        model.addAttribute("users",users);
         return "users/profileForm";
     }
 }
