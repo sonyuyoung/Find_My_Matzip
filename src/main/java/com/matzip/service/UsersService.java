@@ -1,6 +1,7 @@
 package com.matzip.service;
 
 
+import com.matzip.dto.UsersFormDto;
 import com.matzip.entity.Users;
 import com.matzip.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,21 +26,47 @@ public class UsersService implements UserDetailsService {
     private final UsersRepository usersRepository;
     private final FileService fileService;
 
+
     public Users saveUsers(Users users, MultipartFile userImgFile) throws Exception {
         String oriImgName = userImgFile.getOriginalFilename();
-        String imgName = null;
+        String imgName = "";
+        String imgUrl = "";
 
         //파일 업로드
         if (!StringUtils.isEmpty(oriImgName)) {
             imgName = fileService.uploadFile(userImgLocation, oriImgName, userImgFile.getBytes());
+            imgUrl = "/images/users/" + imgName;
         }
 
-        //상품 이미지 정보 저장 (중간저장소 -> db)
-        users.setUser_image(imgName);
+        //상품 이미지 정보 저장
+        users.setUser_image(imgUrl);
 
         validateDuplicateUsers(users);
         return usersRepository.save(users);
     }
+
+    public void updateUsers(UsersFormDto usersFormDto, MultipartFile userImgFile) throws Exception {
+        String oriImgName = userImgFile.getOriginalFilename();
+        String imgName = "";
+        String imgUrl = "";
+
+        //파일 업로드
+        if (!StringUtils.isEmpty(oriImgName)) {
+            imgName = fileService.uploadFile(userImgLocation, oriImgName, userImgFile.getBytes());
+            imgUrl = "/images/users/" + imgName;
+        }
+
+        //상품 이미지 정보 저장
+        usersFormDto.setUser_image(imgUrl);
+
+        //객체 찾기
+        Users users = usersRepository.findByUserid(usersFormDto.getUserid());
+        
+        //usersFormDto(수정폼 입력 정보)로 data변경
+        users.updateUsers(usersFormDto);
+        usersRepository.save(users);
+    }
+
 
     private void validateDuplicateUsers(Users users) {
         Users findUsers = usersRepository.findByUserid(users.getUserid());

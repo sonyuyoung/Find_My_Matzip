@@ -54,4 +54,11 @@ public class Users {
         users.setUser_image(usersFormDto.getUser_image());
         return users;
     }
+
+    public void updateUsers(UsersFormDto usersFormDto){
+        this.user_name = usersFormDto.getUser_name();
+        this.user_address = usersFormDto.getUser_address();
+        this.user_phone = usersFormDto.getUser_phone();
+        this.user_image = usersFormDto.getUser_image();
+    }
 }

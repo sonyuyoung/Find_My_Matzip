@@ -15,9 +15,9 @@ import javax.persistence.*;
 public class Board{
 
     @Id
-    @Column(name="board_No")
+    @Column(name="boardNo")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long board_No;       //게시글 번호
+    private Long boardNo;       //게시글 번호
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "res_id")
