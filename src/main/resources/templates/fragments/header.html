@@ -61,6 +61,9 @@
                                 회원목록
                             </a>
                         </li>
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                            <a class="nav-link" href="/admin/board/new">리뷰 등록</a>
+                        </li>
                     </ul>
 
 

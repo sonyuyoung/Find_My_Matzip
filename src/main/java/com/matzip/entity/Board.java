@@ -1,5 +1,6 @@
 package com.matzip.entity;
 
+import com.matzip.constant.BoardViewStatus;
 import com.matzip.dto.BoardFormDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,20 +13,20 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-public class Board{
+public class Board extends BaseEntity{
 
     @Id
-    @Column(name="boardNo")
+    @Column(name="board_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long boardNo;       //게시글 번호
+    private Long id;       //게시글 번호
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "res_id")
-    private Restaurant restaurant;//식당
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
-    private Users user; //회원
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "res_id")
+//    private Restaurant restaurant;//식당
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="user_id")
+//    private Users user; //회원
 
     @Column(nullable = false)
     private String board_title; //제목
@@ -36,6 +37,9 @@ public class Board{
     @Column(nullable = false)
     private int score; //평점
 
+    @Enumerated(EnumType.STRING)
+    private BoardViewStatus boardViewStatus; //게시글 상태
+
     /* @Column(nullable = false)
     private String writeDate; //게시 일자*/
 
@@ -44,6 +48,7 @@ public class Board{
         this.board_title = boardFormDto.getBoard_title();
         this.content = boardFormDto.getContent();
         this.score = boardFormDto.getScore();
+        this.boardViewStatus = boardFormDto.getBoardViewStatus();
     }
 
 }
