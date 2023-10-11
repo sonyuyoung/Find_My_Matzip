@@ -105,7 +105,7 @@
             margin-top:-100px; margin-left:-200px;
             text-align:center;
             box-sizing:border-box; padding:74px 0;
-            line-height:23px; cursor:pointer;
+            line-height:23px;
         }
         .openModal{
             cursor:pointer;
@@ -120,14 +120,14 @@
             <div class="card">
                 <div class="row no-gutters">
                     <div class="col-4">
-                        <img id="preview" th:src="${users.user_image}"  width=200 height=200 th:alt="${users.user_image}">
+                        <img id="preview" th:src="${pageUsers.user_image}"  width=200 height=200 th:alt="${pageUsers.user_image}">
                     </div>
                     <div class="col-8">
                         <div class="card-body">
                             <div class = "detail">
-                                <h2 th:text="${users.userid}"></h2>
+                                <h2 th:text="${pageUsers.userid}"></h2>
 
-                                <th:block th:switch="${users.userid}">
+                                <th:block th:switch="${pageUsers.userid}">
 
                                     <!--내 프로필-->
                                     <div th:case="${principal.getName()}">
@@ -136,7 +136,7 @@
                                     </div>
                                     <!--다른 사람 프로필-->
                                     <div th:case="*">
-                                        <button class="cta" onclick="toggleSubscribe( [${users.userid}], this)">구독하기</button>
+                                        <button class="cta" onclick="toggleSubscribe( [${pageUsers.userid}], this)">구독하기</button>
                                         <!-- <button type="button"
                                                  th:userid="${users.userid}"
                                                  th:onclick="toggleSubscribe(${profileDto.id},this)"
