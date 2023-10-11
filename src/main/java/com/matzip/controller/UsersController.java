@@ -9,14 +9,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -120,4 +118,19 @@ public class UsersController {
         model.addAttribute("users",users);
         return "users/profileForm";
     }
+    @GetMapping("/users/")
+    public String findAll(Model model){
+        List<UsersFormDto> usersFormDtoList = usersService.findAll();
+        model.addAttribute("usersList",usersFormDtoList);
+        return "users/usersListForm";
+    }
+
+    @GetMapping("/delete/{userid}")
+    public String deleteById(@PathVariable String userid){
+        usersService.deleteById(userid);
+
+        return "redirect:/users/";
+    }
+
+
 }
