@@ -63,5 +63,15 @@ public class UsersFormDto {
         return modelMapper.map(users,UsersFormDto.class);
     }
 
+    public static UsersFormDto toUsersDto(Users users){
+        UsersFormDto usersFormDto =new UsersFormDto();
+        usersFormDto.setUserid(users.getUserid());
+        usersFormDto.setUser_name(users.getUser_name());
+        usersFormDto.setUser_address(users.getUser_address());
+        usersFormDto.setUser_role(users.getUser_role());
+        usersFormDto.setUser_phone(users.getUser_phone());
+        usersFormDto.setUser_image(users.getUser_image());
 
+        return usersFormDto;
+    }
 }
