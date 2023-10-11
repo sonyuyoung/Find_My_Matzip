@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class Users {
 
     @Id
-    @Column(name="userid")
+    @Column(name="userid",unique = true)
     private String userid;       //회원 id
 
     @Column(nullable = false)
@@ -36,6 +36,7 @@ public class Users {
 
     private String user_image; //프로필 이미지
 
+    private String gender;
     //private LocalDateTime regTime; //가입 날짜
 
 
@@ -52,6 +53,7 @@ public class Users {
         users.setUser_phone(usersFormDto.getUser_phone());
         users.setUser_role(UserRole.ADMIN);
         users.setUser_image(usersFormDto.getUser_image());
+        users.setGender(usersFormDto.getGender());
         return users;
     }
 
@@ -60,5 +62,6 @@ public class Users {
         this.user_address = usersFormDto.getUser_address();
         this.user_phone = usersFormDto.getUser_phone();
         this.user_image = usersFormDto.getUser_image();
+        this.gender=usersFormDto.getGender();
     }
 }

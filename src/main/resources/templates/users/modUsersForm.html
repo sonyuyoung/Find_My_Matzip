@@ -109,6 +109,13 @@
       <p th:if="${#fields.hasErrors('user_phone')}" th:errors="*{user_phone}" class="fieldError">Incorrect data</p>
     </div>
 
+    <div class="form-group">
+      <label for="gender">성별</label>
+      <select id="gender" name="gender" class="form-control">
+        <option value="MALE">남성</option>
+        <option value="FEMALE">여성</option>
+      </select>
+    </div>
 
     <div style="text-align: center">
       <button type="submit" class="btn btn-primary" style="">Submit</button>
