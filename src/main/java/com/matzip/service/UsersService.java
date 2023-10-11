@@ -50,18 +50,20 @@ public class UsersService implements UserDetailsService {
         String imgName = "";
         String imgUrl = "";
 
-        //파일 업로드
-        if (!StringUtils.isEmpty(oriImgName)) {
-            imgName = fileService.uploadFile(userImgLocation, oriImgName, userImgFile.getBytes());
-            imgUrl = "/images/users/" + imgName;
-        }
-
-        //상품 이미지 정보 저장
-        usersFormDto.setUser_image(imgUrl);
-
         //객체 찾기
         Users users = usersRepository.findByUserid(usersFormDto.getUserid());
-        
+
+        //파일 업로드
+        if (!StringUtils.isEmpty(oriImgName)) {
+            //사진이 바뀐 경우
+            imgName = fileService.uploadFile(userImgLocation, oriImgName, userImgFile.getBytes());
+            imgUrl = "/images/users/" + imgName;
+            usersFormDto.setUser_image(imgUrl);
+        }else{
+            //사진이 바뀌지 않은 경우(기존 이미지 저장)
+            usersFormDto.setUser_image(users.getUser_image());
+        }
+
         //usersFormDto(수정폼 입력 정보)로 data변경
         users.updateUsers(usersFormDto);
         usersRepository.save(users);
