@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
 
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -55,12 +56,20 @@ public class UsersService implements UserDetailsService {
 
         //파일 업로드
         if (!StringUtils.isEmpty(oriImgName)) {
-            //사진이 바뀐 경우
+            //1. 사진이 바뀐 경우
+            //기존 이미지 물리경로에서 삭제
+            imgName = users.getUser_image();
+            imgUrl = imgName.substring(imgName.lastIndexOf("/"));
+            imgUrl = userImgLocation+imgUrl;
+
+            fileService.deleteFile(imgUrl);
+
+            //바뀐사진 dto에 담기
             imgName = fileService.uploadFile(userImgLocation, oriImgName, userImgFile.getBytes());
             imgUrl = "/images/users/" + imgName;
             usersFormDto.setUser_image(imgUrl);
         }else{
-            //사진이 바뀌지 않은 경우(기존 이미지 저장)
+            //2. 사진이 바뀌지 않은 경우(기존 이미지 저장)
             usersFormDto.setUser_image(users.getUser_image());
         }
 
