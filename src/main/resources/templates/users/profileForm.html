@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <div class = "con_padding">
+        <div class="col-8">
+            <div class="card">
+                <div class="row no-gutters">
+                    <div class="col-4">
+                        <img id="preview" th:src="${users.user_image}"  width=200 height=200 th:alt="${users.user_image}">
+                    </div>
+                    <div class="col-8">
+                        <div class="card-body">
+                            <div class = "detail">
+                                <h2 th:text="${users.userid}"></h2>
+                                <button type="button"  class="btn btn-secondary">팔로잉</button>
+                                <button type="button" onClick="location.href='/users/modUsersForm'"  class="btn btn-secondary">프로필 편집</button>
+                                <button type="button" onClick="location.href='/board/boardForm'" class="btn btn-secondary">게시글 작성</button>
+                            </div>
+                            <div class ="detail_list">
+                                    <a>게시물<span> 15</span></a>
+                                    <a href="#">팔로워<span> 15</span></a>
+                                    <a href="#">팔로우<span> 15</span></a>
+                            </div>
+                            <div>
+                                신뢰등급 + 게시글 작성 버튼
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        <hr>
+        <div class="board">
+            여기는 게시글 자리입니다
+            <div>
+
+            </div>
+            <div>
+
+            </div>
+            <div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+</div>
+</html>
