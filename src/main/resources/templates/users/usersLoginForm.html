@@ -3,12 +3,7 @@
       xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
       layout:decorate="~{layouts/layout1}">
 
-<script src="http://developers.kakao.com/sdk/js/kakao.js"></script>
-<script>
-    window.Kakao.init("662b1873b0923adb65e026f133345f24");
 
-
-</script>
 <div layout:fragment="content">
 
     <!--  <body class="text-center">-->
@@ -27,7 +22,6 @@
 
         <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
         <button class="btn btn-primary">로그인</button>
-        <a href="javascript:kakaoLogin();">카카오 로그인</a>
 
 
         <button type="button" class="btn btn-primary" onClick="location.href='/users/new'">회원가입</button>
