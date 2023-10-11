@@ -24,10 +24,10 @@ public class Restaurant {
     private String res_district;//구군
 
     @Column(nullable = false)
-    private String res_latitude;//위도
+    private String res_lat;//위도
 
     @Column(nullable = false)
-    private String res_hardness;//경도
+    private String res_lng;//경도
 
     @Column(nullable = false)
     private String res_address;//식당 주소
