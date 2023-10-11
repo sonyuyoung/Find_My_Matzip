@@ -115,6 +115,7 @@ public class UsersController {
         String userid = principal.getName();
         Users users = usersRepository.findByUserid(userid);
 
+        model.addAttribute("principal",principal);
         model.addAttribute("users",users);
         return "users/profileForm";
     }

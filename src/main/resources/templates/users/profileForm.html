@@ -7,8 +7,112 @@
 
     <script th:inline="javascript">
 
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+        });
+
+        //구독 & 구독취소 버튼 활성화
+        function toggleSubscribe(toUserId,obj) {
+            if ($(obj).text() === "구독취소") {
+                $.ajax({
+                    type: "delete",
+                    url: "/users/profileForm/" + $(toUserId),
+                    dataType: "text"
+                }).done(res => {
+                    $(obj).text("구독하기");
+                    $(obj).toggleClass("blue");
+                }).fail(error => {
+                    alert(error.responseText);
+                });
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: "/users/profileForm/" + $(toUserId),
+                    dataType: "text"
+                }).done(res => {
+                    $(obj).text("구독취소");
+                    $(obj).toggleClass("blue");
+                }).fail(error => {
+                    alert(error.responseText);
+                });
+            }
+        }
+
+
+        //팔로워 모달 띄우기
+        /*function getSubscribeModalUsers(fromUser) {
+            let item = `<div class="subscribe__item" id="subscribeModalItem-${fromUser.userid}">
+                        <div class="subscribe__img">
+                        th:src="${fromUser.user_image}"
+                        </div>
+                        <div class="subscribe__text">
+                            <h2>${fromUser.userid}</h2>
+                        </div>
+                        <div class="subscribe__btn">`;
+
+            if(!fromUser.equalUserStatus){ // 동일 유저가 아닐때 버튼이 만들어져야 함.
+                // 구독한 상태
+                if(fromUser.subscribeStatus){
+                    item += `<button class="cta blue" onclick="toggleSubscribe(${fromUser.id},this)">구독취소</button>`;
+                    // 구독 안한 상태
+                }else{
+                    item += `<button class="cta" onclick="toggleSubscribe(${fromUser.id},this)">구독하기</button>`;
+                }
+            }
+            item += `</div></div>`;
+            return item;
+        }
+
+        // (7) 구독자 정보 모달 닫기
+        function modalClose() {
+            $(".modal-subscribe").css("display", "none");
+            location.reload();
+        }*/
+
+        //팔로워 모달 창 띄우기
+        $(function (){
+            $(".openModal").click(function (){
+                $(".modal").fadeIn();
+            });
+
+            $(".modal").dblclick(function (){
+                $(".modal").fadeOut();
+            });
+        })
+
+
     </script>
 </th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .modal {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            top: 0;left: 0;
+            display: none;
+        }
+        .modal-content{
+            width:350px; height:500px;
+            background:#fff; border-radius:10px;
+            position:relative; top:40%; left:50%;
+            margin-top:-100px; margin-left:-200px;
+            text-align:center;
+            box-sizing:border-box; padding:74px 0;
+            line-height:23px; cursor:pointer;
+        }
+        .openModal{
+            cursor:pointer;
+        }
+    </style>
+</th:block>
+
 
 <div layout:fragment="content">
     <div class = "con_padding">
@@ -22,14 +126,39 @@
                         <div class="card-body">
                             <div class = "detail">
                                 <h2 th:text="${users.userid}"></h2>
-                                <button type="button"  class="btn btn-secondary">팔로잉</button>
-                                <button type="button" onClick="location.href='/users/modUsersForm'"  class="btn btn-secondary">프로필 편집</button>
-                                <button type="button" onClick="location.href='/board/boardForm'" class="btn btn-secondary">게시글 작성</button>
+
+                                <th:block th:switch="${users.userid}">
+
+                                    <!--내 프로필-->
+                                    <div th:case="${principal.getName()}">
+                                        <button type="button" onClick="location.href='/users/modUsersForm'"  class="btn btn-secondary">프로필 편집</button>
+                                        <button type="button" onClick="location.href='/board/boardForm'" class="btn btn-secondary">게시글 작성</button>
+                                    </div>
+                                    <!--다른 사람 프로필-->
+                                    <div th:case="*">
+                                        <button class="cta" onclick="toggleSubscribe( [${users.userid}], this)">구독하기</button>
+                                        <!-- <button type="button"
+                                                 th:userid="${users.userid}"
+                                                 th:onclick="toggleSubscribe(${profileDto.id},this)"
+                                                 th:text="구독하기"></button>-->
+
+                                        <!--<th:block th:switch="${FollowDto.id}">
+                                            &lt;!&ndash;구독한 유저&ndash;&gt;
+                                            <div th:case="${profileDto.subscribeState}">
+                                                <button class="cta blue" onclick="toggleSubscribe(${profileDto.id}, this)">구독취소</button>
+                                            </div>
+                                            &lt;!&ndash;구독하지 않은 유저&ndash;&gt;
+                                            <div th:case="*">
+                                                <button class="cta" onclick="toggleSubscribe(${profileDto.id}, this)">구독하기</button>
+                                            </div>
+                                        </th:block>-->
+                                    </div>
+                                </th:block>
                             </div>
                             <div class ="detail_list">
-                                    <a>게시물<span> 15</span></a>
-                                    <a href="#">팔로워<span> 15</span></a>
-                                    <a href="#">팔로우<span> 15</span></a>
+                                <a>게시물<span> 15</span></a>
+                                <a class="openModal">팔로우<span> 15</span></a>
+                                <a href="#">팔로우<span> 15</span></a>
                             </div>
                             <div>
                                 신뢰등급 + 게시글 작성 버튼
@@ -39,23 +168,32 @@
                     </div>
                 </div>
             </div>
-        <hr>
-        <div class="board">
-            여기는 게시글 자리입니다
-            <div>
+            <hr>
+            <div class="board">
+                여기는 게시글 자리입니다
+                <div>
 
+                </div>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
             </div>
-            <div>
 
-            </div>
-            <div>
 
+        </div>
+        <!--팔로워 모달창-->
+        <div class="modal">
+            <div class="modal-content">
+                <h2>모달창 제목</h2>
+                <p>모달창 내용</p>
             </div>
         </div>
 
+
     </div>
 
-
-</div>
 </div>
 </html>
