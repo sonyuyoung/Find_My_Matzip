@@ -168,6 +168,13 @@ public class UsersController {
     public String deleteFollow(@PathVariable String toUserId,Principal principal){
         followService.deleteFollow(toUserId,principal.getName());
 
+        return "redirect:/users/profile/"+toUserId;
+    }
+
+    @GetMapping("/insertFollow/{toUserId}")
+    public String insertFollow(@PathVariable String toUserId,Principal principal){
+        followService.insertFollow(toUserId,principal.getName());
+
 
 
         return "redirect:/users/profile/"+toUserId;

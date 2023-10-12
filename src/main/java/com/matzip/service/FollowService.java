@@ -2,7 +2,9 @@ package com.matzip.service;
 
 import com.matzip.dto.FollowDto;
 import com.matzip.entity.Follow;
+import com.matzip.entity.Users;
 import com.matzip.repository.FollowRepository;
+import com.matzip.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class FollowService {
     private final FollowRepository followRepository;
+    private final UsersRepository usersRepository;
 
     //팔로워dto 리스트
     public List<FollowDto> getFollowerDtoList(String toUserId, String loginUserId) throws Exception{
@@ -85,6 +88,15 @@ public class FollowService {
     public void deleteFollow(String toUserId,String fromUserId) {
        Follow follow = followRepository.findByToUserIdAndFromUserId(toUserId,fromUserId);
        followRepository.delete(follow);
+
+    }
+
+    public void insertFollow(String toUserId,String fromUserId) {
+        Users toUser = usersRepository.findByUserid(toUserId);
+        Users fromUser = usersRepository.findByUserid(fromUserId);
+
+        Follow follow = new Follow(toUser,fromUser);
+        followRepository.save(follow);
 
     }
 

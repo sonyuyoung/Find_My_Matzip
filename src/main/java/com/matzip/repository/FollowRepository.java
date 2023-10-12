@@ -3,7 +3,6 @@ package com.matzip.repository;
 
 import com.matzip.entity.Follow;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,8 +23,12 @@ public interface FollowRepository extends JpaRepository<Follow, Long>{
      @Query("select f from Follow f where f.toUser.userid = :toUserId and f.fromUser.userid = :loginUserId")
      Follow findByToUserIdAndFromUserId(@Param("toUserId") String toUserId,@Param("loginUserId") String loginUserId);
 
-     @Modifying
+     /*@Modifying
      @Query("delete from Follow f where f.toUser.userid = :toUserId and f.fromUser.userid = :fromUserId")
-     int deleteFollow(@Param("toUserId") String toUserId, @Param("fromUserId") String fromUserId);
+     int deleteFollow(@Param("toUserId") String toUserId, @Param("fromUserId") String fromUserId);*/
+
+     /*@Modifying
+     @Query("insert into Follow f(from_user,to_user) value f.toUser.userid = :toUserId and f.fromUser.userid = :fromUserId")
+     int insert(@Param("toUserId") String toUserId, @Param("fromUserId") String fromUserId);*/
 
 }
