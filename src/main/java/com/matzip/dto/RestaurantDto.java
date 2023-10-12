@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper;
 @Getter @Setter
 public class RestaurantDto {
 
-    private Long res_id;       //식당 id
+    private String res_id;       //식당 id
 
     private String res_name;//식당 이름
 
@@ -38,4 +38,22 @@ public class RestaurantDto {
         return modelMapper.map(res_id, RestaurantDto.class);
     }
 
+    public  static RestaurantDto restaurantDto(Restaurant restaurant){
+        RestaurantDto restaurantDto = new RestaurantDto();
+        restaurantDto.setRes_id(restaurant.getRes_id());
+        restaurant.setRes_name(restaurant.getRes_name());
+        restaurant.setRes_district(restaurant.getRes_district());
+        restaurant.setRes_lat(restaurant.getRes_lat());
+        restaurant.setRes_lng(restaurant.getRes_lng());
+        restaurant.setRes_address(restaurant.getRes_address());
+        restaurant.setRes_phone(restaurant.getRes_phone());
+        restaurant.setOperate_time(restaurant.getOperate_time());
+        restaurant.setRes_menu(restaurant.getRes_menu());
+        restaurant.setRes_image(restaurant.getRes_image());
+        restaurant.setRes_thumbnail(restaurant.getRes_thumbnail());
+        restaurant.setRes_intro(restaurant.getRes_intro());
+
+        return restaurantDto;
+
+    }
 }

@@ -1,24 +1,22 @@
 package com.matzip.controller;
 
 import lombok.RequiredArgsConstructor;
-
+import com.matzip.service.RestaurantService;
 import org.springframework.stereotype.Controller;
-
-
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequiredArgsConstructor
 public class RestaurantController {
 
-   /* private final BoardService boardService;
-    @GetMapping(value = "/maps")
-    public String main(BoardSearchDto boardSearchDto, Optional<Integer> page, Model model){
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-        Page<MainBoardDto> boards = boardService.getMainBoardPage(boardSearchDto, pageable);
-        model.addAttribute("boards", boards);
-        model.addAttribute("boardSearchDto", boardSearchDto);
-        model.addAttribute("maxPage", 5);
-        return "main";
+    private final RestaurantService restaurantService;
+
+    @GetMapping("/map")
+    public String findAll(Model model){
+      //  List<RestaurantDto> restaurantDtoList = restaurantService.findAll();
+      //  model.addAttribute("restaurantList",restaurantDtoList);
+
+        return "map/mapForm";
     }
-*/
 }

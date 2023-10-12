@@ -16,7 +16,7 @@ public class Restaurant {
     @Id
     @Column(name="res_id", unique = true)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long res_id;       //식당 id
+    private String res_id;       //식당 id
 
     @Column(nullable = false)
     private String res_name;//식당 이름
