@@ -231,7 +231,7 @@
                         <tr th:each="followingDto : ${followingDtoList}">
                             <div class="text-center align-middle">
                                 <td><img th:src="${followingDto.profileImage}" width=50 height=50 alt="profile_img"></td>
-                                <td><a href="/users/profile/{id}(id = ${followingDto.id})" th:text="${followingDto.id}"></a></td>
+                                <td><a th:href="@{/users/profile/{id}(id = ${followingDto.id})}" th:text="${followingDto.id}"></a></td>
                                 <td><div class="following_id_message" th:text="${followingDto.subscribeState}"></div></td>
                             </div>
                         </tr>
