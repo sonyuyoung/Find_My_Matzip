@@ -34,24 +34,24 @@ public class RestaurantDto {
 
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public static RestaurantDto of(Restaurant res_id) {
-        return modelMapper.map(res_id, RestaurantDto.class);
+    public static RestaurantDto of(Restaurant restaurant) {
+        return modelMapper.map(restaurant, RestaurantDto.class);
     }
 
     public  static RestaurantDto restaurantDto(Restaurant restaurant){
         RestaurantDto restaurantDto = new RestaurantDto();
         restaurantDto.setRes_id(restaurant.getRes_id());
-        restaurant.setRes_name(restaurant.getRes_name());
-        restaurant.setRes_district(restaurant.getRes_district());
-        restaurant.setRes_lat(restaurant.getRes_lat());
-        restaurant.setRes_lng(restaurant.getRes_lng());
-        restaurant.setRes_address(restaurant.getRes_address());
-        restaurant.setRes_phone(restaurant.getRes_phone());
-        restaurant.setOperate_time(restaurant.getOperate_time());
-        restaurant.setRes_menu(restaurant.getRes_menu());
-        restaurant.setRes_image(restaurant.getRes_image());
-        restaurant.setRes_thumbnail(restaurant.getRes_thumbnail());
-        restaurant.setRes_intro(restaurant.getRes_intro());
+        restaurantDto.setRes_name(restaurant.getRes_name());
+        restaurantDto.setRes_district(restaurant.getRes_district());
+        restaurantDto.setRes_lat(restaurant.getRes_lat());
+        restaurantDto.setRes_lng(restaurant.getRes_lng());
+        restaurantDto.setRes_address(restaurant.getRes_address());
+        restaurantDto.setRes_phone(restaurant.getRes_phone());
+        restaurantDto.setOperate_time(restaurant.getOperate_time());
+        restaurantDto.setRes_menu(restaurant.getRes_menu());
+        restaurantDto.setRes_image(restaurant.getRes_image());
+        restaurantDto.setRes_thumbnail(restaurant.getRes_thumbnail());
+        restaurantDto.setRes_intro(restaurant.getRes_intro());
 
         return restaurantDto;
 
