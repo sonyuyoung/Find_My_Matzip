@@ -14,7 +14,8 @@ import javax.persistence.*;
 public class Restaurant {
 
     @Id
-    @Column(name="res_id", nullable = false)
+    @Column(name="res_id", unique = true)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long res_id;       //식당 id
 
     @Column(nullable = false)
