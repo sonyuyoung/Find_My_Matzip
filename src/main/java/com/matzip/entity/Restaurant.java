@@ -14,8 +14,9 @@ import javax.persistence.*;
 public class Restaurant {
 
     @Id
-    @Column(name="res_id", nullable = false)
-    private Long res_id;       //식당 id
+    @Column(name="res_id", unique = true)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String res_id;       //식당 id
 
     @Column(nullable = false)
     private String res_name;//식당 이름
@@ -24,10 +25,10 @@ public class Restaurant {
     private String res_district;//구군
 
     @Column(nullable = false)
-    private String res_latitude;//위도
+    private String res_lat;//위도
 
     @Column(nullable = false)
-    private String res_hardness;//경도
+    private String res_lng;//경도
 
     @Column(nullable = false)
     private String res_address;//식당 주소
