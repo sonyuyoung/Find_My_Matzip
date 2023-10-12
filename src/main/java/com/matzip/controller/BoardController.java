@@ -128,6 +128,9 @@ public class BoardController {
         return "board/boardMng";
     }
 
+    //게시글 상세페이지
+    //상품을 가지고 오는 로직을 똑같이 사용
+    //-> boardDtl로 가자
     @GetMapping(value = "/board/{boardId}")
     public String boardDtl(Model model, @PathVariable("boardId") Long boardId){
         BoardFormDto boardFormDto = boardService.getBoardDtl(boardId);

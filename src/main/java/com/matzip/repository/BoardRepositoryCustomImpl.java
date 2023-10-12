@@ -106,6 +106,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         return new PageImpl<>(content, pageable, total);
     } // -> BoardRepository 인터페이스에서 BoardRepositoryCustom 인터페이스를 상속받으러 가자 교재 271p
 
+
+    //
     private BooleanExpression boardTitleLike(String searchQuery){
         return StringUtils.isEmpty(searchQuery) ? null : QBoard.board.board_title.like("%" + searchQuery + "%");
     }
