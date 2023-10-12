@@ -38,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/") // 로그아웃 후 이동 페이지
 
 
+
                 .and()
                 .oauth2Login()
                 .loginPage("/users/login") // OAuth2 로그인 페이지
