@@ -135,3 +135,33 @@ body {
 .fieldError {
     color: #bd2130;
 }
+/* 검색창 CSS */
+.search {
+    display: flex;
+    align-items: center;
+}
+
+input {
+    flex: 1;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.Magnifier {
+    position: relative;
+    width: 17px;
+    top: 0px;
+    right: 0px;
+    margin: 0;
+}
+
+.searchbutton {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: auto; /* 오른쪽 정렬을 위한 추가 */
+}

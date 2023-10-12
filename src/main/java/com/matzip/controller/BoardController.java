@@ -113,7 +113,7 @@ public class BoardController {
         //페이징을 위해서 PageRequest.of 메서드를 통해 Pageable 객체생성
         //첫번째 파라미터로는 조회할페이지번호 / 두번째 파라미터로는 한번에 가져올 데이터 수를 넣어준다
         //URL경로에 페이지 번호가 있으면 해당 페이지를 조회하도록 세팅하고 페이지 번호가 없으면 0페이지를 조회하도록한다.
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
         //조회조건과 페이징 정보를 파라미터로 넘겨서 Page<Board> 객체를 반환 받는다.
         Page<Board> boards = boardService.getAdminBoardPage(boardSearchDto, pageable);
 
