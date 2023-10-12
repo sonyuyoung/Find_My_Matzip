@@ -130,13 +130,13 @@
                                 <th:block th:switch="*{pageUserDto.userid}">
 
                                     <!--내 프로필-->
-                                    <div th:case="${myDto.getUserid()}">
+                                    <div th:case="${loginUserDto.getUserid()}">
                                         <button type="button" onClick="location.href='/users/modUsersForm'"  class="btn btn-secondary">프로필 편집</button>
                                         <button type="button" onClick="location.href='/board/boardForm'" class="btn btn-secondary">게시글 작성</button>
                                     </div>
                                     <!--다른 사람 프로필-->
                                     <div th:case="*">
-                                        <button class="cta" onclick="toggleSubscribe( [${pageUserDto.userid}], this)">구독하기</button>
+                                        <button type="button" onclick="toggleSubscribe( [${pageUserDto.userid}], this)" class="btn btn-secondary">구독하기</button>
                                         <!-- <button type="button"
                                                  th:userid="${users.userid}"
                                                  th:onclick="toggleSubscribe(${profileDto.id},this)"
@@ -187,15 +187,17 @@
         <!--팔로워 모달창-->
         <div class="modal">
             <div class="modal-content">
-                <h2>모달창 제목</h2>
+                <p>팔로워</p>
                 <div>
-                   <!-- <table class="table">
-                        <tr th:each="cartItem : ${followDtoList}">
-                            <td class="text-center align-middle">
-                                <input type="checkbox" name="cartChkBox" th:value="${followDtoList.}">
-                            </td>
+                    <table class="table">
+                        <tr th:each="followDto : ${followDtoList}">
+                            <div class="text-center align-middle">
+                                <td th:text="${followDto.profileImage}"></td>
+                                <td th:text="${followDto.id}"></td>
+                                <td th:text="${followDto.subscribeState}"></td>
+                            </div>
                         </tr>
-                    </table>-->
+                    </table>
                 </div>
             </div>
         </div>

@@ -1,7 +1,10 @@
 package com.matzip.controller;
 
+import com.matzip.dto.BoardDto;
+import com.matzip.dto.FollowDto;
 import com.matzip.dto.UsersFormDto;
 import com.matzip.entity.Users;
+import com.matzip.service.FollowService;
 import com.matzip.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +25,7 @@ public class UsersController {
 
     private final PasswordEncoder passwordEncoder;
     private final UsersService usersService;
+    private final FollowService followService;
 
 
     @GetMapping(value = "/new")
@@ -89,11 +93,11 @@ public class UsersController {
         }
 
         //현재 로그인된 userDto(=pageUser)
-        String myId = principal.getName();
-        UsersFormDto myDto = usersService.findById(myId);
+        String loginUserId = principal.getName();
+        UsersFormDto loginUserDto = usersService.findById(loginUserId);
 
-        model.addAttribute("myDto",myDto);
-        model.addAttribute("pageUserDto",myDto);
+        model.addAttribute("loginUserDto",loginUserDto);
+        model.addAttribute("pageUserDto",loginUserDto);
 
         return "users/profileForm";
     }
@@ -112,12 +116,12 @@ public class UsersController {
 
     //내 프로필 조회
     @GetMapping(value = {"/profile","/profile/{pageUserid}"})
-    public String myProfileForm(@PathVariable(name ="pageUserid", required = false) String pageUserId,Principal principal,Model model){
+    public String myProfileForm(@PathVariable(name ="pageUserid", required = false) String pageUserId,Principal principal,Model model) throws Exception {
         //myBoardList : 내 게시글 리스트
-        /*List<BoardDto> myBoardList = boardService.getBoardList(principal.getName());
+       /* List<BoardDto> myBoardList = boardService.getBoardList(principal.getName());
         model.addAttribute("myBoardList", myBoardList);*/
 
-        //마이페이지일때
+        //마이페이지일때 ("/profile")
         if(pageUserId == null){
             //pageUser == principal
             pageUserId = principal.getName();
@@ -127,53 +131,18 @@ public class UsersController {
         UsersFormDto pageUserDto = usersService.findById(pageUserId);
 
         //현재 로그인된 user의 userDto
-        String myId = principal.getName();
-        UsersFormDto myDto = usersService.findById(myId);
+        String loginUserId = principal.getName();
+        UsersFormDto loginUserDto = usersService.findById(loginUserId);
+
 
         //현재 로그인된 users 팔로워 리스트
-       /* List<FollowDto> followDtoList = followService.getFollowDtoList(pageUserId,principal.getName());*/
+        List<FollowDto> followDtoList = followService.getFollowDtoList(pageUserId,principal.getName());
 
+        model.addAttribute("followDtoList",followDtoList);
         model.addAttribute("pageUserDto",pageUserDto);
-        model.addAttribute("myDto",myDto);
+        model.addAttribute("loginUserDto",loginUserDto);
         return "users/profileForm";
     }
-
-    //다른사람 프로필 조회
-   /* @GetMapping(value = "/profile")
-    public String profileForm(Principal principal,Model model){
-        //myBoardList : 내 게시글 리스트
-       *//* List<BoardDto> myBoardList = boardService.getBoardList(principal.getName());
-        model.addAttribute("myBoardList", myBoardList);*//*
-
-
-        //현재 로그인된 users 객체 model에 추가
-        String userid = principal.getName();
-        Users users = usersRepository.findByUserid(userid);
-
-        model.addAttribute("principal",principal);
-        model.addAttribute("users",users);
-        return "users/profileForm";
-    }*/
-
-    //pageUsers기준
-    /*@GetMapping(value = "/profile/{userid}")
-    public String profileForm(@PathVariable("userid") String pageUserId,Principal principal,Model model){
-        //myBoardList : 내 게시글 리스트
-        *//*List<BoardDto> myBoardList = boardService.getBoardList(principal.getName());
-        model.addAttribute("myBoardList", myBoardList);*//*
-
-
-        //현재 로그인된 user
-        String userid = principal.getName();
-        Users users = usersRepository.findByUserid(userid);
-
-        //페이지의 user
-        Users pageUsers = usersRepository
-
-        model.addAttribute("principal",principal);
-        model.addAttribute("users",users);
-        return "users/profileForm";
-    }*/
 
     @GetMapping("/users/")
     public String findAll(Model model){

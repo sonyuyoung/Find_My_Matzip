@@ -1,35 +1,48 @@
 package com.matzip.service;
 
+import com.matzip.dto.FollowDto;
+import com.matzip.entity.Follow;
+import com.matzip.repository.FollowRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
-@Log
+@RequiredArgsConstructor
 public class FollowService {
+    private final FollowRepository followRepository;
 
-    public String uploadFile(String uploadPath, String originalFileName, byte[] fileData) throws Exception{
-        UUID uuid = UUID.randomUUID();
-        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        String savedFileName = uuid.toString() + extension;
-        String fileUploadFullUrl = uploadPath + "/" + savedFileName;
-        FileOutputStream fos = new FileOutputStream(fileUploadFullUrl);
-        fos.write(fileData);
-        fos.close();
-        return savedFileName;
-    }
-
-    public void deleteFile(String filePath) throws Exception{
-        File deleteFile = new File(filePath);
-        if(deleteFile.exists()) {
-            deleteFile.delete();
-            log.info("파일을 삭제하였습니다.");
-        } else {
-            log.info("파일이 존재하지 않습니다.");
+    public List<FollowDto> getFollowDtoList(String toUserId, String loginUserId) throws Exception{
+        //pageuser를 팔로잉한 사람 목록(FollowDto : id,name,profileImage,subscribeState)
+        List<Follow> toUserList = followRepository.findByToUserId(toUserId);
+        
+        //DTO로 변환
+        List<FollowDto> followDtoList = new ArrayList<>();
+        for(Follow follow:toUserList){
+            FollowDto followDto = new FollowDto(follow);
+            followDtoList.add(followDto);
         }
+
+        //내가 팔로잉한 사람 목록(Follow : id,toUser,fromUser)
+        List<Follow> loginUserList = followRepository.findByFromUserId(loginUserId);
+
+        //팔로잉 여부는 나중에 저장
+        for(Follow follow : loginUserList) {
+            for(FollowDto dto : followDtoList) {
+                if(Objects.equals(follow.getToUser().getUserid(), dto.getId()))
+                    dto.setSubscribeState(true);
+            }
+
+        }
+
+        return followDtoList;
     }
 
 }
