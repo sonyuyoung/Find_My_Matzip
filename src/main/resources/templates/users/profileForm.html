@@ -122,8 +122,12 @@
             text-align:center;
             box-sizing:border-box; padding:74px 0;
             line-height:23px;
+            overflow: scroll;
         }
-        .openModal{
+        .modal_img{
+
+        }
+        .openFollower{
             cursor:pointer;
         }
     </style>
@@ -208,9 +212,9 @@
                     <table class="table">
                         <tr th:each="followerDto : ${followerDtoList}">
                             <div class="text-center align-middle">
-                                <td th:text="${followerDto.profileImage}"></td>
-                                <td th:text="${followerDto.id}"></td>
-                                <td th:text="${followerDto.subscribeState}"></td>
+                                <td><img th:src="${followerDto.profileImage}" width=50 height=50 alt="profile_img"></td>
+                                <td><a th:href="@{/users/profile/{id}(id = ${followerDto.id})}" th:text="${followerDto.id}"></a></td>
+                                <td><div class="following_id_message" th:text="${followerDto.subscribeState}"></div></td>
                             </div>
                         </tr>
                     </table>
@@ -226,9 +230,9 @@
                     <table class="table">
                         <tr th:each="followingDto : ${followingDtoList}">
                             <div class="text-center align-middle">
-                                <td th:text="${followingDto.profileImage}"></td>
-                                <td th:text="${followingDto.id}"></td>
-                                <td th:text="${followingDto.subscribeState}"></td>
+                                <td><img th:src="${followingDto.profileImage}" width=50 height=50 alt="profile_img"></td>
+                                <td><a href="/users/profile/{id}(id = ${followingDto.id})" th:text="${followingDto.id}"></a></td>
+                                <td><div class="following_id_message" th:text="${followingDto.subscribeState}"></div></td>
                             </div>
                         </tr>
                     </table>

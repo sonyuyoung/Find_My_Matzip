@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class FollowDto {
 
-    //Follower 정보
+    //user 정보
     private String id;
     private String name;
     private String profileImage;
