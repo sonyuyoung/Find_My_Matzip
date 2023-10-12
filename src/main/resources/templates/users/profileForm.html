@@ -152,7 +152,7 @@
                                     <!--내 프로필-->
                                     <div th:case="${loginUserDto.getUserid()}">
                                         <button type="button" onClick="location.href='/users/modUsersForm'"  class="btn btn-secondary">프로필 편집</button>
-                                        <button type="button" onClick="location.href='/board/boardForm'" class="btn btn-secondary">게시글 작성</button>
+                                        <button type="button" onClick="location.href='/admin/board/new'" class="btn btn-secondary">게시글 작성</button>
                                     </div>
                                     <!--다른 사람 프로필-->
                                     <div th:case="*">
@@ -162,7 +162,7 @@
                                                  th:onclick="toggleSubscribe(${profileDto.id},this)"
                                                  th:text="구독하기"></button>-->
 
-                                        <!--<th:block th:switch="${FollowDto.id}">
+                                        <!--<th:block th:switch="${FollowerDto.id}">
                                             &lt;!&ndash;구독한 유저&ndash;&gt;
                                             <div th:case="${profileDto.subscribeState}">
                                                 <button class="cta blue" onclick="toggleSubscribe(${profileDto.id}, this)">구독취소</button>
