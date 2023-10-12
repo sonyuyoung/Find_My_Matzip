@@ -20,6 +20,7 @@ public class Board extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;       //게시글 번호
 
+    //오류가 터져서 일단 주석해놓음
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "res_id")
 //    private Restaurant restaurant;//식당
@@ -44,6 +45,7 @@ public class Board extends BaseEntity{
     private String writeDate; //게시 일자*/
 
 
+    //게시글 데이터 수정 업데이트로직 -> boardService 이동 후 추가
     public void updateBoard(BoardFormDto boardFormDto){
         this.board_title = boardFormDto.getBoard_title();
         this.content = boardFormDto.getContent();
