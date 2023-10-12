@@ -14,27 +14,28 @@
             }
         });
 
-        //팔로잉 & 팔로워 버튼 활성화
+        //팔로잉 & 팔로워 기능
         function toggleSubscribe(toUserId,obj) {
+            console.log("도대체 뭐가 들어온거야 : "+toUserId);
             if ($(obj).text() === "언팔로우") {
                 $.ajax({
-                    type: "delete",
-                    url: "/users/profileForm/" + $(toUserId),
+                    type: "GET",
+                    url: "/users/deleteFollow/"+toUserId,
                     dataType: "text"
                 }).done(res => {
                     $(obj).text("팔로우");
-                    $(obj).toggleClass("blue");
+                    $(obj).toggleClass("btn btn-primary");
                 }).fail(error => {
                     alert(error.responseText);
                 });
             } else {
                 $.ajax({
                     type: "post",
-                    url: "/users/profileForm/" + $(toUserId),
+                    url: "/users/updateFollow/" + toUserId,
                     dataType: "text"
                 }).done(res => {
                     $(obj).text("언팔로우");
-                    $(obj).toggleClass("blue");
+                    $(obj).toggleClass("btn btn-danger");
                 }).fail(error => {
                     alert(error.responseText);
                 });
@@ -154,11 +155,12 @@
                                         <th:block th:switch="${followcheck}">
                                             <!--팔로우한 유저-->
                                             <div th:case="true">
-                                                <button class="cta blue" onclick="toggleSubscribe([${profileDto.id}], this)">언팔로우</button>
+                                                <button type="button" class="btn btn-danger" th:attr="onclick='toggleSubscribe(\'' + ${pageUserDto.userid} + '\', this)'">언팔로우</button>
+
                                             </div>
                                             <!--팔로우하지 않은 유저-->
                                             <div th:case="false">
-                                                <button class="cta" onclick="toggleSubscribe([${profileDto.id}], this)">팔로우</button>
+                                                <button type="button" class="btn btn-primary" th:attr="onclick='toggleSubscribe(\'' + ${pageUserDto.userid} + '\', this)'">팔로우</button>
                                             </div>
                                         </th:block>
                                     </div>

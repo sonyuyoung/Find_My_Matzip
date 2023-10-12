@@ -3,6 +3,7 @@ package com.matzip.repository;
 
 import com.matzip.entity.Follow;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,7 +21,11 @@ public interface FollowRepository extends JpaRepository<Follow, Long>{
      List<Follow> findByToUserId(@Param("toUserId") String toUserId);
 
      //로그인 유저가 페이지 유저 팔로잉했는지 여부 호출
-     @Query("select count(f) from Follow f where f.toUser.userid = :toUserId and f.fromUser.userid = :loginUserId")
-     Integer findByToUserIdAndFromUserId(@Param("toUserId") String toUserId,@Param("loginUserId") String loginUserId);
+     @Query("select f from Follow f where f.toUser.userid = :toUserId and f.fromUser.userid = :loginUserId")
+     Follow findByToUserIdAndFromUserId(@Param("toUserId") String toUserId,@Param("loginUserId") String loginUserId);
+
+     @Modifying
+     @Query("delete from Follow f where f.toUser.userid = :toUserId and f.fromUser.userid = :fromUserId")
+     int deleteFollow(@Param("toUserId") String toUserId, @Param("fromUserId") String fromUserId);
 
 }

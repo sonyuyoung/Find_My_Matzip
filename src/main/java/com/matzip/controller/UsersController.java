@@ -164,5 +164,14 @@ public class UsersController {
         return "redirect:/users/";
     }
 
+    @GetMapping("/deleteFollow/{toUserId}")
+    public String deleteFollow(@PathVariable String toUserId,Principal principal){
+        followService.deleteFollow(toUserId,principal.getName());
+
+
+
+        return "redirect:/users/profile/"+toUserId;
+    }
+
 
 }

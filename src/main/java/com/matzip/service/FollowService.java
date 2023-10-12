@@ -71,9 +71,9 @@ public class FollowService {
 
     //로그인 유저가 페이지 유저 팔로잉했는지 여부 호출
     public Boolean isFollow(String toUserId, String loginUserId) throws Exception{
-        Integer followCheck = followRepository.findByToUserIdAndFromUserId(toUserId, loginUserId);
+        Follow followCheck = followRepository.findByToUserIdAndFromUserId(toUserId, loginUserId);
 
-        if(followCheck>0){
+        if(followCheck != null){
             return true;
         }
         else{
@@ -81,5 +81,12 @@ public class FollowService {
         }
 
     }
+
+    public void deleteFollow(String toUserId,String fromUserId) {
+       Follow follow = followRepository.findByToUserIdAndFromUserId(toUserId,fromUserId);
+       followRepository.delete(follow);
+
+    }
+
 
 }
