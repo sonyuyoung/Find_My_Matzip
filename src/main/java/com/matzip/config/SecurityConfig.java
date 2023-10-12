@@ -1,6 +1,6 @@
 package com.matzip.config;
 
-import com.matzip.service.PrincipalOauth2UserService;
+import com.matzip.config.oauth.PrincipalOauth2UserService;
 import com.matzip.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,10 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("userid")// 아이디 파라미터명 설정
                 .passwordParameter("user_pwd")
                 .failureUrl("/users/login/error") // 로그인 실패 후 이동 페이지
+
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout")) //사용자 정의 로그아웃 페이지
                 .logoutSuccessUrl("/") // 로그아웃 후 이동 페이지
+
 
                 .and()
                 .oauth2Login()
@@ -42,8 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userInfoEndpoint()
                 .userService(principalOauth2UserService);
 
-
         ;
+
+
         http.authorizeRequests()
                 .mvcMatchers("/", "/users/**","/item/**", "/images/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
