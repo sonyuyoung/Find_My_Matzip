@@ -1,6 +1,5 @@
 package com.matzip.controller;
 
-import com.matzip.dto.BoardDto;
 import com.matzip.dto.FollowDto;
 import com.matzip.dto.UsersFormDto;
 import com.matzip.entity.Users;
@@ -140,6 +139,10 @@ public class UsersController {
         //팔로잉 리스트
         List<FollowDto> followingDtoList = followService.getFollowingDtoList(pageUserId,principal.getName());
 
+        //로그인 유저가 페이지 유저 팔로우 했는지 여부
+        Boolean followcheck = followService.isFollow(pageUserId,principal.getName());
+
+        model.addAttribute("followcheck",followcheck);
         model.addAttribute("followerDtoList",followerDtoList);
         model.addAttribute("followingDtoList",followingDtoList);
         model.addAttribute("pageUserDto",pageUserDto);

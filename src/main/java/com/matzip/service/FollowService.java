@@ -69,4 +69,17 @@ public class FollowService {
         return followingDtoList;
     }
 
+    //로그인 유저가 페이지 유저 팔로잉했는지 여부 호출
+    public Boolean isFollow(String toUserId, String loginUserId) throws Exception{
+        Integer followCheck = followRepository.findByToUserIdAndFromUserId(toUserId, loginUserId);
+
+        if(followCheck>0){
+            return true;
+        }
+        else{
+            return  false;
+        }
+
+    }
+
 }
