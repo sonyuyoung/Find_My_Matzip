@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter @Setter
 public class BoardSearchDto {
 
+    //게시글 데이터 조회 시, 게시글 조회 조건 -> BoardRepositoryCustom으로 이동 후 사용자 정의 인터페이스를 작성
     private String searchDateType;
 
     private BoardViewStatus searchViewStatus;

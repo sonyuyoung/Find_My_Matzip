@@ -10,6 +10,9 @@
         <module name="Find_My_Matzip" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ch6-test1" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

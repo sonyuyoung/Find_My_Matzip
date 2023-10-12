@@ -20,18 +20,30 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
+// 무 조 건 파일명 뒤에 Impl 이라고 붙여줘야만 작동함 조심하셈
+
+
+//보드 리파지토리를 상속받고
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
+    //동적으로 쿼리를 생성하기 위해서 JPAqueryFactory 클래스를 사용한다.
     private JPAQueryFactory queryFactory;
 
+    //JPAqueryFactory의 생성자로 EntityManager (em) 객체를 넣어준다
     public BoardRepositoryCustomImpl(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    //게시글 상태조건이 전체(null)일 경우에는 null을 리턴한다
+    //결과적으로 게시글 상태조건이 null이 아니라 , VIEW / NOT_VIEW 상태라면 해당 조건의 게시글만 조회한다.
+    //이부분을 수정해서 비밀글 로 할 수 있지 않을까 <<<<<<<<<<<<<<<<<<<<<<
     private BooleanExpression searchViewStatusEq(BoardViewStatus searchViewStatus){
         return searchViewStatus == null ? null : QBoard.board.boardViewStatus.eq(searchViewStatus);
     }
 
+
+    //시간검색조건
     private BooleanExpression regDtsAfter(String searchDateType){
 
         LocalDateTime dateTime = LocalDateTime.now();
@@ -51,6 +63,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         return QBoard.board.regTime.after(dateTime);
     }
 
+    //리뷰제목, 리뷰작성자 아이디 에 검색어를 포함하고있는 게시글을 조회하도록 조건값을 반환한다.
     private BooleanExpression searchByLike(String searchBy, String searchQuery){
 
         if(StringUtils.equals("board_title", searchBy)){
@@ -67,6 +80,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
         // Querydsl
         // 통계 , 복잡한 쿼리 검색시 사용함. 1) 자동완성, 2) 문법체크등, ide 도움을 받기.
+        //쿼리팩토리를 이용해서 쿼리 생성한다.
+        //게시글 데이터를 조회하기 위해서 QBoard의 board를 지정한다
         QueryResults<Board> results = queryFactory
                 .selectFrom(QBoard.board)
                 // 조건절을 명시, 별말 없으면, and 조건으로
@@ -89,7 +104,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         long total = results.getTotal();
         // 검색 결과 데이터들과, 페이징의 조건, 전체 갯수를 반환.
         return new PageImpl<>(content, pageable, total);
-    }
+    } // -> BoardRepository 인터페이스에서 BoardRepositoryCustom 인터페이스를 상속받으러 가자 교재 271p
 
     private BooleanExpression boardTitleLike(String searchQuery){
         return StringUtils.isEmpty(searchQuery) ? null : QBoard.board.board_title.like("%" + searchQuery + "%");

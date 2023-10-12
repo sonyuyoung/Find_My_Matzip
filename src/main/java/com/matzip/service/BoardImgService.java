@@ -25,6 +25,7 @@ public class BoardImgService {
 
     private final FileService fileService;
 
+    //게시글에 이미지 업로드 및 저장
     public void saveBoardImg(BoardImg boardImg, MultipartFile boardImgFile) throws Exception{
         String oriImgName = boardImgFile.getOriginalFilename();
         String imgName = "";
@@ -42,6 +43,7 @@ public class BoardImgService {
         boardImgRepository.save(boardImg);
     }
 
+    //게시글 수정 -> 정상작동확인완료 -> board 엔티티로 이동해서 상품데이터를 업데이트하는 로직을 만든다
     public void updateBoardImg(Long boardImgId, MultipartFile boardImgFile) throws Exception{
         if(!boardImgFile.isEmpty()){
             BoardImg savedBoardImg = boardImgRepository.findById(boardImgId)

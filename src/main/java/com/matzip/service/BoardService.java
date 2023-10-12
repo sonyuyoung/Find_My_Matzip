@@ -32,10 +32,11 @@ public class BoardService {
 
     private final BoardImgRepository boardImgRepository;
 
+    //게시글 저장하기
     public Long saveBoard(BoardFormDto boardFormDto, List<MultipartFile> boardImgFileList) throws Exception{
 
         System.out.println("여기서부터 오류발생 보드서비스,,, 세이브보드 시작");
-        //상품 등록
+        //게시글 등록
         Board board = boardFormDto.createBoard();
         System.out.println("보드생성완료");
         boardRepository.save(board);
@@ -57,34 +58,47 @@ public class BoardService {
         return board.getId();
     }
 
+    //게시글수정하기
+
+    //@Transactional -> 트랜잭션 읽기전용설정 , JPA가 더티체킹을 수행하지 않아서 성능향상
     @Transactional(readOnly = true)
     public BoardFormDto getBoardDtl(Long boardId){
+        //해당 게시글의 이미지 조회, 등록순으로 가지고 오기 위해서 게시글이미지 아이디를 오름차순으로 가지고온다
         List<BoardImg> boardImgList = boardImgRepository.findByBoardIdOrderByIdAsc(boardId);
         List<BoardImgDto> boardImgDtoList = new ArrayList<>();
+
         for (BoardImg boardImg : boardImgList) {
+            //boardImg 엔티티를 boardImgDto 객체로 만들어서
             BoardImgDto boardImgDto = BoardImgDto.of(boardImg);
+            //리스트에 추가
             boardImgDtoList.add(boardImgDto);
         }
 
+        //게시글의 아이디를 통해 상품 엔티티를 조회 . 존재하지않으면 오류 발생시키기
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(EntityNotFoundException::new);
         BoardFormDto boardFormDto = BoardFormDto.of(board);
         boardFormDto.setBoardImgDtoList(boardImgDtoList);
         return boardFormDto;
     }
+    //게시글 수정 페이지로 진입하기 위해서 BoardController 클래스에 코드추가
 
-    // 상품 수정을  처리하는 로직.
+    // 게시글 수정을  처리하는 로직. -> 완성후 boardController로 이동 후 게시글URL을 추가해준다
     public Long updateBoard(BoardFormDto boardFormDto, List<MultipartFile> boardImgFileList) throws Exception{
         //상품 수정,
-        // 기존 아이템 정보를 불러오기.
+        //게시글 등록 화면으로부터 전달받은 게시글 아이디를 이용하여 게시글 엔티티를 조회한다.
         Board board = boardRepository.findById(boardFormDto.getId())
                 .orElseThrow(EntityNotFoundException::new);
         // 기존 아이템에 내용에 , 더티 체킹. 변경사항에 대해서, 영속성이 알아서 자동으로 처리.
+        //등록화면으로 부터 전달받은 boardFormDto를 통해, 게시글 엔티티를 업데이트한다.
         board.updateBoard(boardFormDto);
+        //게시글 이미지 아이디 리스트를 조회
         List<Long> boardImgIds = boardFormDto.getBoardImgIds();
 
         //이미지 등록
         for(int i=0;i<boardImgFileList.size();i++){
+            //게시글이미지를 업데이트 하기 위해서 updateBoardImg()메서드에
+            //게시글 이미지 아이디/게시글 이미지 파일정보를 파라미터로 전달한다.
             boardImgService.updateBoardImg(boardImgIds.get(i),
                     boardImgFileList.get(i));
         }
@@ -92,6 +106,9 @@ public class BoardService {
         return board.getId();
     }
 
+    // // 게시글 조회조건과 페이지 정보를 파라미터로 받아서 데이터조회하는 getAdminBoardPage() 메소드를 추가했다
+    //데이터의 수정이 일어나지않고 조회만 하기때문에 readOnly 어노테이션 설정
+    //BoardController로 이동해서 게시글 관리 화면 및 조회한 게시글 데이터를 화면에 전달하는 로직을 구현하자 108줄
     @Transactional(readOnly = true)
     public Page<Board> getAdminBoardPage(BoardSearchDto boardSearchDto, Pageable pageable){
         return boardRepository.getAdminBoardPage(boardSearchDto, pageable);
