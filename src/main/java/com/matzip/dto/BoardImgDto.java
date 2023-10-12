@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper;
 @Getter @Setter
 public class BoardImgDto {
 
-    private Long board_img_id;
+    private Long id;
 
     private String imgName;
 

@@ -8,12 +8,12 @@ import javax.persistence.*;
 @Entity
 @Table(name="board_img")
 @Getter @Setter
-public class BoardImg{
+public class BoardImg extends BaseEntity{
 
     @Id
     @Column(name="board_img_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long board_img_id;
+    private Long id;
 
     private String imgName; //이미지 파일명
 
@@ -24,7 +24,7 @@ public class BoardImg{
     private String repimgYn; //대표 이미지 여부
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "boardNo")
+    @JoinColumn(name = "board_id")
     private Board board;
 
     public void updateBoardImg(String oriImgName, String imgName, String imgUrl){

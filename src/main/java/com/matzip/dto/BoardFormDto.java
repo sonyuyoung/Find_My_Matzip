@@ -1,5 +1,6 @@
 package com.matzip.dto;
 
+import com.matzip.constant.BoardViewStatus;
 import com.matzip.entity.Board;
 import com.matzip.entity.Restaurant;
 import com.matzip.entity.Users;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,21 +19,31 @@ import java.util.List;
 public class BoardFormDto {
 
     //1. 게시글(일반 데이터) 입력 부분
-    private Long boardNo;
 
+    //게시글아이디
+    private Long id;
+
+    //식당아이디
     private Restaurant res_id;
 
+    //유저아이디
     private Users user_id;
 
+    //일단 에러나니까추가해봄
+    private BoardViewStatus boardViewStatus;
+
+    //게시글제목
     @NotBlank(message = "제목을 입력 바랍니다.")
     private String board_title;
 
+    //리뷰상세내역
     private String content;
 
-    @NotBlank(message = "평점을 입력 바랍니다.")
-    private int score;
+    //리뷰 평점
+    @NotNull(message = "평점을 입력 바랍니다.")
+    private Integer score;
 
-    //2. 이미지 입력 부분
+    //2. 리뷰 이미지 입력 부분
     private List<BoardImgDto> boardImgDtoList = new ArrayList<>();
 
     private List<Long> boardImgIds = new ArrayList<>();
@@ -41,7 +53,10 @@ public class BoardFormDto {
 
     //폼 데이터 자동 매핑 -> Board객체 생성
     public Board createBoard(){
-        return modelMapper.map(this, Board.class);
+        System.out.println("BoardFormDto/createBoard 넘어오는거까지는성공");
+        Board board = modelMapper.map(this, Board.class);
+        System.out.println("modelMapper.map(this, Board.class); 수행 후~~~~~================");
+        return board;
     }
 
     //board객체를 boardFormDto로 변환 : service에서 data 전달 시 이용

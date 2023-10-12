@@ -4,7 +4,11 @@ import com.matzip.constant.UserRole;
 import com.matzip.entity.Users;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Getter @Setter
 public class UsersFormDto {
@@ -41,14 +45,19 @@ public class UsersFormDto {
 //        return user_sex;
 //    }
 
-
+@NotBlank(message = "아이디를 입력해주세요 ")
     private String userid;
+@NotBlank(message = "비밀번호를 입력해주세요 ")
     private String user_pwd;
+    @NotBlank(message = "이름을 입력해주세요 ")
     private String user_name;
+    @NotBlank(message = "주소를 적용해주세요 ")
     private String user_address;
     private UserRole user_role;
+    @Pattern(regexp = "^[0-9]{11}$", message = "폰번호는 11자리의 숫자여야 합니다.")
     private String user_phone;
     private String user_image;
+    private String gender;
 //    private LocalDateTime user_birth;
 //    private int user_level;
 //    private boolean user_sex;
@@ -63,5 +72,16 @@ public class UsersFormDto {
         return modelMapper.map(users,UsersFormDto.class);
     }
 
+    public static UsersFormDto toUsersDto(Users users){
+        UsersFormDto usersFormDto =new UsersFormDto();
+        usersFormDto.setUserid(users.getUserid());
+        usersFormDto.setUser_name(users.getUser_name());
+        usersFormDto.setUser_address(users.getUser_address());
+        usersFormDto.setUser_role(users.getUser_role());
+        usersFormDto.setUser_phone(users.getUser_phone());
+        usersFormDto.setUser_image(users.getUser_image());
+
+        return usersFormDto;
+    }
 
 }
