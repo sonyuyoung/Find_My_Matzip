@@ -1,5 +1,6 @@
 package com.matzip.config;
 
+import com.matzip.service.PrincipalOauth2UserService;
 import com.matzip.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UsersService usersService;
+    @Autowired
+    private PrincipalOauth2UserService principalOauth2UserService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -32,8 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout")) //사용자 정의 로그아웃 페이지
                 .logoutSuccessUrl("/") // 로그아웃 후 이동 페이지
-        ;
 
+                .and()
+                .oauth2Login()
+                .loginPage("/users/login") // OAuth2 로그인 페이지
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService);
+
+
+        ;
         http.authorizeRequests()
                 .mvcMatchers("/", "/users/**","/item/**", "/images/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
