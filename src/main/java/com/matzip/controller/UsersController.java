@@ -111,16 +111,20 @@ public class UsersController {
     }
 
     //내 프로필 조회
-    @GetMapping(value = "/myProfile")
-    public String myProfileForm(Principal principal,Model model){
+    @GetMapping(value = {"/profile","/profile/{pageUserid}"})
+    public String myProfileForm(@PathVariable(name ="pageUserid", required = false) String pageUserId,Principal principal,Model model){
         //myBoardList : 내 게시글 리스트
         /*List<BoardDto> myBoardList = boardService.getBoardList(principal.getName());
         model.addAttribute("myBoardList", myBoardList);*/
 
+        //마이페이지일때
+        if(pageUserId == null){
+            //pageUser == principal
+            pageUserId = principal.getName();
+        }
 
         //pageUser의 userDto
-        String pageUserid = principal.getName();
-        UsersFormDto pageUserDto = usersService.findById(pageUserid);
+        UsersFormDto pageUserDto = usersService.findById(pageUserId);
 
         //현재 로그인된 user의 userDto
         String myId = principal.getName();
