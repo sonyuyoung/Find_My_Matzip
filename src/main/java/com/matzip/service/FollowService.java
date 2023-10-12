@@ -2,26 +2,25 @@ package com.matzip.service;
 
 import com.matzip.dto.FollowDto;
 import com.matzip.entity.Follow;
+import com.matzip.entity.Users;
 import com.matzip.repository.FollowRepository;
+import com.matzip.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class FollowService {
     private final FollowRepository followRepository;
+    private final UsersRepository usersRepository;
 
     //팔로워dto 리스트
     public List<FollowDto> getFollowerDtoList(String toUserId, String loginUserId) throws Exception{
-        //pageuser를 팔로잉한 사람 목록(FollowDto : id,name,profileImage,subscribeState)
+        //pageuser를 팔로잉한 사람 목록(FollowerDto : id,name,profileImage,subscribeState)
         List<Follow> toUserList = followRepository.findByToUserId(toUserId);
         
         //DTO로 변환
@@ -48,13 +47,13 @@ public class FollowService {
 
     //팔로잉dto 리스트
     public List<FollowDto> getFollowingDtoList(String fromUserId, String loginUserId) throws Exception{
-        //pageuser가 팔로잉한 사람 목록(FollowDto : id,name,profileImage,subscribeState)
+        //pageuser가 팔로잉한 사람 목록(FollowerDto : id,name,profileImage,subscribeState)
         List<Follow> fromUserList = followRepository.findByFromUserId(fromUserId);
 
         //DTO로 변환
         List<FollowDto> followingDtoList = new ArrayList<>();
         for(Follow follow:fromUserList){
-            FollowDto followDto = new FollowDto(follow);
+            FollowDto followDto = new FollowDto(follow.getToUser().getUserid(), follow.getToUser().getUser_name(), follow.getToUser().getUser_image());
             followingDtoList.add(followDto);
         }
 
@@ -72,5 +71,34 @@ public class FollowService {
 
         return followingDtoList;
     }
+
+    //로그인 유저가 페이지 유저 팔로잉했는지 여부 호출
+    public Boolean isFollow(String toUserId, String loginUserId) throws Exception{
+        Follow followCheck = followRepository.findByToUserIdAndFromUserId(toUserId, loginUserId);
+
+        if(followCheck != null){
+            return true;
+        }
+        else{
+            return  false;
+        }
+
+    }
+
+    public void deleteFollow(String toUserId,String fromUserId) {
+       Follow follow = followRepository.findByToUserIdAndFromUserId(toUserId,fromUserId);
+       followRepository.delete(follow);
+
+    }
+
+    public void insertFollow(String toUserId,String fromUserId) {
+        Users toUser = usersRepository.findByUserid(toUserId);
+        Users fromUser = usersRepository.findByUserid(fromUserId);
+
+        Follow follow = new Follow(toUser,fromUser);
+        followRepository.save(follow);
+
+    }
+
 
 }
