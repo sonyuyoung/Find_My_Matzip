@@ -15,47 +15,8 @@
 
 <div layout:fragment="content">
 
-
-  <div class="container">
-    <div>
-
-      <form>
-        <table class="table">
-          <thead>
-          <tr>
-            <td>식당ID</td>
-            <td>식당이름</td>
-            <td>구/군</td>
-            <td>주소</td>
-            <td>영업시간</td>
-            <td>대표메뉴</td>
-            <td>썸네일</td>
-            <td>위도</td>
-            <td>경도</td>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="restaurant : ${restaurantList}">
-            <td th:text="${restaurant.res_id}"></td>
-            <td th:text="${restaurant.operate_time}"></td>
-            <td th:text="${restaurant.res_name}"></td>
-            <td th:text="${restaurant.res_district}"></td>
-            <td th:text="${restaurant.res_address}"></td>
-            <td th:text="${restaurant.res_menu}"></td>
-            <td th:text="${restaurant.res_thumbnail}"></td>
-            <td th:text="${restaurant.res_lat}"></td>
-            <td th:text="${restaurant.res_lng}"></td>
-          </tr>
-          </tbody>
-        </table>
-      </form>
-    </div>
-  </div>-->
-
-
-  <!---->
   <!--지도 호출 구문-->
-  <!--<div id="map" style="width:100%;height:1000px;"></div>
+  <div id="map" style="width:100%;height:1000px;"></div>
 
   <script type="text/javascript">
 
@@ -141,6 +102,15 @@
       }
     }
 
-  </script>-->
+  </script>
 
+
+  <div class="container">
+    <tr th:each="restaurant : ${restaurantList}">
+      <td th:text="${restaurant.res_district}"></td>
+      <td th:text="${restaurant.res_lat}"></td>
+      <td th:text="${restaurant.res_lng}"></td>
+    </tr>
+
+  </div>
 </div>
