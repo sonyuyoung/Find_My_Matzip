@@ -11,8 +11,8 @@ import java.util.List;
 public interface FollowRepository extends JpaRepository<Follow, Long>{
 
      //팔로잉 리스트 호출
-     @Query("select f from Follow f where f.fromUser.userid = :loginUserId")
-     List<Follow> findByFromUserId(@Param("loginUserId") String loginUserId);
+     @Query("select f from Follow f where f.fromUser.userid = :fromUserId")
+     List<Follow> findByFromUserId(@Param("fromUserId") String fromUserId);
 
 
      //팔로워 리스트 호출

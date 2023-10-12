@@ -135,10 +135,13 @@ public class UsersController {
         UsersFormDto loginUserDto = usersService.findById(loginUserId);
 
 
-        //현재 로그인된 users 팔로워 리스트
-        List<FollowDto> followDtoList = followService.getFollowDtoList(pageUserId,principal.getName());
+        //팔로워 리스트
+        List<FollowDto> followerDtoList = followService.getFollowerDtoList(pageUserId,principal.getName());
+        //팔로잉 리스트
+        List<FollowDto> followingDtoList = followService.getFollowingDtoList(pageUserId,principal.getName());
 
-        model.addAttribute("followDtoList",followDtoList);
+        model.addAttribute("followerDtoList",followerDtoList);
+        model.addAttribute("followingDtoList",followingDtoList);
         model.addAttribute("pageUserDto",pageUserDto);
         model.addAttribute("loginUserDto",loginUserDto);
         return "users/profileForm";
