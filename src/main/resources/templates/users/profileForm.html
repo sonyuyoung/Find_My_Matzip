@@ -154,12 +154,12 @@
                                         <th:block th:switch="${followcheck}">
                                             <!--팔로우한 유저-->
                                             <div th:case="true">
-                                                <button type="button" th:attr="onclick='toggleSubscribe(\'' + ${pageUserDto.userid} + '\', this)'">언팔로우</button>
+                                                <button type="button" class = "btn btn-danger" th:attr="onclick='toggleSubscribe(\'' + ${pageUserDto.userid} + '\', this)'">언팔로우</button>
 
                                             </div>
                                             <!--팔로우하지 않은 유저-->
                                             <div th:case="false">
-                                                <button type="button" th:attr="onclick='toggleSubscribe(\'' + ${pageUserDto.userid} + '\', this)'">팔로우</button>
+                                                <button type="button" class = "btn btn-primary" th:attr="onclick='toggleSubscribe(\'' + ${pageUserDto.userid} + '\', this)'">팔로우</button>
                                             </div>
                                         </th:block>
                                     </div>
