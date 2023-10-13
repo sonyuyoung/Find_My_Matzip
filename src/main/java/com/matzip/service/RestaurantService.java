@@ -2,8 +2,7 @@ package com.matzip.service;
 
 import com.matzip.dto.*;
 import com.matzip.entity.Restaurant;
-import com.matzip.repository.BoardImgRepository;
-import com.matzip.repository.BoardRepository;
+import com.matzip.entity.RestaurantImg;
 import com.matzip.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +21,6 @@ import java.util.Optional;
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
-    private final BoardImgRepository boardImgRepository;
     private final FileService fileService;
 
 
@@ -64,6 +63,18 @@ public class RestaurantService {
     @Transactional(readOnly = true)
     public Page<MainRestaurantDto> getMainRestaurantPage(RestaurantSearchDto restaurantSearchDto, Pageable pageable){
         return restaurantRepository.getMainRestaurantPage(restaurantSearchDto, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public RestaurantFormDto getRestaurantDtl(String res_id){
+        //해당 게시글의 이미지 조회, 등록순으로 가지고 오기 위해서 게시글이미지 아이디를 오름차순으로 가지고온다
+        List<RestaurantImgDto> restaurantImgDtoList = new ArrayList<>();
+        //게시글의 아이디를 통해 상품 엔티티를 조회 . 존재하지않으면 오류 발생시키기
+        Restaurant restaurant = restaurantRepository.findById(res_id)
+                .orElseThrow(EntityNotFoundException::new);
+        RestaurantFormDto restaurantFormDto = RestaurantFormDto.of(restaurant);
+        restaurantFormDto.setRestaurantImgDtoList(restaurantImgDtoList);
+        return restaurantFormDto;
     }
 
 
