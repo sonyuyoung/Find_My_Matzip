@@ -100,5 +100,13 @@ public class FollowService {
 
     }
 
+    public Integer countByFromUser(String fromUserId) {
+        return followRepository.countByFromUser(fromUserId);
+    }
+
+    public Integer countByToUser(String toUserId) {
+        return followRepository.countByToUser(toUserId);
+    }
+
 
 }

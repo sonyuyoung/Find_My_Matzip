@@ -24,7 +24,9 @@
                 }).done(res => {
                     $(obj).text("팔로우");
                     $(obj).toggleClass("btn btn-primary");
-                }).fail(error => {
+                    document.location.reload();
+                })
+                    .fail(error => {
                     alert(error.responseText);
                 });
             } else {
@@ -35,6 +37,7 @@
                 }).done(res => {
                     $(obj).text("언팔로우");
                     $(obj).toggleClass("btn btn-danger");
+                    document.location.reload();
                 }).fail(error => {
                     alert(error.responseText);
                 });
@@ -166,9 +169,10 @@
                                 </th:block>
                             </div>
                             <div class ="detail_list">
-                                <a>게시물<span> 15</span></a>
-                                <a class="openFollower">팔로워</a>
-                                <a class="openFollowing">팔로우</a>
+                                <!--<a>게시물  <span th:text="${countBoard}"></span></a>-->
+                                <a>게시물</a>
+                                <a class="openFollower">팔로워  <span th:text="${countToUser}"></span></a>
+                                <a class="openFollowing">팔로우  <span th:text="${countFromUser}"></span></a>
                             </div>
                             <div>
                                 신뢰등급 + 게시글 작성 버튼
