@@ -43,7 +43,7 @@
     <td>
         <img th:src="${users.user_image}" alt="User Image" style="width: 50px; height: 50px;">
     </td>
-    <td><button type="button" onClick="location.href='/users/modUsersForm'"  class="btn btn-primary btn-sm">수정</button></td>
+    <td><a th:href="@{|/users/modUsersForm/${users.userid}|}" class="btn btn-danger btn-sm">수정</a></td></td>
 <!--    <td><a th:href="@{|/users/updateUsers/|}" class="btn btn-primary btn-sm">수정</a></td>-->
     <td><a th:href="@{|/users/delete/${users.userid}|}" class="btn btn-danger btn-sm">삭제</a></td>
 

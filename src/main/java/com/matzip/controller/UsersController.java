@@ -55,12 +55,21 @@ public class UsersController {
     }
 
     //modUsers폼 호출
-    @GetMapping(value = "/modUsersForm")
-    public String modUsersForm(Principal principal,Model model){
-        String userid = principal.getName();
-        UsersFormDto usersFormDto = usersService.findById(userid);
+    @GetMapping(value = {"/modUsersForm","/modUsersForm/{pageUserid}"})
+    public String modUsersForm(@PathVariable(name ="pageUserid", required = false) String pageUserid,Principal principal,Model model){
 
-        model.addAttribute("usersFormDto", usersFormDto);
+        //내 프로필창에서 수정
+        if(pageUserid == null){
+            String userid = principal.getName();
+            UsersFormDto usersFormDto = usersService.findById(userid);
+            model.addAttribute("usersFormDto", usersFormDto);
+        }
+        //유저 리스트에서 수정
+        else{
+            UsersFormDto usersFormDto = usersService.findById(pageUserid);
+            model.addAttribute("usersFormDto", usersFormDto);
+        }
+
         return "users/modUsersForm";
     }
 
