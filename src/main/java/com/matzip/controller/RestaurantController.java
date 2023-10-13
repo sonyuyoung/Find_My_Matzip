@@ -37,7 +37,7 @@ public class RestaurantController {
         return "map/mapForm";
     }
 
-    @GetMapping(value = "/restaurant/new")
+    @GetMapping(value = {"/restaurant/new"})
     public String restaurantForm(Model model){
         model.addAttribute("restaurantFormDto", new RestaurantFormDto());
         return "/restaurant/restaurantForm";
