@@ -4,6 +4,7 @@ package com.matzip.repository;
 import com.matzip.dto.RestaurantSearchDto;
 import com.matzip.dto.MainRestaurantDto;
 import com.matzip.dto.QMainRestaurantDto;
+import com.matzip.entity.QBoard;
 import com.matzip.entity.Restaurant;
 import com.matzip.entity.QRestaurant;
 import com.matzip.entity.QRestaurantImg;
@@ -19,11 +20,6 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-// 무 조 건 파일명 뒤에 Impl 이라고 붙여줘야만 작동함 조심하셈
-
-
-//보드 리파지토리를 상속받고
 public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCustom {
 
     //동적으로 쿼리를 생성하기 위해서 JPAqueryFactory 클래스를 사용한다.
@@ -34,10 +30,23 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    //리뷰제목, 리뷰작성자 아이디 에 검색어를 포함하고있는 게시글을 조회하도록 조건값을 반환한다.
+    //식당이름, 식당설명, 식당대표메뉴, 식당주소에 검색어를 포함하고있는 게시글을 조회하도록 조건값을 반환한다.
     private BooleanExpression searchByLike(String searchBy, String searchQuery){
+
+        if(StringUtils.equals("res_name", searchBy)){
             return QRestaurant.restaurant.res_name.like("%" + searchQuery + "%");
+        } else if(StringUtils.equals("res_intro", searchBy)){
+            return QRestaurant.restaurant.res_intro.like("%" + searchQuery + "%");
+        }else if(StringUtils.equals("res_menu", searchBy)){
+            return QRestaurant.restaurant.res_menu.like("%" + searchQuery + "%");
+        }else if(StringUtils.equals("res_address", searchBy)){
+            return QRestaurant.restaurant.res_address.like("%" + searchQuery + "%");
+        }
+
+        return null;
     }
+
+
 
     @Override
     public Page<Restaurant> getAdminRestaurantPage(RestaurantSearchDto restaurantSearchDto, Pageable pageable) {

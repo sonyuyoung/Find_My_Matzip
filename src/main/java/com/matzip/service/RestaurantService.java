@@ -1,16 +1,19 @@
 package com.matzip.service;
 
 import com.matzip.dto.*;
+import com.matzip.entity.Board;
+import com.matzip.entity.BoardImg;
 import com.matzip.entity.Restaurant;
-import com.matzip.repository.BoardImgRepository;
-import com.matzip.repository.BoardRepository;
+import com.matzip.entity.RestaurantImg;
 import com.matzip.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,26 +24,8 @@ import java.util.Optional;
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
-    private final BoardImgRepository boardImgRepository;
+    private final RestaurantImgService restaurantImgService;
     private final FileService fileService;
-
-
-    /*@Override
-    public UserDetails loadUserByUsername(String userid) throws UsernameNotFoundException {
-
-        Users users = usersRepository.findByUserid(userid);
-
-        if(users == null){
-            throw new UsernameNotFoundException(userid);
-        }
-
-        return User.builder()
-                .username(users.getUserid())
-                .password(users.getUser_pwd())
-                .roles(users.getUser_role().toString())
-                .build();
-    }*/
-
 
     public List<RestaurantDto> findAll(){
         List<Restaurant> restaurantEntityList = restaurantRepository.findAll();
@@ -61,9 +46,55 @@ public class RestaurantService {
         }
     }
 
+    //게시글 저장하기
+    public String saveRestaurant(RestaurantFormDto restaurantFormDto, List<MultipartFile> restaurantImgFileList) throws Exception{
+
+        System.out.println("여기서부터 오류발생 레스토랑서비스,,, 세이브레스토랑 시작");
+        //게시글 등록
+        Restaurant restaurant = restaurantFormDto.createRestaurant();
+        System.out.println("레스토랑생성완료");
+        restaurantRepository.save(restaurant);
+        System.out.println("레스토랑저장완료");
+
+        //이미지 등록
+        for(int i=0;i<restaurantImgFileList.size();i++){
+            RestaurantImg restaurantImg = new RestaurantImg();
+            restaurantImg.setRestaurant(restaurant);
+
+            if(i == 0)
+                restaurantImg.setRepimgYn("Y");
+            else
+                restaurantImg.setRepimgYn("N");
+
+            restaurantImgService.saveRestaurantImg(restaurantImg, restaurantImgFileList.get(i));
+        }
+
+        return restaurant.getRes_id();
+    }
+
+    // // 게시글 조회조건과 페이지 정보를 파라미터로 받아서 데이터조회하는 getAdminBoardPage() 메소드를 추가했다
+    //데이터의 수정이 일어나지않고 조회만 하기때문에 readOnly 어노테이션 설정
+    //BoardController로 이동해서 게시글 관리 화면 및 조회한 게시글 데이터를 화면에 전달하는 로직을 구현하자 108줄
+    @Transactional(readOnly = true)
+    public Page<Restaurant> getAdminRestaurantPage(RestaurantSearchDto restaurantSearchDto, Pageable pageable){
+        return restaurantRepository.getAdminRestaurantPage(restaurantSearchDto, pageable);
+    }
+
     @Transactional(readOnly = true)
     public Page<MainRestaurantDto> getMainRestaurantPage(RestaurantSearchDto restaurantSearchDto, Pageable pageable){
         return restaurantRepository.getMainRestaurantPage(restaurantSearchDto, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public RestaurantFormDto getRestaurantDtl(String res_id){
+        //해당 게시글의 이미지 조회, 등록순으로 가지고 오기 위해서 게시글이미지 아이디를 오름차순으로 가지고온다
+        List<RestaurantImgDto> restaurantImgDtoList = new ArrayList<>();
+        //게시글의 아이디를 통해 상품 엔티티를 조회 . 존재하지않으면 오류 발생시키기
+        Restaurant restaurant = restaurantRepository.findById(res_id)
+                .orElseThrow(EntityNotFoundException::new);
+        RestaurantFormDto restaurantFormDto = RestaurantFormDto.of(restaurant);
+        restaurantFormDto.setRestaurantImgDtoList(restaurantImgDtoList);
+        return restaurantFormDto;
     }
 
 

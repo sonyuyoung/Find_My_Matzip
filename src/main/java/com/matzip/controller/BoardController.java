@@ -67,6 +67,9 @@ public class BoardController {
     }
 
     //게시글 수정 -> 상품이미지 수정을 위해서 BoardImgService 이동하자
+
+
+    //게시글상세페이지 매핑
     @GetMapping(value = "/admin/board/{boardId}")
     public String boardDtl(@PathVariable("boardId") Long boardId, Model model){
 
