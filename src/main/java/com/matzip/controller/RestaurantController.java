@@ -51,7 +51,7 @@ public class RestaurantController {
             return "restaurant/restaurantForm";
         }
 
-        if(restaurantImgFileList.get(0).isEmpty() && restaurantFormDto.getRes_id() == null){
+        if(restaurantImgFileList.get(0).isEmpty() && restaurantFormDto.getResId() == null){
             model.addAttribute("errorMessage", "첫번째 레스토랑 이미지는 필수 입력 값 입니다.");
             return "restaurant/restaurantForm";
         }
@@ -97,9 +97,9 @@ public class RestaurantController {
 //    }
 
     //식당상세페이지 매핑
-    @GetMapping(value = "/restaurant/{res_id}")
-    public String restaurantDtl(Model model, @PathVariable("res_id") String res_id){
-        RestaurantFormDto restaurantFormDto = restaurantService.getRestaurantDtl(res_id);
+    @GetMapping(value = "/restaurant/{resId}")
+    public String restaurantDtl(Model model, @PathVariable("resId") String resId){
+        RestaurantFormDto restaurantFormDto = restaurantService.getRestaurantDtl(resId);
         model.addAttribute("restaurant", restaurantFormDto);
         return "restaurant/restaurantDtl";
     }

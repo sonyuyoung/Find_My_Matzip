@@ -51,7 +51,7 @@ public class BoardController {
         try {
 //            System.out.println("boardFormDto 내용 확인: =======================================");
 //            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getBoard_title());
-//            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getContent());
+            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getContent());
 //            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getScore());
 ////            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getBoardImgDtoList().get(0).getImgName());
 ////            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getBoardImgDtoList().get(0).getImgUrl());

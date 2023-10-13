@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter @Setter
 public class MainRestaurantDto {
 
-    private String res_id;       //식당 id
+    private String resId;       //식당 id
 
     private String res_name;//식당 이름
 
@@ -18,8 +18,8 @@ public class MainRestaurantDto {
 
 
     @QueryProjection
-    public MainRestaurantDto(String res_id, String res_name, String res_thumbnail,String res_menu){
-        this.res_id = res_id;
+    public MainRestaurantDto(String resId, String res_name, String res_thumbnail,String res_menu){
+        this.resId = resId;
         this.res_name = res_name;
         this.res_thumbnail = res_thumbnail;
         this.res_menu = res_menu;

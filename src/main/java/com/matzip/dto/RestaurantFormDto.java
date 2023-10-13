@@ -18,7 +18,7 @@ import java.util.List;
 public class RestaurantFormDto {
 
 
-    private String res_id;
+    private String resId;
 
     @NotBlank(message = "식당 이름을 입력 바랍니다.")
     private String res_name;//식당 이름

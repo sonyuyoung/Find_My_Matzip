@@ -60,7 +60,7 @@
             식당 등록
         </p>
 
-        <input type="hidden" th:field="*{res_id}">
+        <input type="hidden" th:field="*{resId}">
 
         <div class="input-group">
             <div class="input-group-prepend">
@@ -159,11 +159,11 @@
         </div>
 
         <!--상품의 아이디가 없다면 등록, 있다면 수정-->
-        <div th:if="${#strings.isEmpty(restaurantFormDto.res_id)}" style="text-align: center">
+        <div th:if="${#strings.isEmpty(restaurantFormDto.resId)}" style="text-align: center">
             <button th:formaction="@{/admin/restaurant/new}" type="submit" class="btn btn-primary">저장</button>
         </div>
-        <div th:unless="${#strings.isEmpty(restaurantFormDto.res_id)}" style="text-align: center">
-            <button th:formaction="@{'/admin/restaurant/' + ${restaurantFormDto.res_id} }" type="submit" class="btn btn-primary">수정</button>
+        <div th:unless="${#strings.isEmpty(restaurantFormDto.resId)}" style="text-align: center">
+            <button th:formaction="@{'/admin/restaurant/' + ${restaurantFormDto.resId} }" type="submit" class="btn btn-primary">수정</button>
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 

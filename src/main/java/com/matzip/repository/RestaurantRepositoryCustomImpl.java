@@ -61,7 +61,7 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
                 .where(searchByLike(restaurantSearchDto.getSearchBy(),
                                 restaurantSearchDto.getSearchQuery()))
                 // 정렬 조건.,  최신 상품 순서로
-                .orderBy(QRestaurant.restaurant.res_id.desc())
+                .orderBy(QRestaurant.restaurant.resId.desc())
                 // 페이징의 페이지 번호 위치. 0
                 .offset(pageable.getOffset())
                 // 최대로 보여 줄 페이지 갯수, 6개
@@ -93,7 +93,7 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
                         // @QueryProjection 의 생성자를 이용해서,
                         // 바로 검색 조건으로 자동 매핑을 해줌.
                         new QMainRestaurantDto(
-                                restaurant.res_id,
+                                restaurant.resId,
                                 restaurant.res_name,
                                 restaurant.res_thumbnail,
                                 restaurant.res_menu)
@@ -102,7 +102,7 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
                 .join(restaurantImg.restaurant, restaurant)
                 .where(restaurantImg.repimgYn.eq("Y"))
                 .where(restaurantNameLike(restaurantSearchDto.getSearchQuery()))
-                .orderBy(restaurant.res_id.desc())
+                .orderBy(restaurant.resId.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -111,5 +111,6 @@ public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCusto
         long total = results.getTotal();
         return new PageImpl<>(content, pageable, total);
     }
+
 
 }

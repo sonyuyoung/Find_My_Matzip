@@ -24,7 +24,7 @@ public class RestaurantImg extends BaseEntity{
     private String repimgYn; //대표 이미지 여부
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "res_id")
+    @JoinColumn(name = "resId")
     private Restaurant restaurant;
 
     public void updateRestaurantImg(String oriImgName, String imgName, String imgUrl){

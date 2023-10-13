@@ -8,8 +8,10 @@ import com.matzip.dto.BoardSearchDto;
 import com.matzip.dto.MainBoardDto;
 import com.matzip.entity.Board;
 import com.matzip.entity.BoardImg;
+import com.matzip.entity.Restaurant;
 import com.matzip.repository.BoardImgRepository;
 import com.matzip.repository.BoardRepository;
+import com.matzip.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,12 +34,16 @@ public class BoardService {
 
     private final BoardImgRepository boardImgRepository;
 
+    private final RestaurantRepository restaurantRepository;
+
     //게시글 저장하기
     public Long saveBoard(BoardFormDto boardFormDto, List<MultipartFile> boardImgFileList) throws Exception{
 
         System.out.println("여기서부터 오류발생 보드서비스,,, 세이브보드 시작");
         //게시글 등록
-        Board board = boardFormDto.createBoard();
+        //boardFormDto에는 id만 저장되어있으므로 레스토랑 객체 가져옴
+        Restaurant restaurant = restaurantRepository.findByresId(boardFormDto.getResId());
+        Board board = Board.createBoard(boardFormDto,restaurant);
         System.out.println("보드생성완료");
         boardRepository.save(board);
         System.out.println("보드저장완료");

@@ -72,6 +72,13 @@
 
         <div class="input-group">
             <div class="input-group-prepend">
+                <span class="input-group-text">식당 id</span>
+            </div>
+            <input type="text" th:field="*{resId}" class="form-control" placeholder="식당 id를 입력해주세요">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
                 <span class="input-group-text">리뷰 제목</span>
             </div>
             <input type="text" th:field="*{board_title}" class="form-control" placeholder="리뷰 제목을 입력해주세요">
