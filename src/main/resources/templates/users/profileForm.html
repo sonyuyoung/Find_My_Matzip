@@ -113,7 +113,7 @@
             display: none;
         }
         .modal-content{
-            width:350px; height:500px;
+            width:500px; height:600px;
             background:#fff; border-radius:10px;
             position:relative; top:40%; left:50%;
             margin-top:-100px; margin-left:-200px;
@@ -205,11 +205,30 @@
                 <div>
                     <table class="table">
                         <tr th:each="followerDto : ${followerDtoList}">
-                            <div class="text-center align-middle">
+                            <block class="text-center align-middle">
                                 <td><img th:src="${followerDto.profileImage}" width=50 height=50 alt="profile_img"></td>
                                 <td><a th:href="@{/users/profile/{id}(id = ${followerDto.id})}" th:text="${followerDto.id}"></a></td>
-                                <td><div class="following_id_message" th:text="${followerDto.subscribeState}"></div></td>
-                            </div>
+                                <td>
+                                    <!--리스트의 유저가 로그인 유저가 아닐때-->
+                                    <th:block th:if="${followerDto.id != loginUserDto.getUserid()}">
+                                        <th:block th:switch="${followerDto.subscribeState}">
+                                            <!--팔로우한 유저-->
+                                            <div th:case="true">
+                                                <button type="button" class = "btn btn-danger" th:attr="onclick='toggleSubscribe(\'' + ${followerDto.id} + '\', this)'">언팔로우</button>
+                                            </div>
+                                            <!--팔로우하지 않은 유저-->
+                                            <div th:case="false">
+                                                <button type="button" class = "btn btn-primary" th:attr="onclick='toggleSubscribe(\'' + ${followerDto.id} + '\', this)'">팔로우</button>
+                                            </div>
+                                        </th:block>
+                                    </th:block>
+                                    <!--리스트의 유저가 로그인 유저일때-->
+                                    <th:block th:if="${followerDto.id == loginUserDto.getUserid()}">
+                                        <button type="button" class = "btn btn-info">my profile</button>
+                                    </th:block>
+
+                                </td>
+                            </block>
                         </tr>
                     </table>
                 </div>
@@ -226,7 +245,26 @@
                             <div class="text-center align-middle">
                                 <td><img th:src="${followingDto.profileImage}" width=50 height=50 alt="profile_img"></td>
                                 <td><a th:href="@{/users/profile/{id}(id = ${followingDto.id})}" th:text="${followingDto.id}"></a></td>
-                                <td><div class="following_id_message" th:text="${followingDto.subscribeState}"></div></td>
+                                <td>
+                                    <!--리스트의 유저가 로그인 유저가 아닐때-->
+                                    <th:block th:if="${followingDto.id != loginUserDto.getUserid()}">
+                                        <th:block th:switch="${followingDto.subscribeState}">
+                                            <!--팔로우한 유저-->
+                                            <div th:case="true">
+                                                <button type="button" class = "btn btn-danger" th:attr="onclick='toggleSubscribe(\'' + ${followingDto.id} + '\', this)'">언팔로우</button>
+                                            </div>
+                                            <!--팔로우하지 않은 유저-->
+                                            <div th:case="false">
+                                                <button type="button" class = "btn btn-primary" th:attr="onclick='toggleSubscribe(\'' + ${followingDto.id} + '\', this)'">팔로우</button>
+                                            </div>
+                                        </th:block>
+                                    </th:block>
+                                    <!--리스트의 유저가 로그인 유저일때-->
+                                    <th:block th:if="${followingDto.id == loginUserDto.getUserid()}">
+                                        <button type="button" class = "btn btn-info">my profile</button>
+                                    </th:block>
+
+                                </td>
                             </div>
                         </tr>
                     </table>
