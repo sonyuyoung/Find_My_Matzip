@@ -14,7 +14,7 @@
     <th:block th:each="restaurant, status: ${restaurantList}">
       <div class="col-md-4 margin">
         <div class="card">
-          <a th:href="'/restaurant상세페이지/' +${restaurant.res_id}" class="text-dark">
+          <a th:href="'/restaurant/' +${restaurant.res_id}" class="text-dark">
             <img th:src="${restaurant.res_thumbnail}" class="card-img-top" th:alt="${restaurant.res_name}" height="400">
             <div class="card-body">
               <p class="card-text">[[${restaurant.res_name}]][[${restaurant.res_menu}]]</p>
