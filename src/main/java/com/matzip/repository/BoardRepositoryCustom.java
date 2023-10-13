@@ -9,8 +9,12 @@ import org.springframework.data.domain.Pageable;
 
 public interface BoardRepositoryCustom {
 
+    //게시글 조회 조건을 담고있는 BoardSearchDto 객체와 페이징 정보를 담고있는
+    //pageable 객체를 파라미터로 받는 메소드를 정의한다 . 반환데이터로 Page<Board> 객체를 반환한다.
+    //BoardRepositoryCustomImpl 클래스로가서 인터페이스를 구현해준다
     Page<Board> getAdminBoardPage(BoardSearchDto boardSearchDto, Pageable pageable);
 
+    //메인페이지에 보여줄 게시글 리스트를 가져오는 메서드
     Page<MainBoardDto> getMainBoardPage(BoardSearchDto boardSearchDto, Pageable pageable);
 
 }

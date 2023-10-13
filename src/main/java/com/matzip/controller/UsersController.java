@@ -1,8 +1,9 @@
 package com.matzip.controller;
 
+import com.matzip.dto.FollowDto;
 import com.matzip.dto.UsersFormDto;
 import com.matzip.entity.Users;
-import com.matzip.repository.UsersRepository;
+import com.matzip.service.FollowService;
 import com.matzip.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,9 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsersController {
 
-    private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsersService usersService;
+    private final FollowService followService;
 
 
     @GetMapping(value = "/new")
@@ -54,27 +55,43 @@ public class UsersController {
     }
 
     //modUsers폼 호출
-    @GetMapping(value = "/modUsersForm")
-    public String modUsersForm(Principal principal,Model model){
-        String userid = principal.getName();
-        Users users = usersRepository.findByUserid(userid);
-        UsersFormDto usersFormDto = UsersFormDto.of(users);
+    @GetMapping(value = {"/modUsersForm","/modUsersForm/{pageUserid}"})
+    public String modUsersForm(@PathVariable(name ="pageUserid", required = false) String pageUserid,Principal principal,Model model){
 
-        model.addAttribute("usersFormDto", usersFormDto);
+        //내 프로필창에서 수정
+        if(pageUserid == null){
+            String userid = principal.getName();
+            UsersFormDto usersFormDto = usersService.findById(userid);
+            model.addAttribute("usersFormDto", usersFormDto);
+        }
+        //유저 리스트에서 수정
+        else{
+            UsersFormDto usersFormDto = usersService.findById(pageUserid);
+            model.addAttribute("usersFormDto", usersFormDto);
+        }
+
         return "users/modUsersForm";
     }
-    
+
     //Users 업데이트
     @PostMapping(value = "/updateUsers")
-    public String updateUsers(@Valid UsersFormDto usersFormDto, BindingResult bindingResult, Model model,
+    public String updateUsers(UsersFormDto usersFormDto, BindingResult bindingResult, Model model,
                               @RequestParam("userImgFile") MultipartFile userImgFile,
                               Principal principal) throws Exception {
         if(bindingResult.hasErrors()){
+            System.out.println("error발생");
             return "users/modUsersForm";
         }
 
         try {
             //Users users = usersRepository.findByUserid(usersFormDto.getUserid());
+            System.out.println("usersFormDto.getUserid()"+usersFormDto.getUserid());
+            System.out.println("usersFormDto.getUser_name()"+usersFormDto.getUser_name());
+            System.out.println("usersFormDto.getUser_address()"+usersFormDto.getUser_address());
+            System.out.println("usersFormDto.getUser_phone()"+usersFormDto.getUser_phone());
+            System.out.println("usersFormDto.getUser_image()"+usersFormDto.getUser_image());
+            System.out.println("usersFormDto.getGender()"+usersFormDto.getGender());
+
             usersService.updateUsers(usersFormDto,userImgFile);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
@@ -83,11 +100,12 @@ public class UsersController {
             throw new RuntimeException(e);
         }
 
-        //현재 로그인된 users 객체 model에 추가
-        String userid = principal.getName();
-        Users users = usersRepository.findByUserid(userid);
+        //현재 로그인된 userDto(=pageUser)
+        String loginUserId = principal.getName();
+        UsersFormDto loginUserDto = usersService.findById(loginUserId);
 
-        model.addAttribute("users",users);
+        model.addAttribute("loginUserDto",loginUserDto);
+        model.addAttribute("pageUserDto",loginUserDto);
 
         return "users/profileForm";
     }
@@ -104,21 +122,43 @@ public class UsersController {
         return "users/usersLoginForm";
     }
 
-    @GetMapping(value = "/profile")
-    public String profileForm(Principal principal,Model model){
+    //내 프로필 조회
+    @GetMapping(value = {"/profile","/profile/{pageUserid}"})
+    public String myProfileForm(@PathVariable(name ="pageUserid", required = false) String pageUserId,Principal principal,Model model) throws Exception {
         //myBoardList : 내 게시글 리스트
        /* List<BoardDto> myBoardList = boardService.getBoardList(principal.getName());
         model.addAttribute("myBoardList", myBoardList);*/
 
+        //마이페이지일때 ("/profile")
+        if(pageUserId == null){
+            //pageUser == principal
+            pageUserId = principal.getName();
+        }
 
-        //현재 로그인된 users 객체 model에 추가
-        String userid = principal.getName();
-        Users users = usersRepository.findByUserid(userid);
+        //pageUser의 userDto
+        UsersFormDto pageUserDto = usersService.findById(pageUserId);
 
-        model.addAttribute("principal",principal);
-        model.addAttribute("users",users);
+        //현재 로그인된 user의 userDto
+        String loginUserId = principal.getName();
+        UsersFormDto loginUserDto = usersService.findById(loginUserId);
+
+
+        //팔로워 리스트
+        List<FollowDto> followerDtoList = followService.getFollowerDtoList(pageUserId,principal.getName());
+        //팔로잉 리스트
+        List<FollowDto> followingDtoList = followService.getFollowingDtoList(pageUserId,principal.getName());
+
+        //로그인 유저가 페이지 유저 팔로우 했는지 여부
+        Boolean followcheck = followService.isFollow(pageUserId,principal.getName());
+
+        model.addAttribute("followcheck",followcheck);
+        model.addAttribute("followerDtoList",followerDtoList);
+        model.addAttribute("followingDtoList",followingDtoList);
+        model.addAttribute("pageUserDto",pageUserDto);
+        model.addAttribute("loginUserDto",loginUserDto);
         return "users/profileForm";
     }
+
     @GetMapping("/users/")
     public String findAll(Model model){
         List<UsersFormDto> usersFormDtoList = usersService.findAll();
@@ -131,6 +171,22 @@ public class UsersController {
         usersService.deleteById(userid);
 
         return "redirect:/users/";
+    }
+
+    @GetMapping("/deleteFollow/{toUserId}")
+    public String deleteFollow(@PathVariable String toUserId,Principal principal){
+        followService.deleteFollow(toUserId,principal.getName());
+
+        return "redirect:/users/profile/"+toUserId;
+    }
+
+    @GetMapping("/insertFollow/{toUserId}")
+    public String insertFollow(@PathVariable String toUserId,Principal principal){
+        followService.insertFollow(toUserId,principal.getName());
+
+
+
+        return "redirect:/users/profile/"+toUserId;
     }
 
 

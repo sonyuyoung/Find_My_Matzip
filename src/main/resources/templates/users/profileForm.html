@@ -14,27 +14,27 @@
             }
         });
 
-        //구독 & 구독취소 버튼 활성화
+        //팔로잉 & 팔로워 기능
         function toggleSubscribe(toUserId,obj) {
-            if ($(obj).text() === "구독취소") {
+            if ($(obj).text() === "언팔로우") {
                 $.ajax({
-                    type: "delete",
-                    url: "/users/profileForm/" + $(toUserId),
+                    type: "GET",
+                    url: "/users/deleteFollow/"+toUserId,
                     dataType: "text"
                 }).done(res => {
-                    $(obj).text("구독하기");
-                    $(obj).toggleClass("blue");
+                    $(obj).text("팔로우");
+                    $(obj).toggleClass("btn btn-primary");
                 }).fail(error => {
                     alert(error.responseText);
                 });
             } else {
                 $.ajax({
-                    type: "post",
-                    url: "/users/profileForm/" + $(toUserId),
+                    type: "GET",
+                    url: "/users/insertFollow/" + toUserId,
                     dataType: "text"
                 }).done(res => {
-                    $(obj).text("구독취소");
-                    $(obj).toggleClass("blue");
+                    $(obj).text("언팔로우");
+                    $(obj).toggleClass("btn btn-danger");
                 }).fail(error => {
                     alert(error.responseText);
                 });
@@ -64,22 +64,25 @@
             }
             item += `</div></div>`;
             return item;
-        }
-
-        // (7) 구독자 정보 모달 닫기
-        function modalClose() {
-            $(".modal-subscribe").css("display", "none");
-            location.reload();
         }*/
+
 
         //팔로워 모달 창 띄우기
         $(function (){
-            $(".openModal").click(function (){
-                $(".modal").fadeIn();
+            $(".openFollower").click(function (){
+                $(".followerModal").fadeIn();
             });
 
-            $(".modal").dblclick(function (){
-                $(".modal").fadeOut();
+            $(".openFollowing").click(function (){
+                $(".followingModal").fadeIn();
+            });
+
+            $(".followerModal").dblclick(function (){
+                $(".followerModal").fadeOut();
+            });
+
+            $(".followingModal").dblclick(function (){
+                $(".followingModal").fadeOut();
             });
         })
 
@@ -90,7 +93,15 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
-        .modal {
+        .followerModal{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            top: 0;left: 0;
+            display: none;
+        }
+        .followingModal {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -105,9 +116,13 @@
             margin-top:-100px; margin-left:-200px;
             text-align:center;
             box-sizing:border-box; padding:74px 0;
-            line-height:23px; cursor:pointer;
+            line-height:23px;
+            overflow: scroll;
         }
-        .openModal{
+        .modal_img{
+
+        }
+        .openFollower{
             cursor:pointer;
         }
     </style>
@@ -120,45 +135,40 @@
             <div class="card">
                 <div class="row no-gutters">
                     <div class="col-4">
-                        <img id="preview" th:src="${users.user_image}"  width=200 height=200 th:alt="${users.user_image}">
+                        <img id="preview" th:src="${pageUserDto.user_image}"  width=200 height=200 th:alt="${pageUserDto.user_image}">
                     </div>
                     <div class="col-8">
                         <div class="card-body">
                             <div class = "detail">
-                                <h2 th:text="${users.userid}"></h2>
+                                <h2 th:text="${pageUserDto.userid}"></h2>
 
-                                <th:block th:switch="${users.userid}">
+                                <th:block th:switch="*{pageUserDto.userid}">
 
                                     <!--내 프로필-->
-                                    <div th:case="${principal.getName()}">
+                                    <div th:case="${loginUserDto.getUserid()}">
                                         <button type="button" onClick="location.href='/users/modUsersForm'"  class="btn btn-secondary">프로필 편집</button>
-                                        <button type="button" onClick="location.href='/board/boardForm'" class="btn btn-secondary">게시글 작성</button>
+                                        <button type="button" onClick="location.href='/admin/board/new'" class="btn btn-secondary">게시글 작성</button>
                                     </div>
                                     <!--다른 사람 프로필-->
                                     <div th:case="*">
-                                        <button class="cta" onclick="toggleSubscribe( [${users.userid}], this)">구독하기</button>
-                                        <!-- <button type="button"
-                                                 th:userid="${users.userid}"
-                                                 th:onclick="toggleSubscribe(${profileDto.id},this)"
-                                                 th:text="구독하기"></button>-->
+                                        <th:block th:switch="${followcheck}">
+                                            <!--팔로우한 유저-->
+                                            <div th:case="true">
+                                                <button type="button" class = "btn btn-danger" th:attr="onclick='toggleSubscribe(\'' + ${pageUserDto.userid} + '\', this)'">언팔로우</button>
 
-                                        <!--<th:block th:switch="${FollowDto.id}">
-                                            &lt;!&ndash;구독한 유저&ndash;&gt;
-                                            <div th:case="${profileDto.subscribeState}">
-                                                <button class="cta blue" onclick="toggleSubscribe(${profileDto.id}, this)">구독취소</button>
                                             </div>
-                                            &lt;!&ndash;구독하지 않은 유저&ndash;&gt;
-                                            <div th:case="*">
-                                                <button class="cta" onclick="toggleSubscribe(${profileDto.id}, this)">구독하기</button>
+                                            <!--팔로우하지 않은 유저-->
+                                            <div th:case="false">
+                                                <button type="button" class = "btn btn-primary" th:attr="onclick='toggleSubscribe(\'' + ${pageUserDto.userid} + '\', this)'">팔로우</button>
                                             </div>
-                                        </th:block>-->
+                                        </th:block>
                                     </div>
                                 </th:block>
                             </div>
                             <div class ="detail_list">
                                 <a>게시물<span> 15</span></a>
-                                <a class="openModal">팔로우<span> 15</span></a>
-                                <a href="#">팔로우<span> 15</span></a>
+                                <a class="openFollower">팔로워</a>
+                                <a class="openFollowing">팔로우</a>
                             </div>
                             <div>
                                 신뢰등급 + 게시글 작성 버튼
@@ -184,11 +194,39 @@
 
 
         </div>
-        <!--팔로워 모달창-->
-        <div class="modal">
+        <!--팔로워 모달창(pageUser를 팔로우한사람)-->
+        <div class="followerModal">
             <div class="modal-content">
-                <h2>모달창 제목</h2>
-                <p>모달창 내용</p>
+                <p>팔로워</p>
+                <div>
+                    <table class="table">
+                        <tr th:each="followerDto : ${followerDtoList}">
+                            <div class="text-center align-middle">
+                                <td><img th:src="${followerDto.profileImage}" width=50 height=50 alt="profile_img"></td>
+                                <td><a th:href="@{/users/profile/{id}(id = ${followerDto.id})}" th:text="${followerDto.id}"></a></td>
+                                <td><div class="following_id_message" th:text="${followerDto.subscribeState}"></div></td>
+                            </div>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--팔로잉 모달창(pageUser가 팔로우한사람)-->
+        <div class="followingModal">
+            <div class="modal-content">
+                <p>팔로우</p>
+                <div>
+                    <table class="table">
+                        <tr th:each="followingDto : ${followingDtoList}">
+                            <div class="text-center align-middle">
+                                <td><img th:src="${followingDto.profileImage}" width=50 height=50 alt="profile_img"></td>
+                                <td><a th:href="@{/users/profile/{id}(id = ${followingDto.id})}" th:text="${followingDto.id}"></a></td>
+                                <td><div class="following_id_message" th:text="${followingDto.subscribeState}"></div></td>
+                            </div>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
 

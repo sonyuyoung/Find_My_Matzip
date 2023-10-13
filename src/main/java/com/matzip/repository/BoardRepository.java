@@ -9,10 +9,13 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+//보드 리파지토리 커스텀을 상속받았다 p271
 public interface BoardRepository extends JpaRepository<Board, Long>,
         QuerydslPredicateExecutor<Board>, BoardRepositoryCustom {
 
-    //테스트용 코드같은데... 아닌가 ...
+    //테스트용 코드같은데... 맞다 하지만 이게 없으면 안된다.
+    //왜냐 custom인터페이스를 상속받았기 때문에 여기엔 코드가 없어도 됨
+    // 게시글 조회조건과 페이지 정보를 파라미터로 받아서 데이터조회하기 위해서 BoardService 110줄로 이동하자
 
 //    List<Board> findByBoard_title(String board_title);
 //

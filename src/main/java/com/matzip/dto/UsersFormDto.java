@@ -44,9 +44,9 @@ public class UsersFormDto {
 //        return user_sex;
 //    }
 
-    @NotBlank(message = "아이디를 입력해주세요 ")
+@NotBlank(message = "아이디를 입력해주세요 ")
     private String userid;
-    @NotBlank(message = "비밀번호를 입력해주세요 ")
+@NotBlank(message = "비밀번호를 입력해주세요 ")
     private String user_pwd;
     @NotBlank(message = "이름을 입력해주세요 ")
     private String user_name;
