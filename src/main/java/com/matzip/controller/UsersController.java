@@ -1,9 +1,9 @@
 package com.matzip.controller;
 
-import com.matzip.dto.BoardDto;
 import com.matzip.dto.FollowDto;
 import com.matzip.dto.UsersFormDto;
 import com.matzip.entity.Users;
+import com.matzip.service.BoardService;
 import com.matzip.service.FollowService;
 import com.matzip.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +26,7 @@ public class UsersController {
     private final PasswordEncoder passwordEncoder;
     private final UsersService usersService;
     private final FollowService followService;
+    private final BoardService boardService;
 
 
     @GetMapping(value = "/new")
@@ -56,12 +57,21 @@ public class UsersController {
     }
 
     //modUsers폼 호출
-    @GetMapping(value = "/modUsersForm")
-    public String modUsersForm(Principal principal,Model model){
-        String userid = principal.getName();
-        UsersFormDto usersFormDto = usersService.findById(userid);
+    @GetMapping(value = {"/modUsersForm","/modUsersForm/{pageUserid}"})
+    public String modUsersForm(@PathVariable(name ="pageUserid", required = false) String pageUserid,Principal principal,Model model){
 
-        model.addAttribute("usersFormDto", usersFormDto);
+        //내 프로필창에서 수정
+        if(pageUserid == null){
+            String userid = principal.getName();
+            UsersFormDto usersFormDto = usersService.findById(userid);
+            model.addAttribute("usersFormDto", usersFormDto);
+        }
+        //유저 리스트에서 수정
+        else{
+            UsersFormDto usersFormDto = usersService.findById(pageUserid);
+            model.addAttribute("usersFormDto", usersFormDto);
+        }
+
         return "users/modUsersForm";
     }
 
@@ -140,6 +150,20 @@ public class UsersController {
         //팔로잉 리스트
         List<FollowDto> followingDtoList = followService.getFollowingDtoList(pageUserId,principal.getName());
 
+        //로그인 유저가 페이지 유저 팔로우 했는지 여부
+        Boolean followcheck = followService.isFollow(pageUserId,principal.getName());
+
+        //pageUser의 팔로잉수, 팔로워수
+        int countFromUser = followService.countByFromUser(pageUserId);
+        int countToUser = followService.countByToUser(pageUserId);
+
+        //pageUser의 게시글 갯수 (boardService랑 boardController에 코드 추가 필요)
+        /*int countBoard = boardService.countByUserId(pageUserId);*/
+
+        /*model.addAttribute("countBoard", countBoard);*/
+        model.addAttribute("countFromUser",countFromUser);
+        model.addAttribute("countToUser",countToUser);
+        model.addAttribute("followcheck",followcheck);
         model.addAttribute("followerDtoList",followerDtoList);
         model.addAttribute("followingDtoList",followingDtoList);
         model.addAttribute("pageUserDto",pageUserDto);
@@ -159,6 +183,22 @@ public class UsersController {
         usersService.deleteById(userid);
 
         return "redirect:/users/";
+    }
+
+    @GetMapping("/deleteFollow/{toUserId}")
+    public String deleteFollow(@PathVariable String toUserId,Principal principal){
+        followService.deleteFollow(toUserId,principal.getName());
+
+        return "redirect:/users/profile/"+toUserId;
+    }
+
+    @GetMapping("/insertFollow/{toUserId}")
+    public String insertFollow(@PathVariable String toUserId,Principal principal){
+        followService.insertFollow(toUserId,principal.getName());
+
+
+
+        return "redirect:/users/profile/"+toUserId;
     }
 
 
