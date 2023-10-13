@@ -3,6 +3,7 @@ package com.matzip.controller;
 import com.matzip.dto.FollowDto;
 import com.matzip.dto.UsersFormDto;
 import com.matzip.entity.Users;
+import com.matzip.service.BoardService;
 import com.matzip.service.FollowService;
 import com.matzip.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class UsersController {
     private final PasswordEncoder passwordEncoder;
     private final UsersService usersService;
     private final FollowService followService;
+    private final BoardService boardService;
 
 
     @GetMapping(value = "/new")
@@ -151,6 +153,16 @@ public class UsersController {
         //로그인 유저가 페이지 유저 팔로우 했는지 여부
         Boolean followcheck = followService.isFollow(pageUserId,principal.getName());
 
+        //pageUser의 팔로잉수, 팔로워수
+        int countFromUser = followService.countByFromUser(pageUserId);
+        int countToUser = followService.countByToUser(pageUserId);
+
+        //pageUser의 게시글 갯수 (boardService랑 boardController에 코드 추가 필요)
+        /*int countBoard = boardService.countByUserId(pageUserId);*/
+
+        /*model.addAttribute("countBoard", countBoard);*/
+        model.addAttribute("countFromUser",countFromUser);
+        model.addAttribute("countToUser",countToUser);
         model.addAttribute("followcheck",followcheck);
         model.addAttribute("followerDtoList",followerDtoList);
         model.addAttribute("followingDtoList",followingDtoList);
