@@ -83,7 +83,8 @@ public class BoardService {
         //게시글의 아이디를 통해 상품 엔티티를 조회 . 존재하지않으면 오류 발생시키기
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(EntityNotFoundException::new);
-        BoardFormDto boardFormDto = BoardFormDto.of(board);
+
+        BoardFormDto boardFormDto = new BoardFormDto(board);
         boardFormDto.setBoardImgDtoList(boardImgDtoList);
         return boardFormDto;
     }
