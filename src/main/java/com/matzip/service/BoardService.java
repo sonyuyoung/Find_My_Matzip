@@ -2,13 +2,11 @@ package com.matzip.service;
 
 
 
-import com.matzip.dto.BoardFormDto;
-import com.matzip.dto.BoardImgDto;
-import com.matzip.dto.BoardSearchDto;
-import com.matzip.dto.MainBoardDto;
+import com.matzip.dto.*;
 import com.matzip.entity.Board;
 import com.matzip.entity.BoardImg;
 import com.matzip.entity.Restaurant;
+import com.matzip.entity.Users;
 import com.matzip.repository.BoardImgRepository;
 import com.matzip.repository.BoardRepository;
 import com.matzip.repository.RestaurantRepository;
@@ -22,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -125,5 +124,6 @@ public class BoardService {
     public Page<MainBoardDto> getMainBoardPage(BoardSearchDto boardSearchDto, Pageable pageable){
         return boardRepository.getMainBoardPage(boardSearchDto, pageable);
     }
+
 
 }
