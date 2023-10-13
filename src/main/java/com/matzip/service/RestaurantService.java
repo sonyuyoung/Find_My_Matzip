@@ -1,9 +1,13 @@
 package com.matzip.service;
 
-import com.matzip.dto.RestaurantDto;
+import com.matzip.dto.*;
 import com.matzip.entity.Restaurant;
+import com.matzip.repository.BoardImgRepository;
+import com.matzip.repository.BoardRepository;
 import com.matzip.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +21,7 @@ import java.util.Optional;
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final BoardImgRepository boardImgRepository;
     private final FileService fileService;
 
 
@@ -54,6 +59,11 @@ public class RestaurantService {
         } else {
             return null;
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainRestaurantDto> getMainRestaurantPage(RestaurantSearchDto restaurantSearchDto, Pageable pageable){
+        return restaurantRepository.getMainRestaurantPage(restaurantSearchDto, pageable);
     }
 
 
