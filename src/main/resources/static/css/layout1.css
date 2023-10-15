@@ -4,7 +4,7 @@
     --color-default:#25b286;
     --color-second:#1F5D5E;
     --color-white:#fff;
-    --color-body:#ddbe78;
+    --color-body:#fff;
     --color-light:#fff;
 }
 
@@ -302,9 +302,27 @@ body{
 }
 
 .content{
-    margin-bottom:100px;
-    margin-top: 50px;
-    margin-left: 500px;
-    margin-right: 200px;
+    position: relative;
+    background-color: var(--color-body);
+    min-height: 90vh;
+    top:0;
+    left:78px;
+    width: calc(100% - 78px);
+    transition: all .5s ease;
+    z-index: 2;
 
+}
+
+#map {
+    width: 80%;
+    height: 500px;
+}
+.h2 {
+    margin-top: 50px;
+}
+
+.footer {
+    padding: 20px;
+    background-color: #f5f5f5;
+    text-align: center;
 }
