@@ -33,7 +33,7 @@ public class RestaurantController {
       List<RestaurantDto> restaurantDtoList = restaurantService.findAll();
       System.out.println("restaurantDtoList 의 소스 확인 동네 1: "+restaurantDtoList.get(0).getRes_name());
       model.addAttribute("restaurantList",restaurantDtoList);
-
+     //   model.addAttribute("test","test");
         return "map/mapForm";
     }
 
