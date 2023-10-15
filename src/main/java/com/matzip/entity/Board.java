@@ -1,6 +1,7 @@
 package com.matzip.entity;
 
 import com.matzip.constant.BoardViewStatus;
+import com.matzip.constant.UserRole;
 import com.matzip.dto.BoardFormDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,14 +21,9 @@ public class Board extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;       //게시글 번호
 
-    //오류가 터져서 일단 주석해놓음
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "res_id")
-//    private Restaurant restaurant;//식당
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="user_id")
-//    private Users user; //회원
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant")
+    private Restaurant restaurant;//식당
 
     @Column(nullable = false)
     private String board_title; //제목
@@ -44,6 +40,17 @@ public class Board extends BaseEntity{
     /* @Column(nullable = false)
     private String writeDate; //게시 일자*/
 
+
+    public static Board createBoard(BoardFormDto boardFormDto, Restaurant restaurant) {
+        Board board = new Board();
+        board.setId(boardFormDto.getId());
+        board.setRestaurant(restaurant);
+        board.setBoard_title(boardFormDto.getBoard_title());
+        board.setContent(boardFormDto.getContent());
+        board.setScore(boardFormDto.getScore());
+        board.setBoardViewStatus(boardFormDto.getBoardViewStatus());
+        return board;
+    }
 
     //게시글 데이터 수정 업데이트로직 -> boardService 이동 후 추가
     public void updateBoard(BoardFormDto boardFormDto){

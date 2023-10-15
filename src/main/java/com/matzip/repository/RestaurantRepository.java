@@ -7,6 +7,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 public interface RestaurantRepository extends JpaRepository<Restaurant, String>,
         QuerydslPredicateExecutor<Restaurant>, RestaurantRepositoryCustom{
-    // Restaurant findByRes_id(String res_id);
+     Restaurant findByresId(String resId);
 
 }

@@ -37,8 +37,8 @@ public class RestaurantService {
         return restaurantDtoList;
     }
 
-    public RestaurantDto findById(String res_id) {
-        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(res_id);
+    public RestaurantDto findById(String resId) {
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(resId);
         if (optionalRestaurant.isPresent()){
             return RestaurantDto.restaurantDto(optionalRestaurant.get());
         } else {
@@ -69,7 +69,7 @@ public class RestaurantService {
             restaurantImgService.saveRestaurantImg(restaurantImg, restaurantImgFileList.get(i));
         }
 
-        return restaurant.getRes_id();
+        return restaurant.getResId();
     }
 
     // // 게시글 조회조건과 페이지 정보를 파라미터로 받아서 데이터조회하는 getAdminBoardPage() 메소드를 추가했다
@@ -86,11 +86,11 @@ public class RestaurantService {
     }
 
     @Transactional(readOnly = true)
-    public RestaurantFormDto getRestaurantDtl(String res_id){
+    public RestaurantFormDto getRestaurantDtl(String resId){
         //해당 게시글의 이미지 조회, 등록순으로 가지고 오기 위해서 게시글이미지 아이디를 오름차순으로 가지고온다
         List<RestaurantImgDto> restaurantImgDtoList = new ArrayList<>();
         //게시글의 아이디를 통해 상품 엔티티를 조회 . 존재하지않으면 오류 발생시키기
-        Restaurant restaurant = restaurantRepository.findById(res_id)
+        Restaurant restaurant = restaurantRepository.findById(resId)
                 .orElseThrow(EntityNotFoundException::new);
         RestaurantFormDto restaurantFormDto = RestaurantFormDto.of(restaurant);
         restaurantFormDto.setRestaurantImgDtoList(restaurantImgDtoList);

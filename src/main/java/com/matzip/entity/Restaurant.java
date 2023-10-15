@@ -14,9 +14,9 @@ import javax.persistence.*;
 public class Restaurant {
 
     @Id
-    @Column(name="res_id", unique = true)
+    @Column(name="resId", unique = true)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String res_id;       //식당 id
+    private String resId;       //식당 id
 
     @Column(nullable = false)
     private String res_name;//식당 이름

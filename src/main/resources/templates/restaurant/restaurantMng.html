@@ -48,6 +48,7 @@
                 <td>식당이름</td>
                 <td>주소</td>
                 <td>가게연락처</td>
+                <td></td>
             </tr>
             </thead>
             <tbody>
@@ -55,12 +56,15 @@
                 <td>
                     <img th:src="${restaurant.res_thumbnail}" class = "rounded repImg" th:alt="${restaurant.res_name}">
                 </td>
-                <td th:text="${restaurant.res_id}"></td>
+                <td th:text="${restaurant.resId}"></td>
                 <td>
-                    <a th:href="'/restaurant/'+${restaurant.res_id}" th:text="${restaurant.res_name}"></a>
+                    <a th:href="'/restaurant/'+${restaurant.resId}" th:text="${restaurant.res_name}"></a>
                 </td>
                 <td th:text="${restaurant.res_address}"></td>
                 <td th:text="${restaurant.res_phone}"></td>
+                <td>
+                    <a th:href="@{|/admin/board/new/${restaurant.resId}|}" class="btn btn-primary btn-sm" th:alt="${restaurant.resId}">리뷰작성</a>
+                </td>
             </tr>
             </tbody>
         </table>
