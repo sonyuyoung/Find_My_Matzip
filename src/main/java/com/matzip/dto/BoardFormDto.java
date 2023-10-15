@@ -52,7 +52,7 @@ public class BoardFormDto {
     //board객체를 boardFormDto로 변환 : 일반데이터만
     public BoardFormDto(Board board){
         this.id = board.getId();
-        this.resId = board.getRestaurant().getResId();
+        this.resId = getResId();
         this.user_id = board.getCreatedBy();
         this.board_title = board.getBoard_title();
         this.content = board.getContent();
