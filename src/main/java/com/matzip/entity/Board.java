@@ -22,8 +22,8 @@ public class Board extends BaseEntity{
     private Long id;       //게시글 번호
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant")
-    private Restaurant restaurant;//식당
+    @JoinColumn(name = "resId")
+    private Restaurant resId;//식당 아이디
 
     @Column(nullable = false)
     private String board_title; //제목
@@ -41,10 +41,10 @@ public class Board extends BaseEntity{
     private String writeDate; //게시 일자*/
 
 
-    public static Board createBoard(BoardFormDto boardFormDto, Restaurant restaurant) {
+    public static Board createBoard(BoardFormDto boardFormDto, Restaurant resId) {
         Board board = new Board();
         board.setId(boardFormDto.getId());
-        board.setRestaurant(restaurant);
+        board.setResId(resId);
         board.setBoard_title(boardFormDto.getBoard_title());
         board.setContent(boardFormDto.getContent());
         board.setScore(boardFormDto.getScore());

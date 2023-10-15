@@ -3,8 +3,10 @@ package com.matzip.controller;
 
 import com.matzip.dto.BoardFormDto;
 import com.matzip.dto.BoardSearchDto;
+import com.matzip.dto.RestaurantFormDto;
 import com.matzip.entity.Board;
 import com.matzip.service.BoardService;
+import com.matzip.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,7 @@ import java.util.Optional;
 public class BoardController {
 
     private final BoardService boardService;
+    private final RestaurantService restaurantService;
 
     @GetMapping(value = {"/admin/board/new","/admin/board/new/{resId}"})
     public String boardForm(@PathVariable(name ="resId", required = false) String resId,Model model){
@@ -36,6 +39,9 @@ public class BoardController {
             BoardFormDto boardFormDto = new BoardFormDto();
             boardFormDto.setResId(resId);
             model.addAttribute("boardFormDto",boardFormDto);
+            //리뷰작성페이지에 식당상세보기위해서 추가
+            RestaurantFormDto restaurantFormDto = restaurantService.getRestaurantDtl(resId);
+            model.addAttribute("restaurant", restaurantFormDto);
         }
         // 메뉴에서 리뷰등록 누른 경우(나중에 삭제 요망)
         else{
