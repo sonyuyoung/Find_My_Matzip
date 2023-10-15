@@ -29,9 +29,20 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @GetMapping(value = "/admin/board/new")
-    public String boardForm(Model model){
-        model.addAttribute("boardFormDto", new BoardFormDto());
+    @GetMapping(value = {"/admin/board/new","/admin/board/new/{resId}"})
+    public String boardForm(@PathVariable(name ="resId", required = false) String resId,Model model){
+        //식당검색해서 리뷰등록 누른 경우
+        if(resId != null){
+            BoardFormDto boardFormDto = new BoardFormDto();
+            boardFormDto.setResId(resId);
+            model.addAttribute("boardFormDto",boardFormDto);
+        }
+        // 메뉴에서 리뷰등록 누른 경우(나중에 삭제 요망)
+        else{
+            model.addAttribute("boardFormDto",new BoardFormDto());
+        }
+
+
         return "board/boardForm";
     }
 
@@ -51,7 +62,7 @@ public class BoardController {
         try {
 //            System.out.println("boardFormDto 내용 확인: =======================================");
 //            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getBoard_title());
-//            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getContent());
+            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getContent());
 //            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getScore());
 ////            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getBoardImgDtoList().get(0).getImgName());
 ////            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getBoardImgDtoList().get(0).getImgUrl());
@@ -67,6 +78,9 @@ public class BoardController {
     }
 
     //게시글 수정 -> 상품이미지 수정을 위해서 BoardImgService 이동하자
+
+
+    //게시글상세페이지 매핑
     @GetMapping(value = "/admin/board/{boardId}")
     public String boardDtl(@PathVariable("boardId") Long boardId, Model model){
 

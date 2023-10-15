@@ -24,10 +24,10 @@ public class BoardFormDto {
     private Long id;
 
     //식당아이디
-    private Restaurant res_id;
+    private String resId;
 
     //유저아이디
-    private Users user_id;
+    private String user_id;
 
     //일단 에러나니까추가해봄
     private BoardViewStatus boardViewStatus;
@@ -48,20 +48,18 @@ public class BoardFormDto {
 
     private List<Long> boardImgIds = new ArrayList<>();
 
-    //모델 매퍼 선언
-    private static ModelMapper modelMapper = new ModelMapper();
 
-    //폼 데이터 자동 매핑 -> Board객체 생성
-    public Board createBoard(){
-        System.out.println("BoardFormDto/createBoard 넘어오는거까지는성공");
-        Board board = modelMapper.map(this, Board.class);
-        System.out.println("modelMapper.map(this, Board.class); 수행 후~~~~~================");
-        return board;
+    //board객체를 boardFormDto로 변환 : 일반데이터만
+    public BoardFormDto(Board board){
+        this.id = board.getId();
+        this.resId = board.getRestaurant().getResId();
+        this.user_id = board.getCreatedBy();
+        this.board_title = board.getBoard_title();
+        this.content = board.getContent();
+        this.score = board.getScore();
     }
 
-    //board객체를 boardFormDto로 변환 : service에서 data 전달 시 이용
-    public static BoardFormDto of(Board board){
-        return modelMapper.map(board,BoardFormDto.class);
-    }
+    public BoardFormDto() {
 
+    }
 }

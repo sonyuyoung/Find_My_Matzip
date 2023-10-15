@@ -23,12 +23,14 @@ public interface FollowRepository extends JpaRepository<Follow, Long>{
      @Query("select f from Follow f where f.toUser.userid = :toUserId and f.fromUser.userid = :loginUserId")
      Follow findByToUserIdAndFromUserId(@Param("toUserId") String toUserId,@Param("loginUserId") String loginUserId);
 
-     /*@Modifying
-     @Query("delete from Follow f where f.toUser.userid = :toUserId and f.fromUser.userid = :fromUserId")
-     int deleteFollow(@Param("toUserId") String toUserId, @Param("fromUserId") String fromUserId);*/
+     // 팔로워 수 (follower)
+     @Query("select count(f) from Follow f where f.toUser.userid = :toUserId")
+     Integer countByToUser(@Param("toUserId") String toUserId);
 
-     /*@Modifying
-     @Query("insert into Follow f(from_user,to_user) value f.toUser.userid = :toUserId and f.fromUser.userid = :fromUserId")
-     int insert(@Param("toUserId") String toUserId, @Param("fromUserId") String fromUserId);*/
+
+     // 팔로우 수 (following)
+     @Query("select count(f) from Follow f where f.fromUser.userid = :fromUserId")
+     Integer countByFromUser(@Param("fromUserId") String fromUserId);
+
 
 }
