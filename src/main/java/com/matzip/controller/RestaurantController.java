@@ -115,7 +115,8 @@ public class RestaurantController {
         RestaurantFormDto restaurantFormDto = restaurantService.getRestaurantDtl(resId);
         model.addAttribute("restaurant", restaurantFormDto);
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
-        Page<MainBoardDto> boards = boardService.getMainBoardPage(boardSearchDto, pageable);
+        /*Page<MainBoardDto> boards = boardService.getMainBoardPage(boardSearchDto, pageable);*/
+        Page<MainBoardDto> boards = boardService.getBoardPageByResId(boardSearchDto, pageable,resId);
         model.addAttribute("boards", boards);
         model.addAttribute("boardSearchDto", boardSearchDto);
         model.addAttribute("maxPage", 5);

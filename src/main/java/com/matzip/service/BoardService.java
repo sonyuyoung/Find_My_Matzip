@@ -130,6 +130,12 @@ public class BoardService {
 
 
 
+    @Transactional(readOnly = true)
+    public Page<MainBoardDto> getBoardPageByResId(BoardSearchDto boardSearchDto, Pageable pageable,String resId){
+        return boardRepository.getBoardPageByResId(boardSearchDto, pageable,resId);
+    }
+
+
     @Transactional
     public void deleteBoard(Long boardId) {
         // 리뷰 ID로 리뷰를 찾아옴
