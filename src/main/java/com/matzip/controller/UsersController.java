@@ -188,17 +188,17 @@ public class UsersController {
     }
 
     @DeleteMapping("/deleteFollow/{toUserId}")
-    public ResponseEntity<String> deleteFollow(@PathVariable String toUserId, Principal principal){
+    public @ResponseBody ResponseEntity<String> deleteFollow(@PathVariable String toUserId, Principal principal){
         followService.deleteFollow(toUserId,principal.getName());
 
-        return ResponseEntity.ok().body("언팔로우 성공");
+        return new ResponseEntity<String>(toUserId, HttpStatus.OK);
     }
 
     @GetMapping("/insertFollow/{toUserId}")
-    public ResponseEntity<String> insertFollow(@PathVariable String toUserId,Principal principal){
+    public @ResponseBody ResponseEntity<String> insertFollow(@PathVariable String toUserId,Principal principal){
         followService.insertFollow(toUserId,principal.getName());
 
-        return ResponseEntity.ok().body("팔로잉 성공");
+        return new ResponseEntity<String>(toUserId, HttpStatus.OK);
     }
 
 
