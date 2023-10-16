@@ -96,10 +96,13 @@ public class RestaurantService {
         restaurantFormDto.setRestaurantImgDtoList(restaurantImgDtoList);
         return restaurantFormDto;
     }
+
+
+//    평균 점수를 기준으로 상위 N개의 레스토랑을 가져와 RestaurantDto로 변환하는 메서드를 정의
     public List<RestaurantDto> getTopNRestaurantsByAvgScore(int n) {
         // RestaurantRepository를 통해 레스토랑 랭킹을 가져오는 쿼리 실행
         List<Object[]> ranking = restaurantRepository.findTopNByOrderByAvgScoreDesc(n);
-
+//        restaurantRepository.findTopNByOrderByAvgScoreDesc(n)를 호출하여 레스토랑의 랭킹을 가져옴
         // 가져온 데이터를 RestaurantDto로 변환
         return convertToRestaurantDtoList(ranking);
     }
@@ -108,7 +111,7 @@ public class RestaurantService {
         // 변환 로직 구현
         List<RestaurantDto> restaurantDtoList = new ArrayList<>();
         for (Object[] result : ranking) {
-            restaurantDtoList.add(new RestaurantDto((String) result[0], (String) result[1], (Double) result[2]));
+            restaurantDtoList.add(new RestaurantDto((String) result[0], (String) result[1], (String) result[2],(Double) result[3]));
         }
         return restaurantDtoList;
     }
