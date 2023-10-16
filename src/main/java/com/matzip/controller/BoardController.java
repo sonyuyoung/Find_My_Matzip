@@ -148,6 +148,30 @@ public class BoardController {
         return "board/boardMng";
     }
 
+//    식당정보 + 리뷰들 매핑시작!!!!
+//    식당정보 + 리뷰들 매핑시작!!!!
+//    식당정보 + 리뷰들 매핑시작!!!!
+//    @GetMapping(value = {"/restaurant/{resId}"})
+//    public String sumResRivew(String resId, BoardSearchDto boardSearchDto, Optional<Integer> page, Model model){
+////        식당상세페이지 보기를 위해 추가
+//        RestaurantFormDto restaurantFormDto = restaurantService.getRestaurantDtl(resId);
+//        model.addAttribute("restaurant", restaurantFormDto);
+////        식당상세페이지 보기를 위해 추가
+//
+//        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+//        Page<Board> boards = boardService.getAdminBoardPage(boardSearchDto, pageable);
+//        model.addAttribute("boards", boards);
+//        model.addAttribute("boardSearchDto", boardSearchDto);
+//        model.addAttribute("maxPage", 5);
+//
+//        //template/board 폴더 아래에 boardMng.html 파일을 생성한다.
+//        return "restaurant/restaurant_review";
+//    }
+    //    식당정보 + 리뷰들 매핑끝!!!!
+    //    식당정보 + 리뷰들 매핑끝!!!!
+    //    식당정보 + 리뷰들 매핑끝!!!!
+
+
     //게시글 상세페이지
     //상품을 가지고 오는 로직을 똑같이 사용
     //-> boardDtl로 가자
