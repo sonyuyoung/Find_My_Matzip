@@ -99,7 +99,6 @@ public class RestaurantService {
     public List<RestaurantDto> getTopNRestaurantsByAvgScore(int n) {
         // RestaurantRepository를 통해 레스토랑 랭킹을 가져오는 쿼리 실행
         List<Object[]> ranking = restaurantRepository.findTopNByOrderByAvgScoreDesc(n);
-
         // 가져온 데이터를 RestaurantDto로 변환
         return convertToRestaurantDtoList(ranking);
     }

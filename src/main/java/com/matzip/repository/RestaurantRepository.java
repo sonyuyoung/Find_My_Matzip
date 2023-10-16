@@ -22,6 +22,4 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, String>,
         "GROUP BY r.resId, r.res_name " +
         "ORDER BY avgScore DESC")
 List<Object[]> findTopNByOrderByAvgScoreDesc(int n);
-
-
 }

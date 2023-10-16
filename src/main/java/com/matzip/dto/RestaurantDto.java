@@ -41,7 +41,6 @@ public class RestaurantDto {
         this.res_thumbnail = res_thumbnail;
         this.res_name = res_name;
         this.avgScore = avgScore;
-
     }
 
     public RestaurantDto() {
