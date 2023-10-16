@@ -10,6 +10,7 @@ import com.matzip.entity.Users;
 import com.matzip.repository.BoardImgRepository;
 import com.matzip.repository.BoardRepository;
 import com.matzip.repository.RestaurantRepository;
+import com.matzip.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,8 @@ public class BoardService {
     private final BoardImgRepository boardImgRepository;
 
     private final RestaurantRepository restaurantRepository;
+
+    private final UsersRepository usersRepository;
 
     //게시글 저장하기
     public Long saveBoard(BoardFormDto boardFormDto, List<MultipartFile> boardImgFileList) throws Exception{
@@ -135,6 +138,14 @@ public class BoardService {
 
         // 리뷰 삭제
         boardRepository.delete(board);
+    }
+
+    @Transactional
+    public Users getUserByCreated(String userId) {
+        // board의 userId로 user객체 찾기(작성자 정보 가져오기)
+        Users users = usersRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("작성자를 찾을 수 없습니다. ID: " + userId));
+        return users;
     }
 
 

@@ -60,6 +60,20 @@
             height: auto;
             width: 50%;
         }
+
+        .profile{
+            display: flex;
+            align-items: center; /* 세로 중앙 정렬 */
+        }
+        .box{
+            width: 50px;
+            height: 50px;
+            border-radius: 70%;
+            overflow: hidden;
+        }
+        .box_margin{
+            margin: 10px;
+        }
     </style>
 </th:block>
 
@@ -80,14 +94,29 @@
                              th:alt="${board.board_title}">
                     </div>
                     <div class="wd50">
-            <span th:if="${board.boardViewStatus == T(com.matzip.constant.BoardViewStatus).VIEW}"
-                  class="badge badge-primary mgb-15">
-                일반글 흐으음...
-            </span>
+                        <span th:if="${board.boardViewStatus == T(com.matzip.constant.BoardViewStatus).VIEW}"
+                              class="badge badge-primary mgb-15">
+                            일반글 흐으음...
+                        </span>
                         <span th:unless="${board.boardViewStatus == T(com.matzip.constant.BoardViewStatus).NOT_VIEW}"
                               class="badge btn-danger mgb-15">
-                비밀글 여기다가 뭐넣을까
-            </span>
+                            비밀글 여기다가 뭐넣을까
+                        </span>
+                        <div class="profile">
+                            <div class ="box_margin">
+                                <div class="box">
+                                    <img th:src="${users.user_image}" width=50 height=50
+                                         alt="profile_img">
+                                </div>
+                            </div>
+                            <div class = "detail">
+                                <a th:href="@{/users/profile/{id}(id = ${users.userid})}"
+                                   th:text="${users.userid}"></a>
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                        <hr class="my-4">
                         <div class="h4" th:text="${board.board_title}"></div>
                         <hr class="my-4">
 

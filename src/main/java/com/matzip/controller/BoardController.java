@@ -5,6 +5,7 @@ import com.matzip.dto.BoardFormDto;
 import com.matzip.dto.BoardSearchDto;
 import com.matzip.dto.RestaurantFormDto;
 import com.matzip.entity.Board;
+import com.matzip.entity.Users;
 import com.matzip.service.BoardService;
 import com.matzip.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
@@ -178,6 +179,9 @@ public class BoardController {
     @GetMapping(value = "/board/{boardId}")
     public String boardDtl(Model model, @PathVariable("boardId") Long boardId){
         BoardFormDto boardFormDto = boardService.getBoardDtl(boardId);
+        Users users = boardService.getUserByCreated(boardFormDto.getUser_id());
+
+        model.addAttribute("users",users);
         model.addAttribute("board", boardFormDto);
         return "board/boardDtl";
     }
