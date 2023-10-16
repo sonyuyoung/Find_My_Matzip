@@ -158,4 +158,6 @@ public class BoardController {
         return "board/boardDtl";
     }
 
+
+
 }

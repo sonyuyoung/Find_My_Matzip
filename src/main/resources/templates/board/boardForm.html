@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout2}">
+      layout:decorate="~{layouts/layout1}">
 <!--restaurant head이식-->
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
@@ -85,8 +85,9 @@
     </style>
 </th:block>
 
-<div layout:fragment="content1" style="margin-left:25%;margin-right:25%">
-
+<div layout:fragment="content">
+<div class="row">
+    <div class="col">
     <input type="hidden" id="resId" th:value="${restaurant.resId}">
 
     <div class="d-flex">
@@ -115,10 +116,9 @@
             <p class="lead" th:text="${restaurant.res_intro}"></p>
         </div>
     </div>
-</div>
+    </div>
 
-<div layout:fragment="content2">
-
+    <div class="col">
     <form role="form" method="post" enctype="multipart/form-data" th:object="${boardFormDto}">
 
         <p class="h2">
@@ -197,7 +197,7 @@
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
     </form>
-
+    </div>
 </div>
-
+</div>
 </html>
