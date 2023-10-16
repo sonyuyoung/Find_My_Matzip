@@ -3,6 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
@@ -15,60 +21,57 @@
         });
 
         //팔로잉 & 팔로워 기능
-        function toggleSubscribe(toUserId, obj) {
+        function toggleSubscribe(obj) {
             if ($(obj).text() === "언팔로우") {
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+                var userId = obj.dataset.id;
+
+                alert("userId : "+ userId);
+                var url = "/users/deleteFollow/" + userId;
+
                 $.ajax({
-                    type: "GET",
-                    url: "/users/deleteFollow/" + toUserId,
-                    dataType: "text"
-                }).done(res => {
+                    url      : url,
+                    type     : "DELETE",
+                    beforeSend : function(xhr){
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        xhr.setRequestHeader(header, token);
+                        alert("beforeSend ");
+                    },
+                    dataType : "json",
+                }).success(res => {
                     $(obj).text("팔로우");
                     $(obj).toggleClass("btn btn-primary");
-                    document.location.reload();
+                    location.reload();
                 })
                     .fail(error => {
                         alert(error.responseText);
                     });
-            } else {
+            }else if($(obj).text() === "팔로우") {
+                var token2 = $("meta[name='_csrf']").attr("content");
+                var header2 = $("meta[name='_csrf_header']").attr("content");
+                var userId2 = obj.dataset.id;
+
+                var url2 = "/users/insertFollow/" + userId2;
+
                 $.ajax({
+                    url : url2,
                     type: "GET",
-                    url: "/users/insertFollow/" + toUserId,
-                    dataType: "text"
+                    beforeSend : function(xhr){
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        xhr.setRequestHeader(header2, token2);
+                    },
+                    dataType : "json",
+                    cache   : false,
                 }).done(res => {
                     $(obj).text("언팔로우");
                     $(obj).toggleClass("btn btn-danger");
-                    document.location.reload();
+                    location.reload();
                 }).fail(error => {
                     alert(error.responseText);
                 });
             }
         }
-
-
-        //팔로워 모달 띄우기
-        /*function getSubscribeModalUsers(fromUser) {
-            let item = `<div class="subscribe__item" id="subscribeModalItem-${fromUser.userid}">
-                        <div class="subscribe__img">
-                        th:src="${fromUser.user_image}"
-                        </div>
-                        <div class="subscribe__text">
-                            <h2>${fromUser.userid}</h2>
-                        </div>
-                        <div class="subscribe__btn">`;
-
-            if(!fromUser.equalUserStatus){ // 동일 유저가 아닐때 버튼이 만들어져야 함.
-                // 구독한 상태
-                if(fromUser.subscribeStatus){
-                    item += `<button class="cta blue" onclick="toggleSubscribe(${fromUser.id},this)">구독취소</button>`;
-                    // 구독 안한 상태
-                }else{
-                    item += `<button class="cta" onclick="toggleSubscribe(${fromUser.id},this)">구독하기</button>`;
-                }
-            }
-            item += `</div></div>`;
-            return item;
-        }*/
-
 
         //팔로워 모달 창 띄우기
         $(function () {
@@ -183,16 +186,15 @@
                                                         <!--팔로우한 유저-->
                                                         <div th:case="true">
                                                             <button type="button" class="btn btn-danger"
-                                                                    th:attr="onclick='toggleSubscribe(\'' + ${pageUserDto.userid} + '\', this)'">
-                                                                언팔로우
+                                                                    th:text="언팔로우"
+                                                                    th:data-id="${pageUserDto.userid}" onclick="toggleSubscribe(this)">
                                                             </button>
-
                                                         </div>
                                                         <!--팔로우하지 않은 유저-->
                                                         <div th:case="false">
                                                             <button type="button" class="btn btn-primary"
-                                                                    th:attr="onclick='toggleSubscribe(\'' + ${pageUserDto.userid} + '\', this)'">
-                                                                팔로우
+                                                                    th:text="팔로우"
+                                                                    th:data-id="${pageUserDto.userid}" onclick="toggleSubscribe(this)">>
                                                             </button>
                                                         </div>
                                                     </th:block>
@@ -248,15 +250,15 @@
                                                         <!--팔로우한 유저-->
                                                         <div th:case="true">
                                                             <button type="button" class="btn btn-danger"
-                                                                    th:attr="onclick='toggleSubscribe(\'' + ${followerDto.id} + '\', this)'">
-                                                                언팔로우
+                                                                    th:text="언팔로우"
+                                                                    th:data-id="${followerDto.id}" onclick="toggleSubscribe(this)">
                                                             </button>
                                                         </div>
                                                         <!--팔로우하지 않은 유저-->
                                                         <div th:case="false">
                                                             <button type="button" class="btn btn-primary"
-                                                                    th:attr="onclick='toggleSubscribe(\'' + ${followerDto.id} + '\', this)'">
-                                                                팔로우
+                                                                    th:text="팔로우"
+                                                                    th:data-id="${followerDto.id}" onclick="toggleSubscribe(this)">
                                                             </button>
                                                         </div>
                                                     </th:block>
@@ -293,15 +295,15 @@
                                                         <!--팔로우한 유저-->
                                                         <div th:case="true">
                                                             <button type="button" class="btn btn-danger"
-                                                                    th:attr="onclick='toggleSubscribe(\'' + ${followingDto.id} + '\', this)'">
-                                                                언팔로우
+                                                                    th:text="언팔로우"
+                                                                    th:data-id="${followingDto.id}" onclick="toggleSubscribe(this)">
                                                             </button>
                                                         </div>
                                                         <!--팔로우하지 않은 유저-->
                                                         <div th:case="false">
                                                             <button type="button" class="btn btn-primary"
-                                                                    th:attr="onclick='toggleSubscribe(\'' + ${followingDto.id} + '\', this)'">
-                                                                팔로우
+                                                                    th:text="팔로우"
+                                                                    th:data-id="${followingDto.id}" onclick="toggleSubscribe(this)">
                                                             </button>
                                                         </div>
                                                     </th:block>
