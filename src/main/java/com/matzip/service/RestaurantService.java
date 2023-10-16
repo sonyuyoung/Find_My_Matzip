@@ -108,7 +108,7 @@ public class RestaurantService {
         // 변환 로직 구현
         List<RestaurantDto> restaurantDtoList = new ArrayList<>();
         for (Object[] result : ranking) {
-            restaurantDtoList.add(new RestaurantDto((String) result[0], (String) result[1], (Double) result[2]));
+            restaurantDtoList.add(new RestaurantDto((String) result[0], (String) result[1], (String) result[2],(Double) result[3]));
         }
         return restaurantDtoList;
     }
