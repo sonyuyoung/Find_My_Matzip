@@ -7,6 +7,8 @@ import com.matzip.service.BoardService;
 import com.matzip.service.FollowService;
 import com.matzip.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -185,20 +187,18 @@ public class UsersController {
         return "redirect:/users/";
     }
 
-    @GetMapping("/deleteFollow/{toUserId}")
-    public String deleteFollow(@PathVariable String toUserId,Principal principal){
+    @DeleteMapping("/deleteFollow/{toUserId}")
+    public ResponseEntity<String> deleteFollow(@PathVariable String toUserId, Principal principal){
         followService.deleteFollow(toUserId,principal.getName());
 
-        return "redirect:/users/profile/"+toUserId;
+        return ResponseEntity.ok().body("언팔로우 성공");
     }
 
     @GetMapping("/insertFollow/{toUserId}")
-    public String insertFollow(@PathVariable String toUserId,Principal principal){
+    public ResponseEntity<String> insertFollow(@PathVariable String toUserId,Principal principal){
         followService.insertFollow(toUserId,principal.getName());
 
-
-
-        return "redirect:/users/profile/"+toUserId;
+        return ResponseEntity.ok().body("팔로잉 성공");
     }
 
 
