@@ -326,3 +326,13 @@ body{
     background-color: #eee;
     text-align: center;
 }
+
+/*.content{*/
+/*    !*플렉스1 추가*!*/
+/*    flex: 1;*/
+/*    margin-bottom:100px;*/
+/*    margin-top: 50px;*/
+/*    margin-left: 500px;*/
+/*    margin-right: 200px;*/
+
+/*}*/
