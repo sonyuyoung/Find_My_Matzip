@@ -12,11 +12,16 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, String>,
         QuerydslPredicateExecutor<Restaurant>, RestaurantRepositoryCustom{
      Restaurant findByresId(String resId);
 
-     @Query("SELECT r.resId, r.res_name, AVG(b.score) as avgScore " +
-             "FROM Restaurant r JOIN r.boards b " +
-             "GROUP BY r.resId, r.res_name " +
-             "ORDER BY avgScore DESC")
-     List<Object[]> findTopNByOrderByAvgScoreDesc(int n);
+//     @Query("SELECT r.resId, r.res_name, AVG(b.score) as avgScore " +
+//             "FROM Restaurant r JOIN r.boards b " +
+//             "GROUP BY r.resId, r.res_name " +
+//             "ORDER BY avgScore DESC")
+//     List<Object[]> findTopNByOrderByAvgScoreDesc(int n);
+@Query("SELECT r.resId,r.res_thumbnail, r.res_name, AVG(b.score) as avgScore " +
+        "FROM Restaurant r JOIN r.boards b " +
+        "GROUP BY r.resId, r.res_name " +
+        "ORDER BY avgScore DESC")
+List<Object[]> findTopNByOrderByAvgScoreDesc(int n);
 
 
 }

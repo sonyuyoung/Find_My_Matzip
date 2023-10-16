@@ -36,8 +36,9 @@ public class RestaurantDto {
 
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public RestaurantDto(String resId, String res_name, Double avgScore) {
+    public RestaurantDto(String resId, String res_thumbnail, String res_name, Double avgScore) {
         this.resId = resId;
+        this.res_thumbnail = res_thumbnail;
         this.res_name = res_name;
         this.avgScore = avgScore;
 
