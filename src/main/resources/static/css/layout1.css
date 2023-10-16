@@ -336,3 +336,14 @@ body{
 /*    margin-right: 200px;*/
 
 /*}*/
+.link-no-decoration {
+    color: #999; /* 링크의 기본 색상을 회색(#999)으로 지정 */
+    text-decoration: none; /* 밑줄 제거 */
+    transition: color 0.3s, text-decoration 0.3s; /* 부드러운 전환 효과 추가 */
+}
+
+/* .link-no-decoration 클래스에 호버 상태에 적용될 스타일 */
+.link-no-decoration:hover {
+    color: #000; /* 호버 시 색상을 빨강(#ff0000)으로 변경 */
+    text-decoration: none; /* 호버 시 밑줄 추가 */
+}
