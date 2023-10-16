@@ -32,7 +32,20 @@ public class RestaurantDto {
 
     private String res_intro; //가게 소개
 
+    private Double avgScore;     // 평균 평점
+
     private static ModelMapper modelMapper = new ModelMapper();
+
+    public RestaurantDto(String resId, String res_name, Double avgScore) {
+        this.resId = resId;
+        this.res_name = res_name;
+        this.avgScore = avgScore;
+
+    }
+
+    public RestaurantDto() {
+
+    }
 
     public static RestaurantDto of(Restaurant restaurant) {
         return modelMapper.map(restaurant, RestaurantDto.class);
