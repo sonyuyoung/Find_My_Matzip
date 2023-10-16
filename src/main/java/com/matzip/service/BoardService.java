@@ -127,5 +127,16 @@ public class BoardService {
 
 
 
+    @Transactional
+    public void deleteBoard(Long boardId) {
+        // 리뷰 ID로 리뷰를 찾아옴
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new EntityNotFoundException("삭제할 리뷰를 찾을 수 없습니다. ID: " + boardId));
+
+        // 리뷰 삭제
+        boardRepository.delete(board);
+    }
+
+
 
 }

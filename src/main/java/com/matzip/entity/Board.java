@@ -8,6 +8,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="board")
@@ -39,6 +41,10 @@ public class Board extends BaseEntity{
 
     /* @Column(nullable = false)
     private String writeDate; //게시 일자*/
+
+    /*부모 엔티티에서 자식 엔티티를 제거하면 해당 자식 엔티티는 데이터베이스에서도 삭제.*/
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardImg> boardImgs = new ArrayList<>();
 
 
     public static Board createBoard(BoardFormDto boardFormDto, Restaurant resId) {

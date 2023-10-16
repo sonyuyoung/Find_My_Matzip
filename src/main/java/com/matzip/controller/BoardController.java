@@ -158,6 +158,24 @@ public class BoardController {
         return "board/boardDtl";
     }
 
+    @GetMapping("/admin/board/delete/{boardId}")
+    public String deleteBoard(@PathVariable Long boardId, Model model) {
+        try {
+            // 리뷰 ID를 사용하여 리뷰를 삭제
+            boardService.deleteBoard(boardId);
+            model.addAttribute("successMessage", "리뷰가 성공적으로 삭제되었습니다.");
+        } catch (EntityNotFoundException e) {
+            // 삭제할 리뷰를 찾지 못한 경우
+            model.addAttribute("errorMessage", "삭제할 리뷰를 찾지 못했습니다.");
+        } catch (Exception e) {
+            // 기타 예외 처리
+            model.addAttribute("errorMessage", "리뷰 삭제 중 오류가 발생했습니다.");
+        }
+
+        // 삭제 후 다시 리뷰 목록 페이지로 리다이렉트
+        return "redirect:/admin/boards/";
+    }
+
 
 
 }
