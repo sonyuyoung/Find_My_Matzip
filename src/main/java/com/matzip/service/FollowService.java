@@ -72,6 +72,22 @@ public class FollowService {
         return followingDtoList;
     }
 
+
+    //해당 유저의 팔로잉 리스트
+    public List<String> getFollowingIdList(String userId) throws Exception{
+        List<Follow> toUserList = followRepository.findByFromUserId(userId);
+        List<String> toUserIdList = new ArrayList<>();
+        //ID리스트로 변환
+        if(toUserList != null){
+            for(Follow follow:toUserList){
+                toUserIdList.add(follow.getToUser().getUserid());
+            }
+        }
+        return toUserIdList;
+    }
+
+
+
     //로그인 유저가 페이지 유저 팔로잉했는지 여부 호출
     public Boolean isFollow(String toUserId, String loginUserId) throws Exception{
         Follow followCheck = followRepository.findByToUserIdAndFromUserId(toUserId, loginUserId);

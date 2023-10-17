@@ -141,6 +141,11 @@ public class BoardService {
     }
 
 
+    @Transactional(readOnly = true)
+    public Page<MainBoardDto> getBoardPageByFollowList(BoardSearchDto boardSearchDto, Pageable pageable,List<String> toUserIdList){
+        return boardRepository.getBoardPageByFollowList(boardSearchDto, pageable,toUserIdList);
+    }
+
 
     @Transactional
     public void deleteBoard(Long boardId) {
