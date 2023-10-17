@@ -5,6 +5,7 @@ import com.matzip.dto.FollowDto;
 import com.matzip.dto.MainBoardDto;
 import com.matzip.dto.UsersFormDto;
 import com.matzip.entity.Users;
+import com.matzip.repository.UsersRepository;
 import com.matzip.service.BoardService;
 import com.matzip.service.FollowService;
 import com.matzip.service.UsersService;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,7 +39,7 @@ public class UsersController {
     private final UsersService usersService;
     private final FollowService followService;
     private final BoardService boardService;
-
+    private final UsersRepository usersRepository;
 
     @GetMapping(value = "/new")
     public String memberForm(Model model){
@@ -98,9 +100,9 @@ public class UsersController {
         try {
             //Users users = usersRepository.findByUserid(usersFormDto.getUserid());
             System.out.println("usersFormDto.getUserid()"+usersFormDto.getUserid());
-            System.out.println("usersFormDto.getUser_name()"+usersFormDto.getUser_name());
+            System.out.println("usersFormDto.getUsername()"+usersFormDto.getUsername());
             System.out.println("usersFormDto.getUser_address()"+usersFormDto.getUser_address());
-            System.out.println("usersFormDto.getUser_phone()"+usersFormDto.getUser_phone());
+            System.out.println("usersFormDto.getUserphone()"+usersFormDto.getUserphone());
             System.out.println("usersFormDto.getUser_image()"+usersFormDto.getUser_image());
             System.out.println("usersFormDto.getGender()"+usersFormDto.getGender());
 
@@ -190,19 +192,22 @@ public class UsersController {
         return "users/profileForm";
     }
 
-    @GetMapping("/users/")
-    public String findAll(Model model){
-        List<UsersFormDto> usersFormDtoList = usersService.findAll();
-        model.addAttribute("usersList",usersFormDtoList);
-        return "users/usersListForm";
-    }
+//    @GetMapping("/users/")
+//    public String findAll(Model model){
+//        List<UsersFormDto> usersFormDtoList = usersService.findAll();
+//        model.addAttribute("usersList",usersFormDtoList);
+//        return "users/usersListForm";
+//    }
 
-    @GetMapping("/delete/{userid}")
-    public String deleteById(@PathVariable String userid){
-        usersService.deleteById(userid);
+//    @GetMapping("/delete/{userid}")
+//    public String deleteById(@PathVariable String userid){
+//        usersService.deleteById(userid);
+//
+//        return "redirect:/users/";
+//    }
 
-        return "redirect:/users/";
-    }
+
+
 
 /*    @DeleteMapping("/deleteFollow/{toUserId}")
     public @ResponseBody ResponseEntity<FollowDto> deleteFollow(@PathVariable String toUserId, Principal principal){
@@ -270,5 +275,27 @@ public class UsersController {
         return "board/boardMatjalal";
     }
 
+
+    //    유저 리스트
+    @GetMapping("/userspage/")
+    public String list(Model model, @PageableDefault(size = 2) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
+        // Page<Users> users = usersRepository.findAll(pageable);
+        Page<Users> users = usersRepository.findByUseridContainingOrUsernameContainingOrUserphoneContaining(searchText, searchText,searchText, pageable);
+        int startPage = Math.max(1, users.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(users.getTotalPages(), users.getPageable().getPageNumber() + 4);
+
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("users", users);
+        return "users/usersListForm";
+    }
+
+    @GetMapping("/delete/{userid}")
+    public String deleteById(@PathVariable String userid){
+        usersService.deleteById(userid);
+
+        return "redirect:/users/userspage/";
+
+    }
 
 }

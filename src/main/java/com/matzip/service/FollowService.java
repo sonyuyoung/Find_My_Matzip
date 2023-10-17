@@ -53,7 +53,7 @@ public class FollowService {
         //DTO로 변환
         List<FollowDto> followingDtoList = new ArrayList<>();
         for(Follow follow:fromUserList){
-            FollowDto followDto = new FollowDto(follow.getToUser().getUserid(), follow.getToUser().getUser_name(), follow.getToUser().getUser_image());
+            FollowDto followDto = new FollowDto(follow.getToUser().getUserid(), follow.getToUser().getUsername(), follow.getToUser().getUser_image());
             followingDtoList.add(followDto);
         }
 
