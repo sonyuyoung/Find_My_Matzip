@@ -19,4 +19,7 @@ public interface BoardRepositoryCustom {
 
     Page<MainBoardDto> getBoardPageByResId(BoardSearchDto boardSearchDto, Pageable pageable,String resId);
 
+    Page<MainBoardDto> getBoardPageByUserId(BoardSearchDto boardSearchDto, Pageable pageable,String userId);
+
+
 }

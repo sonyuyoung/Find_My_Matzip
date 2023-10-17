@@ -135,6 +135,12 @@ public class BoardService {
         return boardRepository.getBoardPageByResId(boardSearchDto, pageable,resId);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainBoardDto> getBoardPageByUserId(BoardSearchDto boardSearchDto, Pageable pageable,String userId){
+        return boardRepository.getBoardPageByUserId(boardSearchDto, pageable,userId);
+    }
+
+
 
     @Transactional
     public void deleteBoard(Long boardId) {
