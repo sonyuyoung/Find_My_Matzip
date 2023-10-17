@@ -146,6 +146,12 @@ public class BoardService {
         return boardRepository.getBoardPageByFollowList(boardSearchDto, pageable,toUserIdList);
     }
 
+    @Transactional(readOnly = true)
+    public Restaurant getBoardByResId(String resId){
+        return restaurantRepository.findByresId(resId);
+    }
+
+
 
     @Transactional
     public void deleteBoard(Long boardId) {
