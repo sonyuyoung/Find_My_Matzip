@@ -139,22 +139,20 @@ public class UsersController {
     public String myProfileForm(@PathVariable(name ="pageUserid", required = false) String pageUserId, Principal principal, Model model,
                                 BoardSearchDto boardSearchDto,Optional<Integer> page) throws Exception {
 
-        //myBoardList : 내 게시글 리스트
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-        Page<MainBoardDto> boards = boardService.getBoardPageByUserId(boardSearchDto, pageable,principal.getName());
-
-        model.addAttribute("boards", boards);
-        model.addAttribute("boardSearchDto", boardSearchDto);
-        model.addAttribute("maxPage", 5);
-
-
-
         //마이페이지일때 ("/profile")
         if(pageUserId == null){
             //pageUser == principal
             pageUserId = principal.getName();
             System.out.println("마이페이지일때 pageUserId: "+pageUserId);
         }
+
+        //myBoardList : 내 게시글 리스트
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+        Page<MainBoardDto> boards = boardService.getBoardPageByUserId(boardSearchDto, pageable,pageUserId);
+
+        model.addAttribute("boards", boards);
+        model.addAttribute("boardSearchDto", boardSearchDto);
+        model.addAttribute("maxPage", 5);
 
         //pageUser의 userDto
         UsersFormDto pageUserDto = usersService.findById(pageUserId);
