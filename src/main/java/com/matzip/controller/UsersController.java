@@ -248,5 +248,27 @@ public class UsersController {
 
     }
 
+    //맛잘알게시판
+    @GetMapping(value = {"/matjalal"})
+    public String myMatjalalForm(Principal principal, Model model,
+                                 BoardSearchDto boardSearchDto,Optional<Integer> page) throws Exception {
+
+        //로그인 유저의 following 리스트
+        List<String> toUserIdList = followService.getFollowingIdList(principal.getName());
+
+        //myBoardList : 내 게시글 리스트
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+        Page<MainBoardDto> boards = boardService.getBoardPageByFollowList(boardSearchDto, pageable,toUserIdList);
+
+        model.addAttribute("boards", boards);
+        model.addAttribute("boardSearchDto", boardSearchDto);
+        model.addAttribute("maxPage", 5);
+
+
+        //model.addAttribute("fromUserIdList",fromUserIdList);
+
+        return "board/boardMatjalal";
+    }
+
 
 }
