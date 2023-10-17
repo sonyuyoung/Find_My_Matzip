@@ -5,6 +5,7 @@ import com.matzip.dto.BoardFormDto;
 import com.matzip.dto.BoardSearchDto;
 import com.matzip.dto.RestaurantFormDto;
 import com.matzip.entity.Board;
+import com.matzip.entity.Restaurant;
 import com.matzip.entity.Users;
 import com.matzip.service.BoardService;
 import com.matzip.service.RestaurantService;
@@ -178,11 +179,22 @@ public class BoardController {
     //-> boardDtl로 가자
     @GetMapping(value = "/board/{boardId}")
     public String boardDtl(Model model, @PathVariable("boardId") Long boardId){
+
         BoardFormDto boardFormDto = boardService.getBoardDtl(boardId);
         Users users = boardService.getUserByCreated(boardFormDto.getUser_id());
+        System.out.println("boardFormDto.getResId() : "+boardFormDto.getResId());
+        Restaurant restaurant = boardService.getBoardByResId(boardFormDto.getResId());
 
         model.addAttribute("users",users);
         model.addAttribute("board", boardFormDto);
+        model.addAttribute("restaurant", restaurant);
+        System.out.println("------------------------------" + restaurant.getResId());
+        System.out.println("------------------------------" + restaurant.getResId());
+        System.out.println("------------------------------" + restaurant.getResId());
+        System.out.println("------------------------------" + restaurant.getResId());System.out.println("------------------------------" + restaurant.getResId());
+        System.out.println("------------------------------" + restaurant.getResId());
+
+
         return "board/boardDtl";
     }
 
