@@ -11,8 +11,8 @@
 </head>
 <hidden type="text" id="totalCount" th:value="${restaurantList.size()}">
   <th:block th:each="restaurant, status: ${restaurantList}">
-    <hidden type="text" id="res_lat" th:value="${restaurant.res_lat}">
-      <hidden type="text" id="res_lng" th:value="${restaurant.res_lng}">
+    <hidden type="text" id="res_lat" th:value="${restaurant.res_lat}"></hidden>
+      <hidden type="text" id="res_lng" th:value="${restaurant.res_lng}"></hidden>
   </th:block>
   <div layout:fragment="content">
     <!--지도 호출 구문-->
@@ -55,9 +55,12 @@
       });
       var map = new naver.maps.Map('map', {
         center: new naver.maps.LatLng(35.1797865, 129.0750194), //지도 시작 지점
-        zoom: 13
+        zoom: 13,
+        zoomControl: true,
+        zoomControlOptions: {
+          position: naver.maps.Position.TOP_RIGHT
+        }
       });
-
 
       let markers = new Array(); // 마커 정보를 담는 배열
       let infoWindows = new Array(); // 정보창을 담는 배열
