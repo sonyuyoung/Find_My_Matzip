@@ -7,7 +7,13 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @NoArgsConstructor
-@Table(name="follow")
+@Table(name="follow",
+        uniqueConstraints = {
+        @UniqueConstraint(
+                name="follow_uk",
+                columnNames = {"to_user", "from_user"}
+        )
+})
 @Entity
 @Getter @Setter
 public class Follow {

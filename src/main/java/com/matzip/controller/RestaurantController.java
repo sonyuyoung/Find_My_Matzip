@@ -1,8 +1,10 @@
 package com.matzip.controller;
 
 import com.matzip.dto.*;
+import com.matzip.entity.Board;
 import com.matzip.entity.Restaurant;
 import com.matzip.entity.Restaurant;
+import com.matzip.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import com.matzip.service.RestaurantService;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ import java.util.Optional;
 public class RestaurantController {
 
     private final RestaurantService restaurantService;
+    private final BoardService boardService;
 
     @GetMapping("/map")
     public String findAll(Model model){
@@ -96,12 +99,28 @@ public class RestaurantController {
 //        return "/restaurant/restaurant";
 //    }
 
-    //식당상세페이지 매핑
+//    //식당상세페이지 매핑
+//    @GetMapping(value = "/restaurant/{resId}")
+//    public String restaurantDtl(Model model, @PathVariable("resId") String resId){
+//        RestaurantFormDto restaurantFormDto = restaurantService.getRestaurantDtl(resId);
+//        model.addAttribute("restaurant", restaurantFormDto);
+//        return "restaurant/restaurantDtl";
+//    }
+
+    //식당상세페이지 리뷰추가 매핑...
+    // 근데 이거 뒤에 review 안붙어도 나오게 하고싶다. 그런데 그렇게하면
+    // 리뷰 폼 등록할 때도 나오지 않을까...
     @GetMapping(value = "/restaurant/{resId}")
-    public String restaurantDtl(Model model, @PathVariable("resId") String resId){
+    public String sumResRivew(Model model, @PathVariable("resId") String resId,Optional<Integer> page,BoardSearchDto boardSearchDto){
         RestaurantFormDto restaurantFormDto = restaurantService.getRestaurantDtl(resId);
         model.addAttribute("restaurant", restaurantFormDto);
-        return "restaurant/restaurantDtl";
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+        /*Page<MainBoardDto> boards = boardService.getMainBoardPage(boardSearchDto, pageable);*/
+        Page<MainBoardDto> boards = boardService.getBoardPageByResId(boardSearchDto, pageable,resId);
+        model.addAttribute("boards", boards);
+        model.addAttribute("boardSearchDto", boardSearchDto);
+        model.addAttribute("maxPage", 5);
+        return "restaurant/restaurant_review";
     }
 
     //게시글 관리 화면 및 조회한 게시글 데이터를 화면에 전달하는 로직을 구현
@@ -127,5 +146,13 @@ public class RestaurantController {
         return "restaurant/restaurantMng";
     }
 
-
+    @GetMapping("/ranking")
+    public String showRestaurantRanking(Model model) {
+        // 레스토랑 랭킹을 가져오는 서비스 메서드 호출
+        List<RestaurantDto> ranking = restaurantService.getTopNRestaurantsByAvgScore(10);
+        // 모델에 랭킹 데이터 추가
+        model.addAttribute("ranking", ranking);
+        // 랭킹을 표시할 뷰 페이지 리턴
+        return "restaurant/restaurantRanking";
+    }
 }

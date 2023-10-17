@@ -1,12 +1,19 @@
 package com.matzip.controller;
 
+import com.matzip.dto.BoardSearchDto;
 import com.matzip.dto.FollowDto;
+import com.matzip.dto.MainBoardDto;
 import com.matzip.dto.UsersFormDto;
 import com.matzip.entity.Users;
 import com.matzip.service.BoardService;
 import com.matzip.service.FollowService;
 import com.matzip.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -126,23 +136,32 @@ public class UsersController {
 
     //내 프로필 조회
     @GetMapping(value = {"/profile","/profile/{pageUserid}"})
-    public String myProfileForm(@PathVariable(name ="pageUserid", required = false) String pageUserId,Principal principal,Model model) throws Exception {
-        //myBoardList : 내 게시글 리스트
-       /* List<BoardDto> myBoardList = boardService.getBoardList(principal.getName());
-        model.addAttribute("myBoardList", myBoardList);*/
+    public String myProfileForm(@PathVariable(name ="pageUserid", required = false) String pageUserId, Principal principal, Model model,
+                                BoardSearchDto boardSearchDto,Optional<Integer> page) throws Exception {
 
         //마이페이지일때 ("/profile")
         if(pageUserId == null){
             //pageUser == principal
             pageUserId = principal.getName();
+            System.out.println("마이페이지일때 pageUserId: "+pageUserId);
         }
+
+        //myBoardList : 내 게시글 리스트
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+        Page<MainBoardDto> boards = boardService.getBoardPageByUserId(boardSearchDto, pageable,pageUserId);
+
+        model.addAttribute("boards", boards);
+        model.addAttribute("boardSearchDto", boardSearchDto);
+        model.addAttribute("maxPage", 5);
 
         //pageUser의 userDto
         UsersFormDto pageUserDto = usersService.findById(pageUserId);
+        System.out.println("다른루트일때 pageUserId: "+pageUserId);
 
         //현재 로그인된 user의 userDto
         String loginUserId = principal.getName();
         UsersFormDto loginUserDto = usersService.findById(loginUserId);
+        System.out.println("loginUserDto : "+loginUserDto);
 
 
         //팔로워 리스트
@@ -185,20 +204,48 @@ public class UsersController {
         return "redirect:/users/";
     }
 
-    @GetMapping("/deleteFollow/{toUserId}")
-    public String deleteFollow(@PathVariable String toUserId,Principal principal){
+/*    @DeleteMapping("/deleteFollow/{toUserId}")
+    public @ResponseBody ResponseEntity<FollowDto> deleteFollow(@PathVariable String toUserId, Principal principal){
         followService.deleteFollow(toUserId,principal.getName());
-
-        return "redirect:/users/profile/"+toUserId;
+        FollowDto followDto = new FollowDto("a","b","c");
+        return new ResponseEntity<FollowDto>(followDto, HttpStatus.OK);
     }
 
     @GetMapping("/insertFollow/{toUserId}")
-    public String insertFollow(@PathVariable String toUserId,Principal principal){
+    *//*@PostMapping("/insertFollow/")*//*
+    public @ResponseBody ResponseEntity<FollowDto> insertFollow(@PathVariable String toUserId,Principal principal){
+        System.out.println("팔로우 하기전 ");
         followService.insertFollow(toUserId,principal.getName());
+        System.out.println("팔로우 하기후 ");
+        System.out.println("toUserId 확인: " + toUserId);
+        System.out.println("HttpStatus.OK 확인: " + HttpStatus.OK);
+        FollowDto followDto = new FollowDto("a","b","c");
+        return new ResponseEntity<FollowDto>(followDto, HttpStatus.OK);
 
+    }*/
 
+    @DeleteMapping("/deleteFollow/{toUserId}")
+    public @ResponseBody ResponseEntity<Map<String,Object>> deleteFollow(@PathVariable String toUserId, Principal principal){
+        followService.deleteFollow(toUserId,principal.getName());
+        FollowDto followDto = new FollowDto("a","b","c");
+        Map<String,Object> result = new HashMap<>();
+        result.put("data",toUserId);
+        return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
+    }
 
-        return "redirect:/users/profile/"+toUserId;
+    @GetMapping("/insertFollow/{toUserId}")
+    /*@PostMapping("/insertFollow/")*/
+    public @ResponseBody ResponseEntity<Map<String,Object>> insertFollow(@PathVariable String toUserId,Principal principal){
+        System.out.println("팔로우 하기전 ");
+        followService.insertFollow(toUserId,principal.getName());
+        System.out.println("팔로우 하기후 ");
+        System.out.println("toUserId 확인: " + toUserId);
+        System.out.println("HttpStatus.OK 확인: " + HttpStatus.OK);
+        FollowDto followDto = new FollowDto("a","b","c");
+        Map<String,Object> result = new HashMap<>();
+        result.put("data",toUserId);
+        return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
+
     }
 
 

@@ -56,17 +56,20 @@
                             <td>상태</td>
                             <td>등록자</td>
                             <td>등록일</td>
+                            <td>리뷰삭제</td>
+
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="board, status: ${boards.getContent()}">
                             <td th:text="${board.id}"></td>
                             <td>
-                                <a th:href="'/admin/board/'+${board.id}" th:text="${board.board_title}"></a>
+                                <a th:href="'/board/'+${board.id}" th:text="${board.board_title}"></a>
                             </td>
                             <td th:text="${board.boardViewStatus == T(com.matzip.constant.BoardViewStatus).VIEW} ? '일반글' : '비밀글'"></td>
                             <td th:text="${board.createdBy}"></td>
                             <td th:text="${board.regTime}"></td>
+                            <td> <a th:href="@{'/admin/board/delete/' + ${board.id}}" class="btn btn-danger">삭제</a></td>
                         </tr>
                         </tbody>
                     </table>

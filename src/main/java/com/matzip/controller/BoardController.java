@@ -5,6 +5,7 @@ import com.matzip.dto.BoardFormDto;
 import com.matzip.dto.BoardSearchDto;
 import com.matzip.dto.RestaurantFormDto;
 import com.matzip.entity.Board;
+import com.matzip.entity.Users;
 import com.matzip.service.BoardService;
 import com.matzip.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
@@ -148,14 +149,61 @@ public class BoardController {
         return "board/boardMng";
     }
 
+//    식당정보 + 리뷰들 매핑시작!!!!
+//    식당정보 + 리뷰들 매핑시작!!!!
+//    식당정보 + 리뷰들 매핑시작!!!!
+//    @GetMapping(value = {"/restaurant/{resId}"})
+//    public String sumResRivew(String resId, BoardSearchDto boardSearchDto, Optional<Integer> page, Model model){
+////        식당상세페이지 보기를 위해 추가
+//        RestaurantFormDto restaurantFormDto = restaurantService.getRestaurantDtl(resId);
+//        model.addAttribute("restaurant", restaurantFormDto);
+////        식당상세페이지 보기를 위해 추가
+//
+//        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+//        Page<Board> boards = boardService.getAdminBoardPage(boardSearchDto, pageable);
+//        model.addAttribute("boards", boards);
+//        model.addAttribute("boardSearchDto", boardSearchDto);
+//        model.addAttribute("maxPage", 5);
+//
+//        //template/board 폴더 아래에 boardMng.html 파일을 생성한다.
+//        return "restaurant/restaurant_review";
+//    }
+    //    식당정보 + 리뷰들 매핑끝!!!!
+    //    식당정보 + 리뷰들 매핑끝!!!!
+    //    식당정보 + 리뷰들 매핑끝!!!!
+
+
     //게시글 상세페이지
     //상품을 가지고 오는 로직을 똑같이 사용
     //-> boardDtl로 가자
     @GetMapping(value = "/board/{boardId}")
     public String boardDtl(Model model, @PathVariable("boardId") Long boardId){
         BoardFormDto boardFormDto = boardService.getBoardDtl(boardId);
+        Users users = boardService.getUserByCreated(boardFormDto.getUser_id());
+
+        model.addAttribute("users",users);
         model.addAttribute("board", boardFormDto);
         return "board/boardDtl";
     }
+
+    @GetMapping("/admin/board/delete/{boardId}")
+    public String deleteBoard(@PathVariable Long boardId, Model model) {
+        try {
+            // 리뷰 ID를 사용하여 리뷰를 삭제
+            boardService.deleteBoard(boardId);
+            model.addAttribute("successMessage", "리뷰가 성공적으로 삭제되었습니다.");
+        } catch (EntityNotFoundException e) {
+            // 삭제할 리뷰를 찾지 못한 경우
+            model.addAttribute("errorMessage", "삭제할 리뷰를 찾지 못했습니다.");
+        } catch (Exception e) {
+            // 기타 예외 처리
+            model.addAttribute("errorMessage", "리뷰 삭제 중 오류가 발생했습니다.");
+        }
+
+        // 삭제 후 다시 리뷰 목록 페이지로 리다이렉트
+        return "redirect:/admin/boards/";
+    }
+
+
 
 }
