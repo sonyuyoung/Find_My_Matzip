@@ -2,10 +2,13 @@ package com.matzip.repository;
 
 
 import com.matzip.dto.BoardSearchDto;
+import com.matzip.dto.FollowDto;
 import com.matzip.dto.MainBoardDto;
 import com.matzip.entity.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface BoardRepositoryCustom {
 
@@ -20,6 +23,8 @@ public interface BoardRepositoryCustom {
     Page<MainBoardDto> getBoardPageByResId(BoardSearchDto boardSearchDto, Pageable pageable,String resId);
 
     Page<MainBoardDto> getBoardPageByUserId(BoardSearchDto boardSearchDto, Pageable pageable,String userId);
+
+    Page<MainBoardDto> getBoardPageByFollowList(BoardSearchDto boardSearchDto, Pageable pageable, List<String> fromUserIdList);
 
 
 }
