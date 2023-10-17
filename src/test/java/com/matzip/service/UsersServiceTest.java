@@ -30,10 +30,10 @@ class UsersServiceTest {
     public Users createUsers() {
         UsersFormDto usersFormDto = new UsersFormDto();
         usersFormDto.setUserid("john_doe");
-        usersFormDto.setUser_name("John Doe");
+        usersFormDto.setUsername("John Doe");
         usersFormDto.setUser_pwd("password123");
         usersFormDto.setUser_address("123 Main Street, City");
-        usersFormDto.setUser_phone("123-456-7890");
+        usersFormDto.setUserphone("123-456-7890");
         return Users.createUsers(usersFormDto, passwordEncoder);
 
     }
@@ -59,10 +59,10 @@ class UsersServiceTest {
     System.out.println("users.getUser_pwd(): "+users.getUser_pwd());
     System.out.println("saveUsers(): "+savedUsers.getUserid());
     assertEquals(users.getUserid(),savedUsers.getUserid());
-    assertEquals(users.getUser_name(),savedUsers.getUser_name());
+    assertEquals(users.getUsername(),savedUsers.getUsername());
     assertEquals(users.getUser_pwd(),savedUsers.getUser_pwd());
     assertEquals(users.getUser_address(),savedUsers.getUser_address());
-    assertEquals(users.getUser_phone(),savedUsers.getUser_phone());
+    assertEquals(users.getUserphone(),savedUsers.getUserphone());
     assertEquals(users.getUser_role(),savedUsers.getUser_role());
     assertEquals(users.getUser_image(), savedUsers.getUser_image());
 }

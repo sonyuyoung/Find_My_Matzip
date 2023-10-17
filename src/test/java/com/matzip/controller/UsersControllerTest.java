@@ -40,9 +40,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
         public Users createUsers(String userid, String user_pwd) throws Exception {
             UsersFormDto usersFormDto = new UsersFormDto();
             usersFormDto.setUserid(userid);
-            usersFormDto.setUser_name("John Doe");
+            usersFormDto.setUsername("John Doe");
             usersFormDto.setUser_address("123 Main Street, City");
-            usersFormDto.setUser_phone("123-456-7890");
+            usersFormDto.setUserphone("123-456-7890");
             usersFormDto.setUser_pwd(user_pwd);
             Users users = Users.createUsers(usersFormDto, passwordEncoder);
             return usersService.saveUsers(users,createMultipartFile());

@@ -94,9 +94,9 @@
       </div>
     </div>
     <div class="form-group">
-      <label th:for="user_name">이름</label>
-      <input type="text" th:field="*{user_name}" class="form-control">
-      <p th:if="${#fields.hasErrors('user_name')}" th:errors="*{user_name}" class="fieldError">Incorrect data</p>
+      <label th:for="username">이름</label>
+      <input type="text" th:field="*{username}" class="form-control">
+      <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="fieldError">Incorrect data</p>
     </div>
     <!--<div class="form-group">
       <label th:for="user_pwd">비밀번호</label>
@@ -110,9 +110,9 @@
       <p th:if="${#fields.hasErrors('user_address')}" th:errors="*{user_address}" class="fieldError">Incorrect data</p>
     </div>
     <div class="form-group">
-      <label th:for="user_phone">핸드폰 번호</label>
-      <input type="text" th:field="*{user_phone}" class="form-control">
-      <p th:if="${#fields.hasErrors('user_phone')}" th:errors="*{user_phone}" class="fieldError">Incorrect data</p>
+      <label th:for="userphone">핸드폰 번호</label>
+      <input type="text" th:field="*{userphone}" class="form-control">
+      <p th:if="${#fields.hasErrors('userphone')}" th:errors="*{userphone}" class="fieldError">Incorrect data</p>
     </div>
 
     <div class="form-group">
