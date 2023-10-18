@@ -58,7 +58,7 @@ public class Users {
         users.setUsername(usersFormDto.getUsername());
         users.setUser_address(usersFormDto.getUser_address());
         users.setUserphone(usersFormDto.getUserphone());
-        users.setUser_role(UserRole.ADMIN);
+        users.setUser_role(UserRole.USER);
         users.setUser_image(usersFormDto.getUser_image());
         users.setGender(usersFormDto.getGender());
         return users;
