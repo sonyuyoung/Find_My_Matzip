@@ -1,8 +1,6 @@
 package com.matzip.service;
 
 import com.matzip.dto.*;
-import com.matzip.entity.Board;
-import com.matzip.entity.BoardImg;
 import com.matzip.entity.Restaurant;
 import com.matzip.entity.RestaurantImg;
 import com.matzip.repository.RestaurantRepository;
@@ -29,7 +27,6 @@ public class RestaurantService {
 
     public List<RestaurantDto> findAll(){
         List<Restaurant> restaurantEntityList = restaurantRepository.findAll();
-        System.out.println("restaurantDtoList 의 소스 확인 동네 2 서비스: "+restaurantEntityList.get(0).getRes_name());
         List<RestaurantDto> restaurantDtoList = new ArrayList<>();;
         for (Restaurant restaurant : restaurantEntityList) {
             restaurantDtoList.add(RestaurantDto.restaurantDto(restaurant));
