@@ -295,7 +295,7 @@ public class UsersController {
     public String deleteById(@PathVariable String userid) {
         usersService.deleteById(userid);
 
-        return "redirect:/users/userspage/";
+        return "redirect:/users/admin/userspage/";
 
     }
 

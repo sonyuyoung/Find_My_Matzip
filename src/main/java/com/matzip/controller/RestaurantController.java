@@ -1,12 +1,10 @@
 package com.matzip.controller;
 
 import com.matzip.dto.*;
-import com.matzip.entity.Board;
-import com.matzip.entity.Restaurant;
 import com.matzip.entity.Restaurant;
 import com.matzip.service.BoardService;
-import lombok.RequiredArgsConstructor;
 import com.matzip.service.RestaurantService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +31,7 @@ public class RestaurantController {
     @GetMapping("/map")
     public String findAll(Model model){
       List<RestaurantDto> restaurantDtoList = restaurantService.findAll();
-      System.out.println("restaurantDtoList 의 소스 확인 동네 1: "+restaurantDtoList.get(0).getRes_name());
       model.addAttribute("restaurantList",restaurantDtoList);
-     //   model.addAttribute("test","test");
         return "map/mapForm";
     }
 
@@ -114,7 +109,7 @@ public class RestaurantController {
     public String sumResRivew(Model model, @PathVariable("resId") String resId,Optional<Integer> page,BoardSearchDto boardSearchDto){
         RestaurantFormDto restaurantFormDto = restaurantService.getRestaurantDtl(resId);
         model.addAttribute("restaurant", restaurantFormDto);
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
         /*Page<MainBoardDto> boards = boardService.getMainBoardPage(boardSearchDto, pageable);*/
         Page<MainBoardDto> boards = boardService.getBoardPageByResId(boardSearchDto, pageable,resId);
         model.addAttribute("boards", boards);
