@@ -34,7 +34,7 @@ public class BoardController {
     private final BoardService boardService;
     private final RestaurantService restaurantService;
 
-    @GetMapping(value = {"/admin/board/new","/admin/board/new/{resId}"})
+    @GetMapping(value = {"/board/new","/board/new/{resId}"})
     public String boardForm(@PathVariable(name ="resId", required = false) String resId,Model model){
         //식당검색해서 리뷰등록 누른 경우
         if(resId != null){
@@ -54,7 +54,7 @@ public class BoardController {
         return "board/boardForm";
     }
 
-    @PostMapping(value = "/admin/board/new")
+    @PostMapping(value = "/board/new")
     public String boardNew(@Valid BoardFormDto boardFormDto, BindingResult bindingResult,
                           Model model, @RequestParam("boardImgFile") List<MultipartFile> boardImgFileList){
 
@@ -68,15 +68,7 @@ public class BoardController {
         }
 
         try {
-//            System.out.println("boardFormDto 내용 확인: =======================================");
-//            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getBoard_title());
-            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getContent());
-//            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getScore());
-////            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getBoardImgDtoList().get(0).getImgName());
-////            System.out.println("boardFormDto 내용 확인: "+ boardFormDto.getBoardImgDtoList().get(0).getImgUrl());
-//            System.out.println("boardFormDto 내용 확인: =======================================");
             boardService.saveBoard(boardFormDto, boardImgFileList);
-
         } catch (Exception e){
             model.addAttribute("errorMessage", "리뷰 등록 중 에러가 발생하였습니다.");
             return "board/boardForm";
@@ -105,7 +97,7 @@ public class BoardController {
     }
 
     //게시글을 수정하는 URL을 추가 ->상품상세페이지에 진입하기 위해서 boardSerchDto를 추가
-    @PostMapping(value = "/admin/board/{boardId}")
+    @PostMapping(value = "/board/{boardId}")
     public String boardUpdate(@Valid BoardFormDto boardFormDto, BindingResult bindingResult,
                              @RequestParam("boardImgFile") List<MultipartFile> boardImgFileList, Model model){
         if(bindingResult.hasErrors()){
@@ -149,31 +141,6 @@ public class BoardController {
         //template/board 폴더 아래에 boardMng.html 파일을 생성한다.
         return "board/boardMng";
     }
-
-//    식당정보 + 리뷰들 매핑시작!!!!
-//    식당정보 + 리뷰들 매핑시작!!!!
-//    식당정보 + 리뷰들 매핑시작!!!!
-//    @GetMapping(value = {"/restaurant/{resId}"})
-//    public String sumResRivew(String resId, BoardSearchDto boardSearchDto, Optional<Integer> page, Model model){
-////        식당상세페이지 보기를 위해 추가
-//        RestaurantFormDto restaurantFormDto = restaurantService.getRestaurantDtl(resId);
-//        model.addAttribute("restaurant", restaurantFormDto);
-////        식당상세페이지 보기를 위해 추가
-//
-//        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
-//        Page<Board> boards = boardService.getAdminBoardPage(boardSearchDto, pageable);
-//        model.addAttribute("boards", boards);
-//        model.addAttribute("boardSearchDto", boardSearchDto);
-//        model.addAttribute("maxPage", 5);
-//
-//        //template/board 폴더 아래에 boardMng.html 파일을 생성한다.
-//        return "restaurant/restaurant_review";
-//    }
-    //    식당정보 + 리뷰들 매핑끝!!!!
-    //    식당정보 + 리뷰들 매핑끝!!!!
-    //    식당정보 + 리뷰들 매핑끝!!!!
-
-
     //게시글 상세페이지
     //상품을 가지고 오는 로직을 똑같이 사용
     //-> boardDtl로 가자
