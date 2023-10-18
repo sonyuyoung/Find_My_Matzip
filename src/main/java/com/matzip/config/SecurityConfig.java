@@ -50,7 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .mvcMatchers("/", "/users/**","/item/**", "/images/**", "/map","/restaurant/main").permitAll()
-                .mvcMatchers("/admin/board/new/**").hasRole("USER")
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         ;
