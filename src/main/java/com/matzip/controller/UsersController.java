@@ -23,7 +23,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
@@ -150,7 +149,7 @@ public class UsersController {
         }
 
         //myBoardList : 내 게시글 리스트
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
         Page<MainBoardDto> boards = boardService.getBoardPageByUserId(boardSearchDto, pageable, pageUserId);
 
         model.addAttribute("boards", boards);

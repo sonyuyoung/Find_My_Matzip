@@ -38,7 +38,7 @@
 
 
             <li>
-            <li>
+            <li sec:authorize="isAuthenticated()">
                 <a href="/users/matjalal">
                     <i class="bx bx-run"></i>
                     <span class="link_name">맛잘알 게시판</span>
@@ -46,7 +46,7 @@
                 <span class="tooltip">맛잘알 게시판</span>
             </li>
 
-            <li>
+            <li sec:authorize="isAuthenticated()">
                 <a href="/ranking">
                     <i class="bx bx-trophy"></i>
                     <span class="link_name">랭킹</span>
@@ -63,13 +63,7 @@
             </li>
             <li>
 
-            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                <a href="/users/userspage/">
-                    <i class="bx bxs-user-account"></i>
-                    <span class="link_name">회원목록</span>
-                </a>
-                <span class="tooltip">회원목록</span>
-            </li>
+
             <!--            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
             <!--                <a href="/admin/board/new">-->
             <!--                    <i class="bx bx-user-voice"></i>-->
@@ -79,13 +73,7 @@
             <!--            </li>-->
 
 
-            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                <a href="/admin/boards">
-                    <i class="bx bx-health"></i>
-                    <span class="link_name">리뷰관리</span>
-                </a>
-                <span class="tooltip">리뷰관리</span>
-            </li>
+
 
 <!--            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
 <!--                <a href="/restaurant/new">-->
@@ -95,7 +83,7 @@
 <!--                <span class="tooltip">식당등록</span>-->
 <!--            </li>-->
 
-            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+            <li >
                 <a href="/restaurant/main">
                     <i class="bx bxs-sushi"></i>
                     <span class="link_name">식당목록</span>
@@ -103,11 +91,26 @@
                 <span class="tooltip">식당목록</span>
             </li>
 
-            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+            <li sec:authorize="isAuthenticated()">
                 <a href="/restaurants">
                     <i class="bx bx-file-find"></i>
                     <span class="link_name">식당관리 및 검색창</span>
                 </a><span class="tooltip">식당관리 및 검색창</span>
+            </li>
+
+            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <a href="/users/userspage/">
+                    <i class="bx bxs-user-account"></i>
+                    <span class="link_name">회원목록</span>
+                </a>
+                <span class="tooltip">회원목록</span>
+            </li>
+            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <a href="/admin/boards">
+                    <i class="bx bx-health"></i>
+                    <span class="link_name">리뷰관리</span>
+                </a>
+                <span class="tooltip">리뷰관리</span>
             </li>
 
 
