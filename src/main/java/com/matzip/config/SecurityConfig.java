@@ -47,12 +47,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //
         ;
 
-
         http.authorizeRequests()
                 .mvcMatchers("/", "/users/**","/item/**", "/images/**", "/map","/restaurant/main").permitAll()
-                .mvcMatchers("/admin/**").hasRole("ADMIN")
+                .mvcMatchers("/users/admin/**","/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         ;
+
+       /* http.authorizeRequests()
+                .mvcMatchers("/","/admin/**", "/users/**","/item/**", "/images/**", "/map","/restaurant/main").permitAll()
+                .mvcMatchers("/users/userspage/","/admin/boards").hasRole("ADMIN")
+                .anyRequest().authenticated()
+        ;*/
 
         http.exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
