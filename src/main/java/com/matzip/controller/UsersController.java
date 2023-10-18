@@ -278,7 +278,7 @@ public class UsersController {
 
     //    유저 리스트
     @GetMapping("/userspage/")
-    public String list(Model model, @PageableDefault(size = 2) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
+    public String list(Model model, @PageableDefault(size = 6) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
         // Page<Users> users = usersRepository.findAll(pageable);
         Page<Users> users = usersRepository.findByUseridContainingOrUsernameContainingOrUserphoneContaining(searchText, searchText,searchText, pageable);
         int startPage = Math.max(1, users.getPageable().getPageNumber() - 4);
