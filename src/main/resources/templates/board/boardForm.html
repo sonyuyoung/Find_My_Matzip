@@ -2,6 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
+<!--restaurant head이식-->
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<!--restaurant head이식-->
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
@@ -50,11 +56,69 @@
         .fieldError {
             color: #bd2130;
         }
+        /*restaurantDtl css이식*/
+
+        .mgb-15{
+            margin-bottom:15px;
+        }
+        .mgt-30{
+            margin-top:30px;
+        }
+        .mgt-50{
+            margin-top:50px;
+        }
+        .repImgDiv{
+            margin-right:15px;
+            height:auto;
+            width:50%;
+        }
+        .repImg{
+            width:100%;
+            height:400px;
+        }
+        .wd50{
+            height:auto;
+            width:50%;
+        }
+        /*restaurantDtl css이식*/
+
     </style>
 </th:block>
 
 <div layout:fragment="content">
+<div class="row">
+    <div class="col">
+    <input type="hidden" id="resId" th:value="${restaurant.resId}">
 
+    <div class="d-flex">
+        <div class="repImgDiv">
+            <img th:src="${restaurant.res_thumbnail}" class = "rounded repImg" th:alt="${restaurant.res_name}">
+        </div>
+        <div class="wd50">
+            <div class="h4" th:text="${restaurant.res_name}"></div>
+            <hr class="my-4">
+
+            <div class="text-right">
+                <div class="h4 text-danger text-left">
+                    <span th:text="${restaurant.res_menu}"></span>
+                </div>
+            </div>
+            <div>
+                <a th:href="@{|/admin/board/new/${restaurant.resId}|}" class="btn btn-primary btn-sm" th:alt="${restaurant.resId}">리뷰작성</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron jumbotron-fluid mgt-10">
+        <div class="container">
+            <h4 class="display-5">가게소개</h4>
+            <hr class="my-4">
+            <p class="lead" th:text="${restaurant.res_intro}"></p>
+        </div>
+    </div>
+    </div>
+
+    <div class="col">
     <form role="form" method="post" enctype="multipart/form-data" th:object="${boardFormDto}">
 
         <p class="h2">
@@ -68,6 +132,13 @@
                 <option value="VIEW">일반글</option>
                 <option value="NOT_VIEW">비밀글</option>
             </select>
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">식당 id</span>
+            </div>
+            <input type="text" th:field="*{resId}" class="form-control" placeholder="식당 id를 입력해주세요">
         </div>
 
         <div class="input-group">
@@ -118,15 +189,15 @@
 
         <!--상품의 아이디가 없다면 등록, 있다면 수정-->
         <div th:if="${#strings.isEmpty(boardFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{/admin/board/new}" type="submit" class="btn btn-primary">저장</button>
+            <button th:formaction="@{/board/new}" type="submit" class="btn btn-primary">저장</button>
         </div>
         <div th:unless="${#strings.isEmpty(boardFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{'/admin/board/' + ${boardFormDto.id} }" type="submit" class="btn btn-primary">수정</button>
+            <button th:formaction="@{'/board/' + ${boardFormDto.id} }" type="submit" class="btn btn-primary">수정</button>
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
     </form>
-
+    </div>
 </div>
-
+</div>
 </html>

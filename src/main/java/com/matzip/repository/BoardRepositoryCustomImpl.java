@@ -2,9 +2,7 @@ package com.matzip.repository;
 
 
 import com.matzip.constant.BoardViewStatus;
-import com.matzip.dto.BoardSearchDto;
-import com.matzip.dto.MainBoardDto;
-import com.matzip.dto.QMainBoardDto;
+import com.matzip.dto.*;
 import com.matzip.entity.Board;
 import com.matzip.entity.QBoard;
 import com.matzip.entity.QBoardImg;
@@ -106,6 +104,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         return new PageImpl<>(content, pageable, total);
     } // -> BoardRepository 인터페이스에서 BoardRepositoryCustom 인터페이스를 상속받으러 가자 교재 271p
 
+
+    //
     private BooleanExpression boardTitleLike(String searchQuery){
         return StringUtils.isEmpty(searchQuery) ? null : QBoard.board.board_title.like("%" + searchQuery + "%");
     }
@@ -139,5 +139,100 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         long total = results.getTotal();
         return new PageImpl<>(content, pageable, total);
     }
+
+    @Override
+    public Page<MainBoardDto> getBoardPageByResId(BoardSearchDto boardSearchDto, Pageable pageable,String resId) {
+        QBoard board = QBoard.board;
+        QBoardImg boardImg = QBoardImg.boardImg;
+
+        QueryResults<MainBoardDto> results = queryFactory
+                .select(
+                        // @QueryProjection 의 생성자를 이용해서,
+                        // 바로 검색 조건으로 자동 매핑을 해줌.
+                        new QMainBoardDto(
+                                board.id,
+                                board.board_title,
+                                board.content,
+                                boardImg.imgUrl,
+                                board.score)
+                )
+                .from(boardImg)
+                .join(boardImg.board, board)
+                .where(boardImg.repimgYn.eq("Y"))
+                .where(boardTitleLike(boardSearchDto.getSearchQuery()))
+                .where(board.resId.resId.eq(resId))
+                .orderBy(board.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<MainBoardDto> content = results.getResults();
+        long total = results.getTotal();
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public Page<MainBoardDto> getBoardPageByUserId(BoardSearchDto boardSearchDto, Pageable pageable,String userId) {
+        QBoard board = QBoard.board;
+        QBoardImg boardImg = QBoardImg.boardImg;
+
+        QueryResults<MainBoardDto> results = queryFactory
+                .select(
+                        // @QueryProjection 의 생성자를 이용해서,
+                        // 바로 검색 조건으로 자동 매핑을 해줌.
+                        new QMainBoardDto(
+                                board.id,
+                                board.board_title,
+                                board.content,
+                                boardImg.imgUrl,
+                                board.score)
+                )
+                .from(boardImg)
+                .join(boardImg.board, board)
+                .where(boardImg.repimgYn.eq("Y"))
+                .where(boardTitleLike(boardSearchDto.getSearchQuery()))
+                .where(board.createdBy.eq(userId))
+                .orderBy(board.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<MainBoardDto> content = results.getResults();
+        long total = results.getTotal();
+        return new PageImpl<>(content, pageable, total);
+    }
+
+
+    @Override
+    public Page<MainBoardDto> getBoardPageByFollowList(BoardSearchDto boardSearchDto, Pageable pageable,List<String> toUserIdList) {
+        QBoard board = QBoard.board;
+        QBoardImg boardImg = QBoardImg.boardImg;
+
+        QueryResults<MainBoardDto> results = queryFactory
+                .select(
+                        // @QueryProjection 의 생성자를 이용해서,
+                        // 바로 검색 조건으로 자동 매핑을 해줌.
+                        new QMainBoardDto(
+                                board.id,
+                                board.board_title,
+                                board.content,
+                                boardImg.imgUrl,
+                                board.score)
+                )
+                .from(boardImg)
+                .join(boardImg.board, board)
+                .where(boardImg.repimgYn.eq("Y"))
+                .where(boardTitleLike(boardSearchDto.getSearchQuery()))
+                .where(board.createdBy.in(toUserIdList))
+                .orderBy(board.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<MainBoardDto> content = results.getResults();
+        long total = results.getTotal();
+        return new PageImpl<>(content, pageable, total);
+    }
+
 
 }

@@ -8,6 +8,8 @@ import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -25,11 +27,11 @@ public class Users {
     private String user_pwd; //회원 pw
 
     @Column(nullable = false)
-    private String user_name; //회원 이름
+    private String username; //회원 이름
 
     private String user_address; //주소
 
-    private String user_phone; //전화번호
+    private String userphone; //전화번호
 
     @Enumerated(EnumType.STRING)
     private UserRole user_role; //역할(ADMIN,USER)
@@ -39,6 +41,11 @@ public class Users {
     private String gender;
     //private LocalDateTime regTime; //가입 날짜
 
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> followers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> following = new ArrayList<>();
 
 
 
@@ -48,20 +55,32 @@ public class Users {
         users.setUserid(usersFormDto.getUserid());
         String user_pwd = passwordEncoder.encode(usersFormDto.getUser_pwd());
         users.setUser_pwd(user_pwd);
-        users.setUser_name(usersFormDto.getUser_name());
+        users.setUsername(usersFormDto.getUsername());
         users.setUser_address(usersFormDto.getUser_address());
-        users.setUser_phone(usersFormDto.getUser_phone());
-        users.setUser_role(UserRole.ADMIN);
+        users.setUserphone(usersFormDto.getUserphone());
+        users.setUser_role(UserRole.USER);
         users.setUser_image(usersFormDto.getUser_image());
         users.setGender(usersFormDto.getGender());
         return users;
     }
 
     public void updateUsers(UsersFormDto usersFormDto){
-        this.user_name = usersFormDto.getUser_name();
+        this.username = usersFormDto.getUsername();
         this.user_address = usersFormDto.getUser_address();
-        this.user_phone = usersFormDto.getUser_phone();
+        this.userphone = usersFormDto.getUserphone();
         this.user_image = usersFormDto.getUser_image();
         this.gender=usersFormDto.getGender();
+    }
+
+    public static Users aboutUsers(UsersFormDto usersFormDto){
+        Users users = new Users();
+        users.setUserid(usersFormDto.getUserid());
+        users.setUsername(usersFormDto.getUsername());
+        users.setUser_address(usersFormDto.getUser_address());
+        users.setUserphone(usersFormDto.getUserphone());
+        users.setUser_role(UserRole.ADMIN);
+        users.setUser_image(usersFormDto.getUser_image());
+        users.setGender(usersFormDto.getGender());
+        return users;
     }
 }

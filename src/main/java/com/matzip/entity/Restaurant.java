@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="restaurant")
@@ -14,8 +15,9 @@ import javax.persistence.*;
 public class Restaurant {
 
     @Id
-    @Column(name="res_id", nullable = false)
-    private Long res_id;       //식당 id
+    @Column(name="resId", unique = true)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String resId;       //식당 id
 
     @Column(nullable = false)
     private String res_name;//식당 이름
@@ -24,10 +26,10 @@ public class Restaurant {
     private String res_district;//구군
 
     @Column(nullable = false)
-    private String res_latitude;//위도
+    private String res_lat;//위도
 
     @Column(nullable = false)
-    private String res_hardness;//경도
+    private String res_lng;//경도
 
     @Column(nullable = false)
     private String res_address;//식당 주소
@@ -49,6 +51,9 @@ public class Restaurant {
 
     @Column
     private String res_intro; //가게 소개
+
+    @OneToMany(mappedBy = "resId")
+    private List<Board> boards;     // 레스토랑과 관련된 게시글 목록
 
     /*@Column(nullable = false)
     private String avg_score; //평균 평점*/

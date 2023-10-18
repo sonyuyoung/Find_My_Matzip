@@ -2,14 +2,15 @@ package com.matzip.service;
 
 
 
-import com.matzip.dto.BoardFormDto;
-import com.matzip.dto.BoardImgDto;
-import com.matzip.dto.BoardSearchDto;
-import com.matzip.dto.MainBoardDto;
+import com.matzip.dto.*;
 import com.matzip.entity.Board;
 import com.matzip.entity.BoardImg;
+import com.matzip.entity.Restaurant;
+import com.matzip.entity.Users;
 import com.matzip.repository.BoardImgRepository;
 import com.matzip.repository.BoardRepository;
+import com.matzip.repository.RestaurantRepository;
+import com.matzip.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,12 +34,18 @@ public class BoardService {
 
     private final BoardImgRepository boardImgRepository;
 
+    private final RestaurantRepository restaurantRepository;
+
+    private final UsersRepository usersRepository;
+
     //게시글 저장하기
     public Long saveBoard(BoardFormDto boardFormDto, List<MultipartFile> boardImgFileList) throws Exception{
 
         System.out.println("여기서부터 오류발생 보드서비스,,, 세이브보드 시작");
         //게시글 등록
-        Board board = boardFormDto.createBoard();
+        //boardFormDto에는 id만 저장되어있으므로 레스토랑 객체 가져옴
+        Restaurant restaurant = restaurantRepository.findByresId(boardFormDto.getResId());
+        Board board = Board.createBoard(boardFormDto,restaurant);
         System.out.println("보드생성완료");
         boardRepository.save(board);
         System.out.println("보드저장완료");
@@ -77,7 +85,8 @@ public class BoardService {
         //게시글의 아이디를 통해 상품 엔티티를 조회 . 존재하지않으면 오류 발생시키기
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(EntityNotFoundException::new);
-        BoardFormDto boardFormDto = BoardFormDto.of(board);
+
+        BoardFormDto boardFormDto = new BoardFormDto(board);
         boardFormDto.setBoardImgDtoList(boardImgDtoList);
         return boardFormDto;
     }
@@ -117,6 +126,56 @@ public class BoardService {
     @Transactional(readOnly = true)
     public Page<MainBoardDto> getMainBoardPage(BoardSearchDto boardSearchDto, Pageable pageable){
         return boardRepository.getMainBoardPage(boardSearchDto, pageable);
+    }
+
+
+
+    @Transactional(readOnly = true)
+    public Page<MainBoardDto> getBoardPageByResId(BoardSearchDto boardSearchDto, Pageable pageable,String resId){
+        return boardRepository.getBoardPageByResId(boardSearchDto, pageable,resId);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainBoardDto> getBoardPageByUserId(BoardSearchDto boardSearchDto, Pageable pageable,String userId){
+        return boardRepository.getBoardPageByUserId(boardSearchDto, pageable,userId);
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<MainBoardDto> getBoardPageByFollowList(BoardSearchDto boardSearchDto, Pageable pageable,List<String> toUserIdList){
+        return boardRepository.getBoardPageByFollowList(boardSearchDto, pageable,toUserIdList);
+    }
+
+    @Transactional(readOnly = true)
+    public Restaurant getBoardByResId(String resId){
+        return restaurantRepository.findByresId(resId);
+    }
+
+
+
+    @Transactional
+    public void deleteBoard(Long boardId) {
+        // 리뷰 ID로 리뷰를 찾아옴
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new EntityNotFoundException("삭제할 리뷰를 찾을 수 없습니다. ID: " + boardId));
+
+        // 리뷰 삭제
+        boardRepository.delete(board);
+    }
+
+    @Transactional
+    public Users getUserByCreated(String userId) {
+        // board의 userId로 user객체 찾기(작성자 정보 가져오기)
+        Users users = usersRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("작성자를 찾을 수 없습니다. ID: " + userId));
+        return users;
+    }
+    
+    @Transactional
+    public Integer countByUserId(String userId) {
+        // userid로 사용자 게시글 갯수 가져오기
+        int boardCount = boardRepository.countByUserId(userId);
+        return boardCount;
     }
 
 }

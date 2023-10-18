@@ -4,7 +4,6 @@ import com.matzip.constant.UserRole;
 import com.matzip.entity.Users;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotBlank;
@@ -17,7 +16,7 @@ public class UsersFormDto {
 //    private String user_id;
 //
 //    @NotBlank(message = "이름은 필수 입력 값입니다.")
-//    private String user_name; //회원 이름
+//    private String username; //회원 이름
 //
 //
 //    @NotEmpty(message = "비밀번호는 필수 입력 값입니다.")
@@ -32,7 +31,7 @@ public class UsersFormDto {
 //    private String user_address; //주소
 //
 //    @NotEmpty(message = "전화번호는 필수 입력 값입니다.")
-//    private String user_phone; //전화번호
+//    private String userphone; //전화번호
 //
 //    @NotEmpty(message = "성별은 필수 입력 값입니다.")
 //    private boolean user_sex; //성별
@@ -50,12 +49,12 @@ public class UsersFormDto {
 @NotBlank(message = "비밀번호를 입력해주세요 ")
     private String user_pwd;
     @NotBlank(message = "이름을 입력해주세요 ")
-    private String user_name;
+    private String username;
     @NotBlank(message = "주소를 적용해주세요 ")
     private String user_address;
     private UserRole user_role;
     @Pattern(regexp = "^[0-9]{11}$", message = "폰번호는 11자리의 숫자여야 합니다.")
-    private String user_phone;
+    private String userphone;
     private String user_image;
     private String gender;
 //    private LocalDateTime user_birth;
@@ -75,11 +74,12 @@ public class UsersFormDto {
     public static UsersFormDto toUsersDto(Users users){
         UsersFormDto usersFormDto =new UsersFormDto();
         usersFormDto.setUserid(users.getUserid());
-        usersFormDto.setUser_name(users.getUser_name());
+        usersFormDto.setUsername(users.getUsername());
         usersFormDto.setUser_address(users.getUser_address());
         usersFormDto.setUser_role(users.getUser_role());
-        usersFormDto.setUser_phone(users.getUser_phone());
+        usersFormDto.setUserphone(users.getUserphone());
         usersFormDto.setUser_image(users.getUser_image());
+        usersFormDto.setGender(users.getGender());
 
         return usersFormDto;
     }
