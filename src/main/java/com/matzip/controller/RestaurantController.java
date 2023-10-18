@@ -142,12 +142,10 @@ public class RestaurantController {
     }
 
     @GetMapping("/ranking")
-    public String showRestaurantRanking(Model model) {
-        // 레스토랑 랭킹을 가져오는 서비스 메서드 호출
-        List<RestaurantDto> ranking = restaurantService.getTopNRestaurantsByAvgScore(10);
-        // 모델에 랭킹 데이터 추가
+    public String getTop3RestaurantsByAvgScore(Model model) {
+        List<RestaurantDto> ranking = restaurantService.getTop3RestaurantsByAvgScore();
         model.addAttribute("ranking", ranking);
-        // 랭킹을 표시할 뷰 페이지 리턴
         return "restaurant/restaurantRanking";
     }
+
 }
