@@ -179,9 +179,9 @@ public class UsersController {
         int countToUser = followService.countByToUser(pageUserId);
 
         //pageUser의 게시글 갯수 (boardService랑 boardController에 코드 추가 필요)
-        /*int countBoard = boardService.countByUserId(pageUserId);*/
+        int countBoard = boardService.countByUserId(pageUserId);
 
-        /*model.addAttribute("countBoard", countBoard);*/
+        model.addAttribute("countBoard", countBoard);
         model.addAttribute("countFromUser", countFromUser);
         model.addAttribute("countToUser", countToUser);
         model.addAttribute("followcheck", followcheck);
