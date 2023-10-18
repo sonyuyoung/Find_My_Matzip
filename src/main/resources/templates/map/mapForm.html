@@ -10,13 +10,11 @@
   <meta charset="utf-8">
 </head>
 <hidden type="text" id="totalCount" th:value="${restaurantList.size()}"></hidden>
-  <th:block th:each="restaurant, status: ${restaurantList}">
-  <!--  <hidden type="text" id="res_lat" th:value="${restaurant.res_lat}"></hidden>
-      <hidden type="text" id="res_lng" th:value="${restaurant.res_lng}"></hidden>-->
-  </th:block>
+  <th:block th:each="restaurant, status: ${restaurantList}">  </th:block>
   <div layout:fragment="content">
     <!--지도 호출 구문-->
     <div id="map" style="width:100%;height:1000px;"></div>
+
     <script th:inline="javascript">
       var restaurantList = []
       var res_lat = []
@@ -49,8 +47,8 @@
       res_thumbnail.push([[${restaurant.res_thumbnail}]])
       resId.push([[${restaurant.resId}]])
       [/]
-
     </script>
+
     <script type="text/javascript">
       $(function() {
         addMarkers();
