@@ -79,6 +79,7 @@ public class UsersFormDto {
         usersFormDto.setUser_role(users.getUser_role());
         usersFormDto.setUserphone(users.getUserphone());
         usersFormDto.setUser_image(users.getUser_image());
+        usersFormDto.setGender(users.getGender());
 
         return usersFormDto;
     }

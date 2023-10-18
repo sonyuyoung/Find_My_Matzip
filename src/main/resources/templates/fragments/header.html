@@ -54,7 +54,7 @@
                 <span class="tooltip">랭킹</span>
             </li>
 
-            <li>
+            <li sec:authorize="isAuthenticated()">
                 <a href="/users/profile">
                     <i class="bx bx-user"></i>
                     <span class="link_name">프로필</span>
@@ -130,6 +130,17 @@
                 </a>
                 <span class="tooltip">Logout</span>
             </li>
+
+                <li class="profile">
+<!--                    <div class="name" sec:authentication="principal.username"></div>-->
+<!--                    <div class="designation">님 로그인</div>-->
+                    <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                        <span th:text="  ${#authentication.principal.username} +' 로그인, '"></span>
+                    </th:block>
+
+
+                </li>
+
             </div>
         </ul>
 
