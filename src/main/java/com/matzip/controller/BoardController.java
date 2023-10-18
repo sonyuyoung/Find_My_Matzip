@@ -181,7 +181,7 @@ public class BoardController {
 
         // 삭제 후 다시 리뷰 목록 페이지로 리다이렉트
         return "redirect:/admin/boards";
-        //여기 /boards/면 안될거같아 board로 고침
+        //여기 /boards/면 안될 것 같아서 board로 수정
     }
 
 
