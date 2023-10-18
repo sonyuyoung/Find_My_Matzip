@@ -71,4 +71,16 @@ public class Users {
         this.user_image = usersFormDto.getUser_image();
         this.gender=usersFormDto.getGender();
     }
+
+    public static Users aboutUsers(UsersFormDto usersFormDto){
+        Users users = new Users();
+        users.setUserid(usersFormDto.getUserid());
+        users.setUsername(usersFormDto.getUsername());
+        users.setUser_address(usersFormDto.getUser_address());
+        users.setUserphone(usersFormDto.getUserphone());
+        users.setUser_role(UserRole.ADMIN);
+        users.setUser_image(usersFormDto.getUser_image());
+        users.setGender(usersFormDto.getGender());
+        return users;
+    }
 }

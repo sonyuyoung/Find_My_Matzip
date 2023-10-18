@@ -117,11 +117,10 @@
 
     <div class="form-group">
       <label th:for="gender">성별</label>
-      <select th:field="*{gender}" class="form-control">
-        <option th:value="남성">남성</option>
-        <option th:value="여성">여성</option>
+      <select th:field="*{gender}" class="form-control" th:disabled="${true}">
+        <option value="남성" th:selected="${gender == '남성'}">남성</option>
+        <option value="여성" th:selected="${gender == '여성'}">여성</option>
       </select>
-
     </div>
 
     <div style="text-align: center">

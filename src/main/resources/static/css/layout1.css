@@ -222,7 +222,7 @@ body{
     height: 60px;
     width: 78px;
     left: 0;
-    bottom:-8px;
+    bottom:0px;
     padding:10px 14px;
     overflow: hidden;
     transition: all .5s ease;

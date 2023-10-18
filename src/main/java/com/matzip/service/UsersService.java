@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,7 +64,7 @@ public class UsersService implements UserDetailsService {
             //기존 이미지 물리경로에서 삭제
             imgName = users.getUser_image();
             imgUrl = imgName.substring(imgName.lastIndexOf("/"));
-            imgUrl = userImgLocation+imgUrl;
+            imgUrl = userImgLocation + imgUrl;
 
             fileService.deleteFile(imgUrl);
 
@@ -71,7 +72,7 @@ public class UsersService implements UserDetailsService {
             imgName = fileService.uploadFile(userImgLocation, oriImgName, userImgFile.getBytes());
             imgUrl = "/images/users/" + imgName;
             usersFormDto.setUser_image(imgUrl);
-        }else{
+        } else {
             //2. 사진이 바뀌지 않은 경우(기존 이미지 저장)
             usersFormDto.setUser_image(users.getUser_image());
         }
@@ -94,7 +95,7 @@ public class UsersService implements UserDetailsService {
 
         Users users = usersRepository.findByUserid(userid);
 
-        if(users == null){
+        if (users == null) {
             throw new UsernameNotFoundException(userid);
         }
 
@@ -135,4 +136,10 @@ public class UsersService implements UserDetailsService {
         usersRepository.deleteById(userid);
     }
 
+    public void updateUserInfo(UsersFormDto usersFormDto) {
+        // 여기에서 사용자 정보 업데이트 작업 수행
+        // usersFormDto를 엔티티로 변환하여 업데이트할 수 있어야 함
+        Users users = Users.aboutUsers(usersFormDto);
+        usersRepository.save(users);
+    }
 }

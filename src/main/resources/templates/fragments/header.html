@@ -13,9 +13,9 @@
         <ul class="nav-list">
             <li>
                 <form class="form-inline my-2 my-lg-0" th:action="@{/}" method="get">
-                <i class="bx bx-search"></i>
-                <input type="text" name="searchQuery" placeholder="리뷰검색...">
-                <span class="tooltip">리뷰검색</span>
+                    <i class="bx bx-search"></i>
+                    <input type="text" name="searchQuery" placeholder="리뷰검색...">
+                    <span class="tooltip">리뷰검색</span>
                 </form>
             </li>
 
@@ -54,7 +54,7 @@
                 <span class="tooltip">랭킹</span>
             </li>
 
-            <li>
+            <li sec:authorize="isAuthenticated()">
                 <a href="/users/profile">
                     <i class="bx bx-user"></i>
                     <span class="link_name">프로필</span>
@@ -70,13 +70,13 @@
                 </a>
                 <span class="tooltip">회원목록</span>
             </li>
-<!--            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
-<!--                <a href="/admin/board/new">-->
-<!--                    <i class="bx bx-user-voice"></i>-->
-<!--                    <span class="link_name">리뷰등록</span>-->
-<!--                </a>-->
-<!--                <span class="tooltip">리뷰등록</span>-->
-<!--            </li>-->
+            <!--            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
+            <!--                <a href="/admin/board/new">-->
+            <!--                    <i class="bx bx-user-voice"></i>-->
+            <!--                    <span class="link_name">리뷰등록</span>-->
+            <!--                </a>-->
+            <!--                <span class="tooltip">리뷰등록</span>-->
+            <!--            </li>-->
 
 
             <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
@@ -111,29 +111,47 @@
             </li>
 
 
-
             <!--로그인 로가웃 로그인시 로그아웃버튼 로그아웃시 로그인버튼 활성화됨-->
             <div class="login_content">
-            <li sec:authorize="isAnonymous()">
-                <a href="/users/login">
-                    <i class="bx bx-log-in"></i>
-                    <span class="link_name">Login</span>
-                </a>
-                <span class="tooltip">Login</span>
-            </li>
+                <li sec:authorize="isAnonymous()">
+                    <a href="/users/login">
+                        <i class="bx bx-log-in"></i>
+                        <span class="link_name">Login</span>
+                    </a>
+                    <span class="tooltip">Login</span>
+                </li>
 
 
-            <li sec:authorize="isAuthenticated()">
-                <a href="/users/logout">
-                    <i class="bx bx-log-out" id="log_out"></i>
-                    <span class="link_name">Logout</span>
-                </a>
-                <span class="tooltip">Logout</span>
-            </li>
+                <!--                    <div class="name" sec:authentication="principal.username"></div>-->
+                <!--                    <div class="designation">님 로그인</div>-->
+                <!--                    <th:block th:if="${#authorization.expression('isAuthenticated()')}">-->
+                <!--                        <span th:text="  ${#authentication.principal.username} +' 로그인, '"></span>-->
+                <!--                    </th:block>-->
+                <li class="profile">
+                    <div class="profile_details">
+                        <div class="profile_content">
+                            <th:block th:if="${#authorization.expression('isAuthenticated')}">
+                                <span th:text="${#authentication.principal.username + ' 님로그인, '}" style="color: white; font-size: 13px;"></span>
+                            </th:block>
+
+
+                        </div>
+                    </div>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="/users/logout">
+                        <i class="bx bx-log-out" id="log_out"></i>
+                        <span class="link_name">Logout</span>
+                    </a>
+                    <span class="tooltip">Logout</span>
+                </li>
+
+                </li>
+
+
             </div>
         </ul>
 
-</div>
+    </div>
 
 </div>
 
