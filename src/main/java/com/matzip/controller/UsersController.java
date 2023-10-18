@@ -143,13 +143,14 @@ public class UsersController {
 
         //마이페이지일때 ("/profile")
         if (pageUserId == null) {
-            //pageUser == principal
-            pageUserId = principal.getName();
-            System.out.println("마이페이지일때 pageUserId: " + pageUserId);
+            //pageUser == principal         중간저장
+           /* pageUserId = principal.getName();
+            System.out.println("마이페이지일때 pageUserId: " + pageUserId);*/
+            return "redirect:/users/profile/" + principal.getName();
         }
 
         //myBoardList : 내 게시글 리스트
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
         Page<MainBoardDto> boards = boardService.getBoardPageByUserId(boardSearchDto, pageable, pageUserId);
 
         model.addAttribute("boards", boards);
@@ -277,7 +278,7 @@ public class UsersController {
 
 
     //    유저 리스트
-    @GetMapping("/userspage/")
+    @GetMapping("/admin/userspage/")
     public String list(Model model, @PageableDefault(size = 6) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
         // Page<Users> users = usersRepository.findAll(pageable);
         Page<Users> users = usersRepository.findByUseridContainingOrUsernameContainingOrUserphoneContaining(searchText, searchText, searchText, pageable);
