@@ -87,7 +87,7 @@
 
 <div layout:fragment="content">
 <div class="row">
-    <div class="col">
+    <div class="col" style="margin-top: 100px;margin-left: 100px">
     <input type="hidden" id="resId" th:value="${restaurant.resId}">
 
     <div class="d-flex">
@@ -118,7 +118,7 @@
     </div>
     </div>
 
-    <div class="col">
+    <div class="col" style="margin: 50px">
     <form role="form" method="post" enctype="multipart/form-data" th:object="${boardFormDto}">
 
         <p class="h2">
