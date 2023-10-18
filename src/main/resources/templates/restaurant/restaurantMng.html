@@ -44,6 +44,16 @@
 
                 <p class="h2">
                     식당관리 및 검색
+                <div class="form-inline justify-content-end" th:object="${restaurantSearchDto}">
+                    <select th:field="*{searchBy}" class="form-control" style="width:auto;">
+                        <option value="res_name">식당이름</option>
+                        <option value="res_intro">식당설명</option>
+                        <option value="res_menu">식당메뉴</option>
+                        <option value="res_address">식당주소</option>
+                    </select>
+                    <input th:field="*{searchQuery}" type="text" class="form-control" placeholder="검색어를 입력해주세요">
+                    <button id="searchBtn" type="submit" class="btn btn-primary     ">검색</button>
+                </div>
                 </p>
                 <form th:action="@{'/restaurants/' + ${restaurants.number}}" role="form" method="get"
                       th:object="${restaurants}">
@@ -71,7 +81,7 @@
                             <td th:text="${restaurant.res_address}"></td>
                             <td th:text="${restaurant.res_phone}"></td>
                             <td>
-                                <a th:href="@{|/admin/board/new/${restaurant.resId}|}" class="btn btn-primary btn-sm"
+                                <a th:href="@{|/board/new/${restaurant.resId}|}" class="btn btn-primary btn-sm"
                                    th:alt="${restaurant.resId}">리뷰작성</a>
                             </td>
                         </tr>
@@ -104,16 +114,7 @@
                         </ul>
                     </div>
 
-                    <div class="form-inline justify-content-center" th:object="${restaurantSearchDto}">
-                        <select th:field="*{searchBy}" class="form-control" style="width:auto;">
-                            <option value="res_name">식당이름</option>
-                            <option value="res_intro">식당설명</option>
-                            <option value="res_menu">식당메뉴</option>
-                            <option value="res_address">식당주소</option>
-                        </select>
-                        <input th:field="*{searchQuery}" type="text" class="form-control" placeholder="검색어를 입력해주세요">
-                        <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
-                    </div>
+
                 </form>
 
             </div>

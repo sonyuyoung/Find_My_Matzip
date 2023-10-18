@@ -146,6 +146,12 @@ public class BoardService {
         return boardRepository.getBoardPageByFollowList(boardSearchDto, pageable,toUserIdList);
     }
 
+    @Transactional(readOnly = true)
+    public Restaurant getBoardByResId(String resId){
+        return restaurantRepository.findByresId(resId);
+    }
+
+
 
     @Transactional
     public void deleteBoard(Long boardId) {
@@ -164,7 +170,12 @@ public class BoardService {
                 .orElseThrow(() -> new EntityNotFoundException("작성자를 찾을 수 없습니다. ID: " + userId));
         return users;
     }
-
-
+    
+    @Transactional
+    public Integer countByUserId(String userId) {
+        // userid로 사용자 게시글 갯수 가져오기
+        int boardCount = boardRepository.countByUserId(userId);
+        return boardCount;
+    }
 
 }

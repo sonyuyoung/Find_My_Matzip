@@ -9,16 +9,17 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <meta charset="utf-8">
 </head>
-<hidden type="text" id="totalCount" th:value="${restaurantList.size()}">
+<hidden type="text" id="totalCount" th:value="${restaurantList.size()}"></hidden>
   <th:block th:each="restaurant, status: ${restaurantList}">
-    <hidden type="text" id="res_lat" th:value="${restaurant.res_lat}">
-      <hidden type="text" id="res_lng" th:value="${restaurant.res_lng}">
+  <!--  <hidden type="text" id="res_lat" th:value="${restaurant.res_lat}"></hidden>
+      <hidden type="text" id="res_lng" th:value="${restaurant.res_lng}"></hidden>-->
   </th:block>
   <div layout:fragment="content">
     <!--지도 호출 구문-->
     <div id="map" style="width:100%;height:1000px;"></div>
     <script th:inline="javascript">
       var restaurantList = []
+      var res_lat = []
       var res_lng = []
       var res_name = []
       var res_menu = []
@@ -27,27 +28,28 @@
       var resId = []
 
 
+      //임시 저장을 위해 restaurant3
       let restaurant3 = new Object();
-      /*[# th:each="restaurant : ${restaurantList}"]*/
-      restaurant3.res_lat =  /*[[${restaurant.res_lat}]]*/;
-      restaurant3.res_lng =  /*[[${restaurant.res_lng}]]*/;
-      restaurant3.res_name =  /*[[${restaurant.res_name}]]*/;
-      restaurant3.res_menu =  /*[[${restaurant.res_menu}]]*/;
-      restaurant3.operate_time =  /*[[${restaurant.operate_time}]]*/;
-      restaurant3.res_thumbnail =  /*[[${restaurant.res_thumbnail}]]*/;
-      restaurant3.res_resId =  /*[[${restaurant.resId}]]*/;
+      [# th:each="restaurant : ${restaurantList}"]
+      restaurant3.res_lat =  [[${restaurant.res_lat}]];
+      restaurant3.res_lng =  [[${restaurant.res_lng}]];
+      restaurant3.res_name =  [[${restaurant.res_name}]];
+      restaurant3.res_menu =  [[${restaurant.res_menu}]];
+      restaurant3.operate_time =  [[${restaurant.operate_time}]];
+      restaurant3.res_thumbnail =  [[${restaurant.res_thumbnail}]];
+      restaurant3.res_resId =  [[${restaurant.resId}]];
 
 
-      restaurantList.push(/*[[${restaurant.res_lat}]]*/);
-      res_lng.push(/*[[${restaurant.res_lng}]]*/);
-      res_name.push(/*[[${restaurant.res_name}]]*/)
-      res_menu.push(/*[[${restaurant.res_menu}]]*/)
-      operate_time.push(/*[[${restaurant.operate_time}]]*/)
-      res_thumbnail.push(/*[[${restaurant.res_thumbnail}]]*/)
-      resId.push(/*[[${restaurant.resId}]]*/)
+      restaurantList.push([[${restaurant.res_lat}]]);
+      res_lat.push([[${restaurant.res_lat}]]);
+      res_lng.push([[${restaurant.res_lng}]]);
+      res_name.push([[${restaurant.res_name}]])
+      res_menu.push([[${restaurant.res_menu}]])
+      operate_time.push([[${restaurant.operate_time}]])
+      res_thumbnail.push([[${restaurant.res_thumbnail}]])
+      resId.push([[${restaurant.resId}]])
+      [/]
 
-
-      /*[/]*/
     </script>
     <script type="text/javascript">
       $(function() {
@@ -55,9 +57,12 @@
       });
       var map = new naver.maps.Map('map', {
         center: new naver.maps.LatLng(35.1797865, 129.0750194), //지도 시작 지점
-        zoom: 13
+        zoom: 13,
+        zoomControl: true,
+        zoomControlOptions: {
+          position: naver.maps.Position.TOP_RIGHT
+        }
       });
-
 
       let markers = new Array(); // 마커 정보를 담는 배열
       let infoWindows = new Array(); // 정보창을 담는 배열
@@ -67,7 +72,7 @@
           var marker = new naver.maps.Marker({
             map: map,
             title: res_name[i],
-            position: new naver.maps.LatLng(restaurantList[i], res_lng[i])
+            position: new naver.maps.LatLng(res_lat[i], res_lng[i])
           });
 
           // 클릭 이벤트 리스너를 마커에 추가하여 마커를 클릭하면 정보 창을 표시합니다.
@@ -98,3 +103,4 @@
         }
       }
     </script>
+  </div>

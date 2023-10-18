@@ -19,7 +19,7 @@ public class FollowDto {
     //팔로워
     public FollowDto(Follow follow) {
         this.id = follow.getFromUser().getUserid();
-        this.name = follow.getFromUser().getUser_name();
+        this.name = follow.getFromUser().getUsername();
         this.profileImage = follow.getFromUser().getUser_image();
         this.subscribeState = false;
     }

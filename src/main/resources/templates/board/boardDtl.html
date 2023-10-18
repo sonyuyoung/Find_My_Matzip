@@ -125,30 +125,9 @@
                                 <input type="hidden" th:value="${board.score}" id="score" name="score">
                                 <span th:text="${board.score}"></span>점
                             </div>
-                            <!--                <div class="input-group w-50">-->
-                            <!--                    <div class="input-group-prepend">-->
-                            <!--                        <span class="input-group-text">수량</span>-->
-                            <!--                    </div>-->
-                            <!--                    <input type="number" name="count" id="count" class="form-control" value="1" min="1">-->
-                            <!--                </div>-->
                         </div>
                         <hr class="my-4">
-
-                        <!--            <div class="text-right mgt-50">-->
-                        <!--                <h5>결제 금액</h5>-->
-                        <!--                <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>-->
-                        <!--            </div>-->
-                        <div th:if="${board.boardViewStatus == T(com.matzip.constant.BoardViewStatus).VIEW}"
-                             class="text-right">
-                            <button type="button" class="btn btn-primary border border-primary btn-lg">좋아요</button>
-                            <button type="button" class="btn btn-danger btn-lg">싫어요</button>
-                        </div>
-                        <div th:unless="${board.boardViewStatus == T(com.matzip.constant.BoardViewStatus).NOT_VIEW}"
-                             class="text-right">
-                            <button type="button" class="btn btn-secondary btn-lg">평가를 한 게시글 입니다.이거 VIEW NOT_VIEW로 바꾸면
-                                품절났을때 뜸
-                            </button>
-                        </div>
+<!--                        점수 밑에 하나 추가해야함-->
                     </div>
                 </div>
 
@@ -163,6 +142,48 @@
                 <div th:each="boardImg : ${board.boardImgDtoList}" class="text-center">
                     <img th:if="${not #strings.isEmpty(boardImg.imgUrl)}" th:src="${boardImg.imgUrl}"
                          class="rounded mgb-15" width="800">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+
+                <p class="h2">
+                    가게 정보
+                </p>
+
+                <input type="hidden" id="resId" th:value="${restaurant.resId}">
+
+                <div class="d-flex">
+                    <div class="repImgDiv">
+                        <img th:src="${restaurant.res_thumbnail}" class="rounded repImg"
+                             th:alt="${restaurant.res_name}">
+                    </div>
+                    <div class="wd50">
+                        <a th:href="'/restaurant/' +${restaurant.resId}" class="text-dark">
+                            <div class="h4" th:text="${restaurant.res_name}"></div>
+                        </a>
+                        <hr class="my-4">
+
+                        <div class="text-right">
+                            <div class="h4 text-danger text-left">
+                                <span th:text="${restaurant.res_menu}"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <a th:href="@{|/admin/board/new/${restaurant.resId}|}" class="btn btn-primary btn-sm" th:alt="${restaurant.resId}">리뷰작성</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="jumbotron jumbotron-fluid mgt-10">
+                    <div class="container">
+                        <h4 class="display-5">가게소개</h4>
+                        <hr class="my-4">
+                        <p class="lead" th:text="${restaurant.res_intro}"></p>
+                    </div>
                 </div>
             </div>
         </div>

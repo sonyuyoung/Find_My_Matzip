@@ -39,17 +39,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-                .and()
-                .oauth2Login()
-                .loginPage("/users/login") // OAuth2 로그인 페이지
-                .userInfoEndpoint()
-                .userService(principalOauth2UserService);
-
+//                .and()
+//                .oauth2Login()
+//                .loginPage("/users/login") // OAuth2 로그인 페이지
+//                .userInfoEndpoint()
+//                .userService(principalOauth2UserService);
+//
         ;
 
 
         http.authorizeRequests()
-                .mvcMatchers("/", "/users/**","/item/**", "/images/**").permitAll()
+                .mvcMatchers("/", "/users/**","/item/**", "/images/**", "/map","/restaurant/main").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         ;
