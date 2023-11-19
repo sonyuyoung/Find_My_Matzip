@@ -17,7 +17,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UsersController {
@@ -48,24 +47,13 @@ public class UsersController {
     }
 
     @PostMapping(value = "/new")
-    public String newUsers(@Valid UsersFormDto usersFormDto, BindingResult bindingResult, Model model,
-                           @RequestParam("userImgFile") MultipartFile userImgFile) {
+//    public String newUsers(@Valid UsersFormDto usersFormDto, BindingResult bindingResult, Model model,
+//                           @RequestParam("userImgFile") MultipartFile userImgFile) {
+    public void newUsers(UsersFormDto usersFormDto) {
 
-        if (bindingResult.hasErrors()) {
-            return "users/usersForm";
-        }
+        Users users = Users.createUsers(usersFormDto, passwordEncoder);
+        System.out.print("newUsers : 성공!");
 
-        try {
-            Users users = Users.createUsers(usersFormDto, passwordEncoder);
-            usersService.saveUsers(users, userImgFile);
-        } catch (IllegalStateException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "users/usersForm";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return "users/usersLoginForm";
     }
 
     //modUsers폼 호출
@@ -233,21 +221,14 @@ public class UsersController {
     @DeleteMapping("/deleteFollow/{toUserId}")
     public @ResponseBody ResponseEntity<Map<String, Object>> deleteFollow(@PathVariable String toUserId, Principal principal) {
         followService.deleteFollow(toUserId, principal.getName());
-        FollowDto followDto = new FollowDto("a", "b", "c");
         Map<String, Object> result = new HashMap<>();
         result.put("data", toUserId);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
 
     @GetMapping("/insertFollow/{toUserId}")
-    /*@PostMapping("/insertFollow/")*/
     public @ResponseBody ResponseEntity<Map<String, Object>> insertFollow(@PathVariable String toUserId, Principal principal) {
-        System.out.println("팔로우 하기전 ");
         followService.insertFollow(toUserId, principal.getName());
-        System.out.println("팔로우 하기후 ");
-        System.out.println("toUserId 확인: " + toUserId);
-        System.out.println("HttpStatus.OK 확인: " + HttpStatus.OK);
-        FollowDto followDto = new FollowDto("a", "b", "c");
         Map<String, Object> result = new HashMap<>();
         result.put("data", toUserId);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
