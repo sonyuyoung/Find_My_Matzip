@@ -22,7 +22,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -40,19 +39,22 @@ public class UsersController {
     private final BoardService boardService;
     private final UsersRepository usersRepository;
 
+/*    @GetMapping(value = "/new")
+    public String memberForm(Model model) {
+        //model.addAttribute("usersFormDto", new UsersFormDto());
+        return "users/usersForm";
+    }*/
+
     @GetMapping(value = "/new")
     public String memberForm(Model model) {
-        model.addAttribute("usersFormDto", new UsersFormDto());
-        return "users/usersForm";
+        return "Get입니다";
     }
 
     @PostMapping(value = "/new")
-//    public String newUsers(@Valid UsersFormDto usersFormDto, BindingResult bindingResult, Model model,
-//                           @RequestParam("userImgFile") MultipartFile userImgFile) {
-    public void newUsers(UsersFormDto usersFormDto) {
-
+    public String newUsers(@RequestBody UsersFormDto usersFormDto) throws Exception {
         Users users = Users.createUsers(usersFormDto, passwordEncoder);
-        System.out.print("newUsers : 성공!");
+        usersService.saveUsers(users);
+        return "newUsers : 성공!";
 
     }
 
