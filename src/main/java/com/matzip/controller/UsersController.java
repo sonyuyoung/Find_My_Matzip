@@ -1,9 +1,6 @@
 package com.matzip.controller;
 
-import com.matzip.dto.BoardSearchDto;
-import com.matzip.dto.FollowDto;
-import com.matzip.dto.MainBoardDto;
-import com.matzip.dto.UsersFormDto;
+import com.matzip.dto.*;
 import com.matzip.entity.Users;
 import com.matzip.repository.UsersRepository;
 import com.matzip.service.BoardService;
@@ -51,11 +48,39 @@ public class UsersController {
     }
 
     @PostMapping(value = "/new")
-    public String newUsers(@RequestBody UsersFormDto usersFormDto) throws Exception {
+    public void newUsers(@RequestBody UsersFormDto usersFormDto){
+        System.out.println("왔냐?");
         Users users = Users.createUsers(usersFormDto, passwordEncoder);
+        System.out.println("users : "+users.getUserid());
         usersService.saveUsers(users);
-        return "newUsers : 성공!";
+    }
 
+    // 샘플 테스트 확인용.
+//    public void insertDiary(@RequestBody Diary diary) {
+    @PostMapping(value = "/new2")
+    public UsersFormDto member(@RequestBody UsersFormDto UsersFormDto) {
+        System.out.println("왔냐2?");
+        UsersFormDto vo = new UsersFormDto();
+        vo.setUserid("lsy");
+        vo.setUser_pwd("1234");
+        vo.setUsername("이상용");
+
+        return vo;
+    }
+
+    //test2
+    @PostMapping("/join")
+    public User doJoin(@RequestBody User user) {
+//        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+//        userService.doInsertUser(user);
+        System.out.println("=======================join 수행 확인================123");
+        return user;
+    }
+
+    //전체 유저 목록 조회
+    @GetMapping("/users")
+    public List<UsersFormDto> findAll(){
+        return usersService.findAll();
     }
 
     //modUsers폼 호출
@@ -183,12 +208,7 @@ public class UsersController {
         return "users/profileForm";
     }
 
-//    @GetMapping("/users/")
-//    public String findAll(Model model){
-//        List<UsersFormDto> usersFormDtoList = usersService.findAll();
-//        model.addAttribute("usersList",usersFormDtoList);
-//        return "users/usersListForm";
-//    }
+
 
 //    @GetMapping("/delete/{userid}")
 //    public String deleteById(@PathVariable String userid){

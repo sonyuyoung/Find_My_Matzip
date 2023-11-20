@@ -50,7 +50,7 @@ public class UsersService implements UserDetailsService {
 //        return usersRepository.save(users);
 //    }
 
-    public Users saveUsers(Users users) throws Exception {
+    public Users saveUsers(Users users){
 
         //상품 이미지 정보 저장
         users.setUser_image("더미URL");
