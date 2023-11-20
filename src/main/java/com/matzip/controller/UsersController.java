@@ -36,52 +36,41 @@ public class UsersController {
     private final BoardService boardService;
     private final UsersRepository usersRepository;
 
-/*    @GetMapping(value = "/new")
-    public String memberForm(Model model) {
-        //model.addAttribute("usersFormDto", new UsersFormDto());
-        return "users/usersForm";
-    }*/
-
-    @GetMapping(value = "/new")
-    public String memberForm(Model model) {
-        return "Get입니다";
-    }
 
     @PostMapping(value = "/new")
     public void newUsers(@RequestBody UsersFormDto usersFormDto){
-        System.out.println("왔냐?");
         Users users = Users.createUsers(usersFormDto, passwordEncoder);
-        System.out.println("users : "+users.getUserid());
         usersService.saveUsers(users);
     }
 
-    // 샘플 테스트 확인용.
-//    public void insertDiary(@RequestBody Diary diary) {
-    @PostMapping(value = "/new2")
-    public UsersFormDto member(@RequestBody UsersFormDto UsersFormDto) {
-        System.out.println("왔냐2?");
-        UsersFormDto vo = new UsersFormDto();
-        vo.setUserid("lsy");
-        vo.setUser_pwd("1234");
-        vo.setUsername("이상용");
-
-        return vo;
-    }
-
-    //test2
-    @PostMapping("/join")
-    public User doJoin(@RequestBody User user) {
-//        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-//        userService.doInsertUser(user);
-        System.out.println("=======================join 수행 확인================123");
-        return user;
-    }
 
     //전체 유저 목록 조회
     @GetMapping("/users")
     public List<UsersFormDto> findAll(){
         return usersService.findAll();
     }
+
+
+    //유저 리스트(page)
+//    @GetMapping("/admin/userspage/")
+//    public String list(Model model, @PageableDefault(size = 6) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
+//        // Page<Users> users = usersRepository.findAll(pageable);
+//        Page<Users> users = usersRepository.findByUseridContainingOrUsernameContainingOrUserphoneContaining(searchText, searchText, searchText, pageable);
+//        int startPage = Math.max(1, users.getPageable().getPageNumber() - 4);
+//        int endPage = Math.min(users.getTotalPages(), users.getPageable().getPageNumber() + 4);
+//
+//        model.addAttribute("startPage", startPage);
+//        model.addAttribute("endPage", endPage);
+//        model.addAttribute("users", users);
+//        return "users/usersListForm";
+//    }
+
+//    @PostMapping(value = "/login")
+//    public void login(@RequestBody UsersFormDto usersFormDto) {
+//        return "users/usersLoginForm";
+//    }
+
+
 
     //modUsers폼 호출
     @GetMapping(value = {"/modUsersForm", "/modUsersForm/{pageUserid}"})
@@ -280,19 +269,7 @@ public class UsersController {
     }
 
 
-    //    유저 리스트
-    @GetMapping("/admin/userspage/")
-    public String list(Model model, @PageableDefault(size = 6) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
-        // Page<Users> users = usersRepository.findAll(pageable);
-        Page<Users> users = usersRepository.findByUseridContainingOrUsernameContainingOrUserphoneContaining(searchText, searchText, searchText, pageable);
-        int startPage = Math.max(1, users.getPageable().getPageNumber() - 4);
-        int endPage = Math.min(users.getTotalPages(), users.getPageable().getPageNumber() + 4);
 
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("users", users);
-        return "users/usersListForm";
-    }
 
     @GetMapping("/delete/{userid}")
     public String deleteById(@PathVariable String userid) {
