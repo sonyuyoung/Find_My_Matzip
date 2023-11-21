@@ -51,24 +51,33 @@ public class UsersController {
     }
 
 
-    //유저 리스트(page)
-//    @GetMapping("/admin/userspage/")
-//    public String list(Model model, @PageableDefault(size = 6) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
-//        // Page<Users> users = usersRepository.findAll(pageable);
-//        Page<Users> users = usersRepository.findByUseridContainingOrUsernameContainingOrUserphoneContaining(searchText, searchText, searchText, pageable);
-//        int startPage = Math.max(1, users.getPageable().getPageNumber() - 4);
-//        int endPage = Math.min(users.getTotalPages(), users.getPageable().getPageNumber() + 4);
-//
-//        model.addAttribute("startPage", startPage);
-//        model.addAttribute("endPage", endPage);
-//        model.addAttribute("users", users);
-//        return "users/usersListForm";
-//    }
 
-//    @PostMapping(value = "/login")
-//    public void login(@RequestBody UsersFormDto usersFormDto) {
-//        return "users/usersLoginForm";
-//    }
+    @PostMapping(value = "/loginCheck")
+    public LoginResponse login(@RequestBody UsersFormDto usersFormDto) {
+        //세션 토큰 정보 담아서 보낼 클래스
+        LoginResponse response = new LoginResponse();
+
+        System.out.println("들어왔니..?");
+        System.out.println("Incomming id : " + usersFormDto.getUserid());
+        System.out.println("Incomming pw : "  + usersFormDto.getUser_pwd().toString());
+
+        //로그인 시도한 유저가 db상 존재한다면 -> user정보 가져오기
+        Users loginUser = usersService.vertifyLogin(usersFormDto.getUserid(),usersFormDto.getUser_pwd(),passwordEncoder);
+
+        //로그인 성공시
+        if(loginUser != null){
+            response.setStatus("success");
+            response.setMessage("Login successful");
+            response.setLoginUser(UsersFormDto.of(loginUser));
+            response.setToken(response.getToken());
+        }else{
+            response.setStatus("fail");
+            response.setMessage("Login failed");
+            response.setLoginUser(null);
+        }
+
+        return response;
+    }
 
 
 
@@ -129,16 +138,16 @@ public class UsersController {
     }
 
 
-    @GetMapping(value = "/login")
-    public String loginMember() {
-        return "users/usersLoginForm";
-    }
-
-    @GetMapping(value = "/login/error")
-    public String loginError(Model model) {
-        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
-        return "users/usersLoginForm";
-    }
+//    @GetMapping(value = "/login")
+//    public String loginMember() {
+//        return "users/usersLoginForm";
+//    }
+//
+//    @GetMapping(value = "/login/error")
+//    public String loginError(Model model) {
+//        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
+//        return "users/usersLoginForm";
+//    }
 
     //내 프로필 조회
     @GetMapping(value = {"/profile", "/profile/{pageUserid}"})
@@ -285,4 +294,19 @@ public class UsersController {
         model.addAttribute("users", usersFormDto);
         return "users/usersDetail";
     }
+
+    //유저 리스트(page)
+//    @GetMapping("/admin/userspage/")
+//    public String list(Model model, @PageableDefault(size = 6) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
+//        // Page<Users> users = usersRepository.findAll(pageable);
+//        Page<Users> users = usersRepository.findByUseridContainingOrUsernameContainingOrUserphoneContaining(searchText, searchText, searchText, pageable);
+//        int startPage = Math.max(1, users.getPageable().getPageNumber() - 4);
+//        int endPage = Math.min(users.getTotalPages(), users.getPageable().getPageNumber() + 4);
+//
+//        model.addAttribute("startPage", startPage);
+//        model.addAttribute("endPage", endPage);
+//        model.addAttribute("users", users);
+//        return "users/usersListForm";
+//    }
+
 }

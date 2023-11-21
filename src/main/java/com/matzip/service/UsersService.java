@@ -59,6 +59,21 @@ public class UsersService implements UserDetailsService {
         return usersRepository.save(users);
     }
 
+    //로그인시 확인
+    public Users vertifyLogin(String id,String pw,PasswordEncoder passwordEncoder){
+        Users loginUser = usersRepository.findByUserid(id);
+
+        //password 검증
+        boolean matches = loginUser.checkPassword(pw,passwordEncoder);
+
+        //검증완료
+        if(matches){
+            return loginUser;
+        }else{
+            return null;
+        }
+    }
+
     public void updateUsers(UsersFormDto usersFormDto, MultipartFile userImgFile) throws Exception {
         String oriImgName = userImgFile.getOriginalFilename();
         String imgName = "";

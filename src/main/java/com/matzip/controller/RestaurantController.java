@@ -142,10 +142,8 @@ public class RestaurantController {
     }
 
     @GetMapping("/ranking")
-    public String getTop3RestaurantsByAvgScore(Model model) {
-        List<RestaurantDto> ranking = restaurantService.getTop3RestaurantsByAvgScore();
-        model.addAttribute("ranking", ranking);
-        return "restaurant/restaurantRanking";
+    public List<RestaurantDto> getTop3RestaurantsByAvgScore() {
+        return restaurantService.getTop3RestaurantsByAvgScore();
     }
 
 }

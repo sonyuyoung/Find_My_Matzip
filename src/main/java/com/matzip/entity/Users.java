@@ -83,4 +83,9 @@ public class Users {
         users.setGender(usersFormDto.getGender());
         return users;
     }
+
+    //encoding된 pw비교
+    public boolean checkPassword(String plainPassword, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(plainPassword, this.user_pwd);
+    }
 }
