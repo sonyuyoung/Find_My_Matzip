@@ -37,6 +37,7 @@ public class UsersController {
     private final UsersRepository usersRepository;
 
 
+    //회원가입(Rest)
     @PostMapping(value = "/new")
     public void newUsers(@RequestBody UsersFormDto usersFormDto){
         Users users = Users.createUsers(usersFormDto, passwordEncoder);
@@ -44,7 +45,7 @@ public class UsersController {
     }
 
 
-    //전체 유저 목록 조회
+    //전체 유저 목록 조회(Rest)
     @GetMapping("/users")
     public List<UsersFormDto> findAll(){
         return usersService.findAll();
@@ -52,6 +53,8 @@ public class UsersController {
 
 
 
+
+    //로그인(Rest)
     @PostMapping(value = "/loginCheck")
     public LoginResponse login(@RequestBody UsersFormDto usersFormDto) {
         //세션 토큰 정보 담아서 보낼 클래스
@@ -79,6 +82,7 @@ public class UsersController {
         return response;
     }
 
+    //----------------------------------------------------------------------------
 
 
     //modUsers폼 호출
