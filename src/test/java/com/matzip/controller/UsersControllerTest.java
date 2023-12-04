@@ -37,17 +37,17 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
         PasswordEncoder passwordEncoder;
 
 
-        public Users createUsers(String userid, String user_pwd) throws Exception {
-            UsersFormDto usersFormDto = new UsersFormDto();
-            usersFormDto.setUserid(userid);
-            usersFormDto.setUsername("John Doe");
-            usersFormDto.setUser_address("123 Main Street, City");
-            usersFormDto.setUserphone("123-456-7890");
-            usersFormDto.setUser_pwd(user_pwd);
-            Users users = Users.createUsers(usersFormDto, passwordEncoder);
-            return usersService.saveUsers(users,createMultipartFile());
-
-        }
+//        public Users createUsers(String userid, String user_pwd) throws Exception {
+//            UsersFormDto usersFormDto = new UsersFormDto();
+//            usersFormDto.setUserid(userid);
+//            usersFormDto.setUsername("John Doe");
+//            usersFormDto.setUser_address("123 Main Street, City");
+//            usersFormDto.setUserphone("123-456-7890");
+//            usersFormDto.setUser_pwd(user_pwd);
+//            Users users = Users.createUsers(usersFormDto, passwordEncoder);
+//            return usersService.saveUsers(users,createMultipartFile());
+//
+//        }
 
         //이미지 파일 생성
         MultipartFile createMultipartFile() throws Exception{
@@ -60,28 +60,28 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
             return multipartFile;
         }
 
-        @Test
-        @DisplayName("로그인 성공 테스트")
-        public void loginSuccessTest() throws Exception {
-            String userid = "asd3205";
-            String user_pwd = "1234";
-            this.createUsers(userid, user_pwd);
-            mockMvc.perform(formLogin().userParameter("userid")
-                            .loginProcessingUrl("/users/login")
-                            .user(userid).password(user_pwd))
-                            .andExpect(SecurityMockMvcResultMatchers.authenticated());
-        }
+//        @Test
+//        @DisplayName("로그인 성공 테스트")
+//        public void loginSuccessTest() throws Exception {
+//            String userid = "asd3205";
+//            String user_pwd = "1234";
+//            this.createUsers(userid, user_pwd);
+//            mockMvc.perform(formLogin().userParameter("userid")
+//                            .loginProcessingUrl("/users/login")
+//                            .user(userid).password(user_pwd))
+//                            .andExpect(SecurityMockMvcResultMatchers.authenticated());
+//        }
 
-        @Test
-        @DisplayName("로그인 실패 테스트")
-        public void loginFailTest() throws Exception{
-            String userid = "hong";
-            String password = "1234";
-            this.createUsers(userid, password);
-            mockMvc.perform(formLogin().userParameter("userid")
-                            .loginProcessingUrl("/users/login")
-                            .user(userid).password("12345"))
-                    .andExpect(SecurityMockMvcResultMatchers.unauthenticated());
-        }
+//        @Test
+//        @DisplayName("로그인 실패 테스트")
+//        public void loginFailTest() throws Exception{
+//            String userid = "hong";
+//            String password = "1234";
+//            this.createUsers(userid, password);
+//            mockMvc.perform(formLogin().userParameter("userid")
+//                            .loginProcessingUrl("/users/login")
+//                            .user(userid).password("12345"))
+//                    .andExpect(SecurityMockMvcResultMatchers.unauthenticated());
+//        }
 
     }

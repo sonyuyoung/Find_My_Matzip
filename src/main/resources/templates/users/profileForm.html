@@ -85,7 +85,6 @@
 
                         console.log("동작 여부 확인: 팔로우 에러부분")
                         alert(error.responseText);
-                        /*alert("code"+request.status +"\n"+"messages : "+request.responseText+"\n"+"error : "+error);*/
                     }
                 });
             }
@@ -286,7 +285,7 @@
                             </div>
 
                             <!--    버튼 수정요망     -->
-                           <div th:with="start=${(boards.number/maxPage)*maxPage + 1}, end=(${(boards.totalPages == 0) ? 1 : (start + (maxPage - 1) < boards.totalPages ? start + (maxPage - 1) : boards.totalPages)})">
+                            <div th:with="start=${(boards.number/maxPage)*maxPage + 1}, end=(${(boards.totalPages == 0) ? 1 : (start + (maxPage - 1) < boards.totalPages ? start + (maxPage - 1) : boards.totalPages)})">
                                 <ul class="pagination justify-content-center">
 
                                     <li class="page-board" th:classappend="${boards.number eq 1}?'disabled'">
