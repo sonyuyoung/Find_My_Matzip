@@ -49,23 +49,23 @@ class UsersServiceTest {
         return multipartFile;
     }
 
-@Test
+    @Test
     @DisplayName("회원가입테스트")
     public void saveUserTest() throws Exception {
-    Users users = createUsers();
-    //users.setUser_image(createMultipartFile());
-    Users savedUsers = usersService.saveUsers(users,createMultipartFile());
-    System.out.println("users.getUserid(): "+users.getUserid());
-    System.out.println("users.getUser_pwd(): "+users.getUser_pwd());
-    System.out.println("saveUsers(): "+savedUsers.getUserid());
-    assertEquals(users.getUserid(),savedUsers.getUserid());
-    assertEquals(users.getUsername(),savedUsers.getUsername());
-    assertEquals(users.getUser_pwd(),savedUsers.getUser_pwd());
-    assertEquals(users.getUser_address(),savedUsers.getUser_address());
-    assertEquals(users.getUserphone(),savedUsers.getUserphone());
-    assertEquals(users.getUser_role(),savedUsers.getUser_role());
-    assertEquals(users.getUser_image(), savedUsers.getUser_image());
-}
+        Users users = createUsers();
+        //users.setUser_image(createMultipartFile());
+        Users savedUsers = usersService.saveUsers(users,createMultipartFile());
+        System.out.println("users.getUserid(): "+users.getUserid());
+        System.out.println("users.getUser_pwd(): "+users.getUser_pwd());
+        System.out.println("saveUsers(): "+savedUsers.getUserid());
+        assertEquals(users.getUserid(),savedUsers.getUserid());
+        assertEquals(users.getUsername(),savedUsers.getUsername());
+        assertEquals(users.getUser_pwd(),savedUsers.getUser_pwd());
+        assertEquals(users.getUser_address(),savedUsers.getUser_address());
+        assertEquals(users.getUserphone(),savedUsers.getUserphone());
+        assertEquals(users.getUser_role(),savedUsers.getUser_role());
+        assertEquals(users.getUser_image(), savedUsers.getUser_image());
+    }
 
     @Test
     @DisplayName("중복 회원 가입 테스트")
