@@ -32,22 +32,46 @@ public class UsersService implements UserDetailsService {
     private final FileService fileService;
 
 
-    public Users saveUsers(Users users, MultipartFile userImgFile) throws Exception {
-        String oriImgName = userImgFile.getOriginalFilename();
-        String imgName = "";
-        String imgUrl = "";
+//    public Users saveUsers(Users users, MultipartFile userImgFile) throws Exception {
+//        String oriImgName = userImgFile.getOriginalFilename();
+//        String imgName = "";
+//        String imgUrl = "";
+//
+//        //파일 업로드
+//        if (!StringUtils.isEmpty(oriImgName)) {
+//            imgName = fileService.uploadFile(userImgLocation, oriImgName, userImgFile.getBytes());
+//            imgUrl = "/images/users/" + imgName;
+//        }
+//
+//        //상품 이미지 정보 저장
+//        users.setUser_image(imgUrl);
+//
+//        validateDuplicateUsers(users);
+//        return usersRepository.save(users);
+//    }
 
-        //파일 업로드
-        if (!StringUtils.isEmpty(oriImgName)) {
-            imgName = fileService.uploadFile(userImgLocation, oriImgName, userImgFile.getBytes());
-            imgUrl = "/images/users/" + imgName;
-        }
+    public Users saveUsers(Users users){
 
         //상품 이미지 정보 저장
-        users.setUser_image(imgUrl);
+        users.setUser_image("더미URL");
 
         validateDuplicateUsers(users);
         return usersRepository.save(users);
+    }
+
+    //로그인시 확인
+    public Users vertifyLogin(String id,String pw,PasswordEncoder passwordEncoder){
+        Users loginUser = usersRepository.findByUserid(id);
+
+        //password 검증
+        boolean matches = loginUser.checkPassword(pw,passwordEncoder);
+
+        //검증완료
+        if(matches){
+            return loginUser;
+        }else{
+            return null;
+        }
     }
 
     public void updateUsers(UsersFormDto usersFormDto, MultipartFile userImgFile) throws Exception {

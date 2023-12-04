@@ -11,22 +11,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class RestaurantController {
 
     private final RestaurantService restaurantService;
     private final BoardService boardService;
+
+    @GetMapping("/ranking")
+    public List<RestaurantDto>  getTop3RestaurantsByAvgScore() {
+        return restaurantService.getTop3RestaurantsByAvgScore();
+    }
 
     @GetMapping("/map")
     public String findAll(Model model){
@@ -73,11 +75,8 @@ public class RestaurantController {
     }
 
     @GetMapping(value = "/restaurant/main")
-    public String restaurantMain(RestaurantSearchDto restaurantSearchDto, Optional<Integer> page, Model model){
-        List<RestaurantDto> restaurantDtoList = restaurantService.findAll();
-        System.out.println("restaurantDtoList 의 소스 확인 동네 1: "+restaurantDtoList.get(0).getRes_name());
-        model.addAttribute("restaurantList",restaurantDtoList);
-        return "/restaurant/restaurant";
+    public List<RestaurantDto> restaurantMain(){
+        return restaurantService.findAll();
     }
 
     //원래 이걸로 하려고했는데 불러오는걸 못해서 바꿈 ,,, 확인해볼것
@@ -141,11 +140,6 @@ public class RestaurantController {
         return "restaurant/restaurantMng";
     }
 
-    @GetMapping("/ranking")
-    public String getTop3RestaurantsByAvgScore(Model model) {
-        List<RestaurantDto> ranking = restaurantService.getTop3RestaurantsByAvgScore();
-        model.addAttribute("ranking", ranking);
-        return "restaurant/restaurantRanking";
-    }
+
 
 }

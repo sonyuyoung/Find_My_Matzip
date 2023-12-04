@@ -1,9 +1,6 @@
 package com.matzip.controller;
 
-import com.matzip.dto.BoardSearchDto;
-import com.matzip.dto.FollowDto;
-import com.matzip.dto.MainBoardDto;
-import com.matzip.dto.UsersFormDto;
+import com.matzip.dto.*;
 import com.matzip.entity.Users;
 import com.matzip.repository.UsersRepository;
 import com.matzip.service.BoardService;
@@ -17,20 +14,18 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UsersController {
@@ -41,32 +36,54 @@ public class UsersController {
     private final BoardService boardService;
     private final UsersRepository usersRepository;
 
-    @GetMapping(value = "/new")
-    public String memberForm(Model model) {
-        model.addAttribute("usersFormDto", new UsersFormDto());
-        return "users/usersForm";
-    }
 
+    //회원가입(Rest)
     @PostMapping(value = "/new")
-    public String newUsers(@Valid UsersFormDto usersFormDto, BindingResult bindingResult, Model model,
-                           @RequestParam("userImgFile") MultipartFile userImgFile) {
-
-        if (bindingResult.hasErrors()) {
-            return "users/usersForm";
-        }
-
-        try {
-            Users users = Users.createUsers(usersFormDto, passwordEncoder);
-            usersService.saveUsers(users, userImgFile);
-        } catch (IllegalStateException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "users/usersForm";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return "users/usersLoginForm";
+    public void newUsers(@RequestBody UsersFormDto usersFormDto){
+        Users users = Users.createUsers(usersFormDto, passwordEncoder);
+        usersService.saveUsers(users);
     }
+
+
+    //전체 유저 목록 조회(Rest)
+    @GetMapping("/users")
+    public List<UsersFormDto> findAll(){
+        return usersService.findAll();
+    }
+
+
+
+
+    //로그인(Rest)
+    @PostMapping(value = "/loginCheck")
+    public LoginResponse login(@RequestBody UsersFormDto usersFormDto) {
+        //세션 토큰 정보 담아서 보낼 클래스
+        LoginResponse response = new LoginResponse();
+
+        System.out.println("들어왔니..?");
+        System.out.println("Incomming id : " + usersFormDto.getUserid());
+        System.out.println("Incomming pw : "  + usersFormDto.getUser_pwd().toString());
+
+        //로그인 시도한 유저가 db상 존재한다면 -> user정보 가져오기
+        Users loginUser = usersService.vertifyLogin(usersFormDto.getUserid(),usersFormDto.getUser_pwd(),passwordEncoder);
+
+        //로그인 성공시
+        if(loginUser != null){
+            response.setStatus("success");
+            response.setMessage("Login successful");
+            response.setLoginUser(UsersFormDto.of(loginUser));
+            response.setToken(response.getToken());
+        }else{
+            response.setStatus("fail");
+            response.setMessage("Login failed");
+            response.setLoginUser(null);
+        }
+
+        return response;
+    }
+
+    //----------------------------------------------------------------------------
+
 
     //modUsers폼 호출
     @GetMapping(value = {"/modUsersForm", "/modUsersForm/{pageUserid}"})
@@ -125,16 +142,16 @@ public class UsersController {
     }
 
 
-    @GetMapping(value = "/login")
-    public String loginMember() {
-        return "users/usersLoginForm";
-    }
-
-    @GetMapping(value = "/login/error")
-    public String loginError(Model model) {
-        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
-        return "users/usersLoginForm";
-    }
+//    @GetMapping(value = "/login")
+//    public String loginMember() {
+//        return "users/usersLoginForm";
+//    }
+//
+//    @GetMapping(value = "/login/error")
+//    public String loginError(Model model) {
+//        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
+//        return "users/usersLoginForm";
+//    }
 
     //내 프로필 조회
     @GetMapping(value = {"/profile", "/profile/{pageUserid}"})
@@ -193,12 +210,7 @@ public class UsersController {
         return "users/profileForm";
     }
 
-//    @GetMapping("/users/")
-//    public String findAll(Model model){
-//        List<UsersFormDto> usersFormDtoList = usersService.findAll();
-//        model.addAttribute("usersList",usersFormDtoList);
-//        return "users/usersListForm";
-//    }
+
 
 //    @GetMapping("/delete/{userid}")
 //    public String deleteById(@PathVariable String userid){
@@ -233,21 +245,14 @@ public class UsersController {
     @DeleteMapping("/deleteFollow/{toUserId}")
     public @ResponseBody ResponseEntity<Map<String, Object>> deleteFollow(@PathVariable String toUserId, Principal principal) {
         followService.deleteFollow(toUserId, principal.getName());
-        FollowDto followDto = new FollowDto("a", "b", "c");
         Map<String, Object> result = new HashMap<>();
         result.put("data", toUserId);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
 
     @GetMapping("/insertFollow/{toUserId}")
-    /*@PostMapping("/insertFollow/")*/
     public @ResponseBody ResponseEntity<Map<String, Object>> insertFollow(@PathVariable String toUserId, Principal principal) {
-        System.out.println("팔로우 하기전 ");
         followService.insertFollow(toUserId, principal.getName());
-        System.out.println("팔로우 하기후 ");
-        System.out.println("toUserId 확인: " + toUserId);
-        System.out.println("HttpStatus.OK 확인: " + HttpStatus.OK);
-        FollowDto followDto = new FollowDto("a", "b", "c");
         Map<String, Object> result = new HashMap<>();
         result.put("data", toUserId);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
@@ -277,19 +282,7 @@ public class UsersController {
     }
 
 
-    //    유저 리스트
-    @GetMapping("/admin/userspage/")
-    public String list(Model model, @PageableDefault(size = 6) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
-        // Page<Users> users = usersRepository.findAll(pageable);
-        Page<Users> users = usersRepository.findByUseridContainingOrUsernameContainingOrUserphoneContaining(searchText, searchText, searchText, pageable);
-        int startPage = Math.max(1, users.getPageable().getPageNumber() - 4);
-        int endPage = Math.min(users.getTotalPages(), users.getPageable().getPageNumber() + 4);
 
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("users", users);
-        return "users/usersListForm";
-    }
 
     @GetMapping("/delete/{userid}")
     public String deleteById(@PathVariable String userid) {
@@ -305,4 +298,19 @@ public class UsersController {
         model.addAttribute("users", usersFormDto);
         return "users/usersDetail";
     }
+
+    //유저 리스트(page)
+//    @GetMapping("/admin/userspage/")
+//    public String list(Model model, @PageableDefault(size = 6) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
+//        // Page<Users> users = usersRepository.findAll(pageable);
+//        Page<Users> users = usersRepository.findByUseridContainingOrUsernameContainingOrUserphoneContaining(searchText, searchText, searchText, pageable);
+//        int startPage = Math.max(1, users.getPageable().getPageNumber() - 4);
+//        int endPage = Math.min(users.getTotalPages(), users.getPageable().getPageNumber() + 4);
+//
+//        model.addAttribute("startPage", startPage);
+//        model.addAttribute("endPage", endPage);
+//        model.addAttribute("users", users);
+//        return "users/usersListForm";
+//    }
+
 }
