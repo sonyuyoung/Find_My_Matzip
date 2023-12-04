@@ -25,13 +25,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // 수업 때, 웹 앞단, 히든 ,  csrf 토큰 값을 항상 넣어서 서버에 전달.
-        // 테스트 라서,  csrf 설정임시로 끄고,
-        // 만약, csrf 작업 하고 싶다. 앱, 값 숨겨서 같이 전달해야함.
-        // csrf 사용하거나
-        //  jwt 사용하거나,
-        // sns  인증.
-        http.csrf().disable();
         http.formLogin()
                 .loginPage("/users/login") //사용자 정의 로그인 페이지
                 .defaultSuccessUrl("/") // 로그인 성공 후 이동 페이지
@@ -55,7 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ;
 
         http.authorizeRequests()
-                .mvcMatchers("/**").permitAll()
+                .mvcMatchers("/", "/users/**","/item/**", "/images/**", "/map","/restaurant/main").permitAll()
+                .mvcMatchers("/users/admin/**","/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         ;
 
