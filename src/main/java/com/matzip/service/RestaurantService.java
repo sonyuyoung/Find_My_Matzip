@@ -6,6 +6,7 @@ import com.matzip.entity.RestaurantImg;
 import com.matzip.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,12 +96,9 @@ public class RestaurantService {
     }
 
 
-//    평균 점수를 기준으로 상위 N개의 레스토랑을 가져와 RestaurantDto로 변환하는 메서드를 정의
-    public List<RestaurantDto> getTopNRestaurantsByAvgScore(int n) {
-        // RestaurantRepository를 통해 레스토랑 랭킹을 가져오는 쿼리 실행
-        List<Object[]> ranking = restaurantRepository.findTopNByOrderByAvgScoreDesc(n);
-//        restaurantRepository.findTopNByOrderByAvgScoreDesc(n)를 호출하여 레스토랑의 랭킹을 가져옴
-        // 가져온 데이터를 RestaurantDto로 변환
+    public List<RestaurantDto> getTop3RestaurantsByAvgScore() {
+        Pageable pageable = PageRequest.of(0, 3); // 페이지 0, 사이즈 3인 페이지를 요청
+        List<Object[]> ranking = restaurantRepository.findTopNByOrderByAvgScoreDesc(pageable);
         return convertToRestaurantDtoList(ranking);
     }
 
@@ -108,9 +106,11 @@ public class RestaurantService {
         // 변환 로직 구현
         List<RestaurantDto> restaurantDtoList = new ArrayList<>();
         for (Object[] result : ranking) {
-            restaurantDtoList.add(new RestaurantDto((String) result[0], (String) result[1], (String) result[2],(Double) result[3]));
+            restaurantDtoList.add(new RestaurantDto((String) result[0], (String) result[1], (String) result[2], (Double) result[3]));
         }
         return restaurantDtoList;
     }
+
+
 
 }
