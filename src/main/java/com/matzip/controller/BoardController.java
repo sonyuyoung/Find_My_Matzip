@@ -3,16 +3,21 @@ package com.matzip.controller;
 
 import com.matzip.dto.BoardFormDto;
 import com.matzip.dto.BoardSearchDto;
+import com.matzip.dto.CommentDto;
 import com.matzip.dto.RestaurantFormDto;
 import com.matzip.entity.Board;
 import com.matzip.entity.Restaurant;
 import com.matzip.entity.Users;
 import com.matzip.service.BoardService;
+import com.matzip.service.CommentService;
 import com.matzip.service.RestaurantService;
+import com.matzip.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +39,9 @@ public class BoardController {
 
     private final BoardService boardService;
     private final RestaurantService restaurantService;
+
+    private final CommentService commentService;
+    private final UsersService usersService;
 
     @GetMapping(value = {"/board/new","/board/new/{resId}"})
     public String boardForm(@PathVariable(name ="resId", required = false) String resId,Model model){
@@ -145,16 +154,35 @@ public class BoardController {
     //상품을 가지고 오는 로직을 똑같이 사용
     //-> boardDtl로 가자
     @GetMapping(value = "/board/{boardId}")
-    public String boardDtl(Model model, @PathVariable("boardId") Long boardId){
+    public String boardDtl(Model model, @PathVariable("boardId") Long boardId,
+                           @AuthenticationPrincipal User user,
+                           @RequestParam(required = false, defaultValue = "0") int page, Principal principal){
 
         BoardFormDto boardFormDto = boardService.getBoardDtl(boardId);
         Users users = boardService.getUserByCreated(boardFormDto.getUser_id());
         System.out.println("boardFormDto.getResId() : "+boardFormDto.getResId());
         Restaurant restaurant = boardService.getBoardByResId(boardFormDto.getResId());
 
+        // 댓글 관련 정보 가져오기
+        Pageable pageable = PageRequest.of(0, 5); // 여기서 5는 한 페이지에 보여줄 댓글 수를 나타냄
+        Page<CommentDto> commentsPage = commentService.findCommentsByBoardId(boardId, pageable);
+        model.addAttribute("commentsPage", commentsPage);
+
         model.addAttribute("users",users);
         model.addAttribute("board", boardFormDto);
         model.addAttribute("restaurant", restaurant);
+
+        // 로그인한 사용자 정보를 가져와서 모델에 추가
+//        if (user == null) {
+//            Users loggedInUser = usersService.findByUserId(user.getUsername());
+//            model.addAttribute("loggedInUser", loggedInUser);
+//        }
+// 로그인한 사용자 정보를 가져와서 모델에 추가
+        if (user != null) {
+            Users loggedInUser = usersService.findByUserId(principal.getName());
+            model.addAttribute("loggedInUser", loggedInUser);
+        }
+
         System.out.println("------------------------------" + restaurant.getResId());
         System.out.println("------------------------------" + restaurant.getResId());
         System.out.println("------------------------------" + restaurant.getResId());
@@ -164,6 +192,7 @@ public class BoardController {
 
         return "board/boardDtl";
     }
+
 
     @GetMapping("/admin/board/delete/{boardId}")
     public String deleteBoard(@PathVariable Long boardId, Model model) {

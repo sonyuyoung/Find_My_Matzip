@@ -7,6 +7,80 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        /*<![CDATA[*/
+        var userName = /*[[${loggedInUser.userid}]]*/ 'defaultUserName';
+        console.log('userName:', userName);
+
+        const commentWrite = () => {
+            const contents = document.getElementById("commentContents").value;
+            const id = [[${board.id}]];
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+
+            console.log("Data to be sent:", {
+                "commentWriter": userName,
+                "commentContents": contents,
+                "board": id
+            });
+
+            $.ajax({
+                type: "post",
+                url: "/comment/save",
+                contentType: "application/json",  // Content-Type 변경
+                data: JSON.stringify({
+                    "commentWriter": userName,
+                    "commentContents": contents,
+                    "boardId": id
+                }),
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                success: function (res) {
+                    console.log("요청성공", res);
+
+                    // 새로운 댓글만 테이블에 추가.
+                    addCommentToTable(res);
+
+                    document.getElementById('commentContents').value = '';
+                },
+                error: function (err) {
+                    console.log("요청실패", err);
+                    if(err.status === 401) {
+                        alert('로그인이 필요합니다.');
+                    }
+                }
+            });
+        }
+
+        //리뷰 테이블 한 행씩 추가하기위한 스크립트
+        const addCommentToTable = (comment) => {
+            const table = document.getElementById('comment-list');
+            // insertRow(-1); = 테이블 젤 위에 행이 생성이 됨
+            // insertRow(0); = 테이블 젤 아래에 행이 생성이 됨
+            const newRow = table.insertRow(0);
+
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+
+
+            cell1.innerHTML = comment.commentWriter;
+            cell2.innerHTML = comment.commentContents;
+            cell3.innerHTML = `<a href="/comment/edit/${comment.id}">수정</a>`;
+            cell4.innerHTML = `<a href="/comment/delete/${comment.id}" class="btn btn-danger">삭제</a>`;
+        };
+
+        function confirmDelete() {
+            return window.confirm('정말로 이 댓글을 삭제하시겠습니까?');
+        }
+
+    </script>
+</th:block>
 
 <!-- 사용자 스크립트 추가 합계금액 계산기인데 우린 필요없을거같음 -->
 <!--<th:block layout:fragment="script">-->
@@ -187,6 +261,51 @@
                 </div>
             </div>
         </div>
+        <!-- 댓글 -->
+        <div id="review" class="info-block">
+            <h4>댓글</h4>
+            <div>
+                <div id="comment-write">
+                    <p class="reviewer"><span>작성자</span> : <span th:text="${loggedInUser.userid}"></span></p>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Review</span>
+                        </div>
+                        <textarea class="form-control" aria-label="With textarea" id="commentContents" placeholder="리뷰를 적어 주세요."></textarea>
+                    </div>
+                    <button id="comment-write-btn" onclick="commentWrite()" class="btn btn-dark">댓글작성</button>
+                </div>
+
+                <table class="table center">
+                    <thead id="comment-list_1">
+                    <tr>
+                        <th>작성자</th>
+                        <th>내용</th>
+                        <th>작업</th>
+                        <th>작업</th>
+                    </tr>
+                    </thead>
+                    <tbody id="comment-list">
+                    <tr th:each="comment : ${commentsPage.content}">
+                        <td th:text="${comment.commentWriter}"></td>
+                        <td th:text="${comment.commentContents}"></td>
+                        <td>
+                            <!--로그인을 한 유저, 로그인을 한 유저의 name 과 commentWriter가 일치하면 수정버튼 활성화-->
+                            <a th:if="${users != null and comment.commentWriter == loggedInUser.userid}"
+                               th:href="@{/comment/edit/{commentId}(commentId=${comment.id})}">수정</a>
+                        </td>
+                        <td>
+                            <!-- 로그인한 사용자와 댓글 작성자가 일치하면 삭제 버튼 표시 -->
+                            <a th:if="${users != null and comment.commentWriter == loggedInUser.userid}"
+                               th:href="@{/comment/delete/{commentId}(commentId=${comment.id})}"
+                               class="btn btn-danger delete-comment"
+                               data-comment-id="${comment.id}"
+                               onclick="return confirmDelete()">삭제</a>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
     </div>
 </div>
 
