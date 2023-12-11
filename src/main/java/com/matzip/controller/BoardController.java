@@ -1,17 +1,12 @@
 package com.matzip.controller;
 
 
-import com.matzip.dto.BoardFormDto;
-import com.matzip.dto.BoardSearchDto;
-import com.matzip.dto.CommentDto;
-import com.matzip.dto.RestaurantFormDto;
+import com.matzip.dto.*;
 import com.matzip.entity.Board;
+import com.matzip.entity.Feeling;
 import com.matzip.entity.Restaurant;
 import com.matzip.entity.Users;
-import com.matzip.service.BoardService;
-import com.matzip.service.CommentService;
-import com.matzip.service.RestaurantService;
-import com.matzip.service.UsersService;
+import com.matzip.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +37,7 @@ public class BoardController {
 
     private final CommentService commentService;
     private final UsersService usersService;
+    private final FeelingService feelingService;
 
     @GetMapping(value = {"/board/new","/board/new/{resId}"})
     public String boardForm(@PathVariable(name ="resId", required = false) String resId,Model model){
@@ -168,20 +164,33 @@ public class BoardController {
         Page<CommentDto> commentsPage = commentService.findCommentsByBoardId(boardId, pageable);
         model.addAttribute("commentsPage", commentsPage);
 
+
+        //현재 로그인된 user의 userDto
+        String loginUserId = principal.getName();
+        UsersFormDto loginUserDto = usersService.findById(loginUserId);
+
+        //좋아요 & 싫어요 갯수
+        int likeCount = feelingService.countFeeling(boardFormDto.getId(),1);
+        int dislikeCount = feelingService.countFeeling(boardFormDto.getId(),-1);
+
+        //내 좋아요, 싫어요 표시 여부
+        Feeling myFeeling = feelingService.getFeeling(boardFormDto.getId(),principal.getName());
+
+
+
         model.addAttribute("users",users);
         model.addAttribute("board", boardFormDto);
         model.addAttribute("restaurant", restaurant);
+        model.addAttribute("loginUserDto", loginUserDto);
+        model.addAttribute("likeCount",likeCount);
+        model.addAttribute("dislikeCount",dislikeCount);
+        model.addAttribute("myFeeling",myFeeling);
 
-        // 로그인한 사용자 정보를 가져와서 모델에 추가
-//        if (user == null) {
-//            Users loggedInUser = usersService.findByUserId(user.getUsername());
+// 로그인한 사용자 정보를 가져와서 모델에 추가
+//        if (user != null) {
+//            Users loggedInUser = usersService.findByUserId(principal.getName());
 //            model.addAttribute("loggedInUser", loggedInUser);
 //        }
-// 로그인한 사용자 정보를 가져와서 모델에 추가
-        if (user != null) {
-            Users loggedInUser = usersService.findByUserId(principal.getName());
-            model.addAttribute("loggedInUser", loggedInUser);
-        }
 
         System.out.println("------------------------------" + restaurant.getResId());
         System.out.println("------------------------------" + restaurant.getResId());

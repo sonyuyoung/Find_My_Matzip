@@ -12,6 +12,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ch6-test1" target="11" />
+      <module name="find_My_Matzip" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

@@ -12,7 +12,7 @@
     <script th:inline="javascript">
 
         /*<![CDATA[*/
-        var userName = /*[[${loggedInUser.userid}]]*/ 'defaultUserName';
+        var userName = /*[[${loginUserDto.userid}]]*/ 'defaultUserName';
         console.log('userName:', userName);
 
         const commentWrite = () => {
@@ -36,7 +36,7 @@
                     "commentContents": contents,
                     "boardId": id
                 }),
-                beforeSend: function(xhr){
+                beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
                 },
                 success: function (res) {
@@ -49,7 +49,7 @@
                 },
                 error: function (err) {
                     console.log("요청실패", err);
-                    if(err.status === 401) {
+                    if (err.status === 401) {
                         alert('로그인이 필요합니다.');
                     }
                 }
@@ -77,6 +77,43 @@
 
         function confirmDelete() {
             return window.confirm('정말로 이 댓글을 삭제하시겠습니까?');
+        }
+
+
+        //좋아요 & 싫어요 기능
+        function setFeeling(obj,feel_num) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            console.log("feel_num : "+feel_num);
+
+            var boardId = obj.dataset.id;
+            var url = "/setFeeling/"+boardId+"/"+feel_num;
+
+            $.ajax({
+                url      : url,
+                type     : "GET",
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    console.log("동작 여부 확인: 감정표현 ")
+
+                    location.reload();
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        console.log("동작 여부 확인: 좋아요 에러부분")
+                    }
+
+                }
+            });
         }
 
     </script>
@@ -135,17 +172,19 @@
             width: 50%;
         }
 
-        .profile{
+        .profile {
             display: flex;
             align-items: center; /* 세로 중앙 정렬 */
         }
-        .box{
+
+        .box {
             width: 50px;
             height: 50px;
             border-radius: 70%;
             overflow: hidden;
         }
-        .box_margin{
+
+        .box_margin {
             margin: 10px;
         }
     </style>
@@ -177,13 +216,13 @@
                             비밀글 여기다가 뭐넣을까
                         </span>
                         <div class="profile">
-                            <div class ="box_margin">
+                            <div class="box_margin">
                                 <div class="box">
                                     <img th:src="${users.user_image}" width=50 height=50
                                          alt="profile_img">
                                 </div>
                             </div>
-                            <div class = "detail">
+                            <div class="detail">
                                 <a th:href="@{/users/profile/{id}(id = ${users.userid})}"
                                    th:text="${users.userid}"></a>
                             </div>
@@ -199,9 +238,48 @@
                                 <input type="hidden" th:value="${board.score}" id="score" name="score">
                                 <span th:text="${board.score}"></span>점
                             </div>
+
+                            <th:block th:switch="*{users.userid}">
+                                <!--내가 쓴 글-->
+                                <div th:case="${loginUserDto.getUserid()}">
+                                    <button type="button" onClick="" class="btn btn-secondary">👍 <span th:text="${likeCount}"></span></button>
+                                    <button type="button" onClick="" class="btn btn-secondary">👎 <span th:text="${dislikeCount}"></span></button>
+                                </div>
+
+                                <!--다른사람 게시글-->
+                                <div th:case="*">
+                                    <!--감정표현 한 적 없다면-->
+                                    <div th:if="${myFeeling == null}">
+                                        <button type="button" th:data-id="${board.getId()}" onClick="setFeeling(this, 1)" class="btn btn-secondary">
+                                            👍 <span th:text="${likeCount}"></span>
+                                        </button>
+                                        <button type="button" th:data-id="${board.getId()}" onClick="setFeeling(this, -1)" class="btn btn-secondary">
+                                            👎 <span th:text="${dislikeCount}"></span>
+                                        </button>
+                                    </div>
+                                    <!--감정표현 한 적 있다면-->
+                                    <div th:if="${myFeeling != null}">
+                                        <th:block th:switch="${myFeeling.getFeel_num()}">
+                                            <!--이미 좋아요 상태일 경우-->
+                                            <div th:case=1>
+                                                <button type="button" th:data-id="${board.getId()}"
+                                                        onClick="setFeeling(this,1)" class="btn btn-danger">👍 <span th:text="${likeCount}"></span></button>
+                                                <button type="button" th:data-id="${board.getId()}"
+                                                        onClick="setFeeling(this,-1)" class="btn btn-secondary">👎 <span th:text="${dislikeCount}"></span></button>
+                                            </div>
+                                            <!--이미 싫어요 상태일 경우-->
+                                            <div th:case=-1>
+                                                <button type="button" th:data-id="${board.getId()}"
+                                                        onClick="setFeeling(this,1)" class="btn btn-secondary">👍 <span th:text="${likeCount}"></span></button>
+                                                <button type="button" th:data-id="${board.getId()}"
+                                                        onClick="setFeeling(this,-1)" class="btn btn-danger">👎 <span th:text="${dislikeCount}"></span></button>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </th:block>
                         </div>
                         <hr class="my-4">
-<!--                        점수 밑에 하나 추가해야함-->
                     </div>
                 </div>
 
@@ -247,7 +325,8 @@
                             </div>
                         </div>
                         <div>
-                            <a th:href="@{|/board/new/${restaurant.resId}|}" class="btn btn-primary btn-sm" th:alt="${restaurant.resId}">리뷰작성</a>
+                            <a th:href="@{|/board/new/${restaurant.resId}|}" class="btn btn-primary btn-sm"
+                               th:alt="${restaurant.resId}">리뷰작성</a>
                         </div>
                     </div>
                 </div>
@@ -266,12 +345,13 @@
             <h4>댓글</h4>
             <div>
                 <div id="comment-write">
-                    <p class="reviewer"><span>작성자</span> : <span th:text="${loggedInUser.userid}"></span></p>
+                    <p class="reviewer"><span>작성자</span> : <span th:text="${loginUserDto.userid}"></span></p>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Review</span>
                         </div>
-                        <textarea class="form-control" aria-label="With textarea" id="commentContents" placeholder="리뷰를 적어 주세요."></textarea>
+                        <textarea class="form-control" aria-label="With textarea" id="commentContents"
+                                  placeholder="리뷰를 적어 주세요."></textarea>
                     </div>
                     <button id="comment-write-btn" onclick="commentWrite()" class="btn btn-dark">댓글작성</button>
                 </div>
@@ -291,12 +371,12 @@
                         <td th:text="${comment.commentContents}"></td>
                         <td>
                             <!--로그인을 한 유저, 로그인을 한 유저의 name 과 commentWriter가 일치하면 수정버튼 활성화-->
-                            <a th:if="${users != null and comment.commentWriter == loggedInUser.userid}"
+                            <a th:if="${users != null and comment.commentWriter == loginUserDto.userid}"
                                th:href="@{/comment/edit/{commentId}(commentId=${comment.id})}">수정</a>
                         </td>
                         <td>
                             <!-- 로그인한 사용자와 댓글 작성자가 일치하면 삭제 버튼 표시 -->
-                            <a th:if="${users != null and comment.commentWriter == loggedInUser.userid}"
+                            <a th:if="${users != null and comment.commentWriter == loginUserDto.userid}"
                                th:href="@{/comment/delete/{commentId}(commentId=${comment.id})}"
                                class="btn btn-danger delete-comment"
                                data-comment-id="${comment.id}"
@@ -306,6 +386,8 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
     </div>
 </div>
 
