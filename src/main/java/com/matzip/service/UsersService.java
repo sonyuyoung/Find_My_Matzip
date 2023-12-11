@@ -142,4 +142,7 @@ public class UsersService implements UserDetailsService {
         Users users = Users.aboutUsers(usersFormDto);
         usersRepository.save(users);
     }
+    public Users findByUserId(String userid) {
+        return usersRepository.findByUserid(userid);
+    }
 }
