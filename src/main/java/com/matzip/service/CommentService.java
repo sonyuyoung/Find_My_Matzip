@@ -43,21 +43,7 @@ public class CommentService {
         Comment comment = Comment.toSaveEntity(commentDto, board, null);
         return commentRepository.save(comment).getCommentId();
     }
-    //    public Long saveReply(CommentDto commentDto, Long parentId) {
-//        Comment parentComment = null;
-//
-//        // parentId가 null이 아니면 부모 댓글을 찾음
-//        if (parentId != null) {
-//            parentComment = commentRepository.findById(parentId)
-//                    .orElseThrow(() -> new IllegalArgumentException("부모 댓글을 찾을 수 없습니다."));
-//        }
-//
-//        Board board = boardRepository.findById(commentDto.getBoardId())
-//                .orElseThrow(() -> new IllegalArgumentException("Board not found for id: " + commentDto.getBoardId()));
-//
-//        Comment reply = Comment.toSaveEntity(commentDto, board, parentComment);
-//        return commentRepository.save(reply).getCommentId();
-//    }
+
     //saveReply() 메서드는 부모 댓글이 있는 경우 호출 대댓글 저장에 관련된 로직을 담당
     public Long saveReply(CommentDto commentDto) {
         Board board = boardRepository.findById(commentDto.getBoardId())
@@ -90,37 +76,6 @@ public class CommentService {
         return optionalComment.orElse(null);
     }
 
-    //
-//    public Long save(CommentDto commentDto) {
-//        // 부모 댓글이 있는 경우 해당 댓글을 찾아서 설정
-//        Comment parentComment = null;
-//        if (commentDto.getParentId() != null) {
-//            parentComment = commentRepository.findById(commentDto.getParentId())
-//                    .orElseThrow(() -> new IllegalArgumentException("부모 댓글을 찾을 수 없습니다."));
-//        }
-//
-//        Optional<Board> optionalBoard = boardRepository.findById(commentDto.getBoardId());
-//        if (optionalBoard.isPresent()) {
-//            Board board = optionalBoard.get();
-//            Comment comment = Comment.toSaveEntity(commentDto, board, parentComment);
-//            return commentRepository.save(comment).getId();
-//        } else {
-//            throw new IllegalArgumentException("Board not found for id: " + commentDto.getBoardId());
-//        }
-//    }
-//    public Long saveReply(CommentDto commentDto, Long parentId) {
-//        Comment parent = commentRepository.findById(parentId)
-//                .orElseThrow(() -> new IllegalArgumentException("부모 댓글을 찾을 수 없습니다."));
-//
-//        Optional<Board> optionalBoard = boardRepository.findById(commentDto.getBoardId());
-//        if (optionalBoard.isPresent()) {
-//            Board board = optionalBoard.get();
-//            Comment reply = Comment.toSaveEntity(commentDto, board ,parent);
-//            return commentRepository.save(reply).getId();
-//        } else {
-//            throw new IllegalArgumentException("Board not found for id: " + commentDto.getBoardId());
-//        }
-//    }
     public CommentDto findById(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
@@ -135,16 +90,6 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-//    public List<CommentDto> findAll(Long boardId) {
-//        Board board = boardRepository.findById(boardId).get();
-//        List<Comment> commentEntityList = commentRepository.findAllByBoardOrderByIdDesc(board);
-//        List<CommentDto> commentDtoList = new ArrayList<>();
-//        for (Comment comment : commentEntityList) {
-//            CommentDto commentDto = CommentDto.toCommentDto(comment, boardId);
-//            commentDtoList.add(commentDto);
-//        }
-//        return commentDtoList;
-//    }
 
     public CommentDto findById(Long commentId, Long boardId) {
         Comment comment = commentRepository.findById(commentId)
@@ -160,28 +105,6 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    // 수정 메서드
-//    public CommentDto update(Long id, CommentDto commentDto,Comment parentComment) throws Exception {
-//        Comment comment = commentRepository.findById(id)
-//                .orElseThrow(() -> new Exception("Comment not found"));
-//        comment.update(commentDto,parentComment);
-//        commentRepository.save(comment);
-//        return CommentDto.fromEntity(comment);
-//    }
-//    public CommentDto update(Long id, CommentDto commentDto, Long parentCommentId) throws Exception {
-//        Comment comment = commentRepository.findById(id)
-//                .orElseThrow(() -> new Exception("Comment not found"));
-//
-//        Comment parentComment = null;
-//        if (parentCommentId != null) {
-//            parentComment = commentRepository.findById(parentCommentId)
-//                    .orElseThrow(() -> new IllegalArgumentException("Parent comment not found"));
-//        }
-//
-//        comment.update(commentDto);
-//        commentRepository.save(comment);
-//        return CommentDto.fromEntity(comment);
-//    }
 
     public CommentDto update(Long commentId, CommentDto commentDto, Long parentCommentId) throws Exception {
         Comment comment = commentRepository.findById(commentId)

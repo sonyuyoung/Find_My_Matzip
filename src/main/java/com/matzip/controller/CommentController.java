@@ -67,20 +67,6 @@ public class CommentController {
             return new ResponseEntity<>("부모 댓글을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
     }
-//@PostMapping("/comment/saveReply/{parentId}")
-//public ResponseEntity<?> saveReply(@RequestBody CommentDto commentDto, @PathVariable Long parentId) {
-//    CommentDto commentDtoList = new CommentDto();
-//    commentDtoList.setCommentWriter(commentDto.getCommentWriter());
-//    commentDtoList.setCommentContents(commentDto.getCommentContents());
-//    commentDtoList.setParentId(parentId); // 부모 댓글의 ID를 설정
-//    Long commentId = commentService.saveReply(commentDtoList); // 부모 댓글 ID를 가진 대댓글을 저장
-//    if (commentId != null) {
-//        CommentDto savedReply = commentService.findById(commentId);
-//        return new ResponseEntity<>(savedReply, HttpStatus.OK);
-//    } else {
-//        return new ResponseEntity<>("부모 댓글을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
-//    }
-//}
 
     //부모 댓글의 ID와 연결된 자식 댓글들을 가져오고 있으며,
     // 이를 해당 댓글에 설정하여 반환하는 것
@@ -109,16 +95,6 @@ public class CommentController {
         }
     }
 
-    //    @GetMapping("/comment/edit/{commentId}")
-//    public String editComment(@PathVariable Long commentId, Model model) {
-//        CommentDto commentDto = commentService.findById(commentId);
-//        model.addAttribute("comment", commentDto);
-//        Long boardId = commentDto.getBoardId();  // assuming CommentDTO has getItemId() method
-//        List<CommentDto> comments = commentService.findByBoardId(boardId);
-//        model.addAttribute("comments", comments);
-//
-//        return "editComment";
-//    }
     // 리뷰 화면
     @GetMapping("/comment/edit/{commentId}")
     public String editComment(@PathVariable Long commentId, Model model) {
