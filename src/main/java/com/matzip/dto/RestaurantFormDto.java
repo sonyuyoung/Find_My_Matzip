@@ -54,26 +54,32 @@ public class RestaurantFormDto {
     private String res_intro; //가게 소개
 
 
-
-    //2. 리뷰 이미지 입력 부분
-    private List<RestaurantImgDto> restaurantImgDtoList = new ArrayList<>();
-
-    private List<Long> restaurantImgIds = new ArrayList<>();
-
-    //모델 매퍼 선언
     private static ModelMapper modelMapper = new ModelMapper();
 
-    //폼 데이터 자동 매핑 -> Restaurant객체 생성
     public Restaurant createRestaurant(){
-        System.out.println("RestaurantFormDto/createRestaurant 넘어오는거까지는성공");
-        Restaurant restaurant = modelMapper.map(this, Restaurant.class);
-        System.out.println("modelMapper.map(this, Restaurant.class); 수행 후~~~~~================");
-        return restaurant;
+        return modelMapper.map(this, Restaurant.class);
     }
 
-    //restaurant객체를 restaurantFormDto로 변환 : service에서 data 전달 시 이용
     public static RestaurantFormDto of(Restaurant restaurant){
-        return modelMapper.map(restaurant, RestaurantFormDto.class);
+        return modelMapper.map(restaurant,RestaurantFormDto.class);
+    }
+
+    public static RestaurantFormDto toRestaurantDto(Restaurant restaurant){
+        RestaurantFormDto restaurantFormDto =new RestaurantFormDto();
+        restaurantFormDto.setResId(restaurant.getResId());
+        restaurantFormDto.setRes_name(restaurant.getRes_name());
+        restaurantFormDto.setRes_district(restaurant.getRes_district());
+        restaurantFormDto.setRes_lat(restaurant.getRes_lat());
+        restaurantFormDto.setRes_lng(restaurant.getRes_lng());
+        restaurantFormDto.setRes_address(restaurant.getRes_address());
+        restaurantFormDto.setRes_phone(restaurant.getRes_phone());
+        restaurantFormDto.setOperate_time(restaurant.getRes_phone());
+        restaurantFormDto.setRes_menu(restaurant.getRes_menu());
+        restaurantFormDto.setRes_image(restaurant.getRes_image());
+        restaurantFormDto.setRes_thumbnail(restaurant.getRes_thumbnail());
+        restaurantFormDto.setRes_intro(restaurant.getRes_intro());
+
+        return restaurantFormDto;
     }
 
 }

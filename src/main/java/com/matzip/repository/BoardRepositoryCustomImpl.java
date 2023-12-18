@@ -3,6 +3,7 @@ package com.matzip.repository;
 
 import com.matzip.constant.BoardViewStatus;
 import com.matzip.dto.*;
+import com.matzip.dto.QMainBoardDto;
 import com.matzip.entity.Board;
 import com.matzip.entity.QBoard;
 import com.matzip.entity.QBoardImg;
