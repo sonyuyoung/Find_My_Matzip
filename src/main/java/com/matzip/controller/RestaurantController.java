@@ -62,7 +62,6 @@ public class RestaurantController {
 ////            System.out.println("restaurantFormDto 내용 확인: "+ restaurantFormDto.getRestaurantImgDtoList().get(0).getImgName());
 ////            System.out.println("restaurantFormDto 내용 확인: "+ restaurantFormDto.getRestaurantImgDtoList().get(0).getImgUrl());
 //            System.out.println("restaurantFormDto 내용 확인: =======================================");
-            restaurantService.saveRestaurant(restaurantFormDto, restaurantImgFileList);
 
         } catch (Exception e){
             model.addAttribute("errorMessage", "리뷰 등록 중 에러가 발생하였습니다.");
