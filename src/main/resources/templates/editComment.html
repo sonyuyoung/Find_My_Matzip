@@ -76,8 +76,8 @@
     <div class="center-wrapper">
         <div class="content-box">
             <h1>댓글 수정</h1>
-            <form action="/comment/update/{commentId}" method="post" th:object="${comment}" th:action="@{/comment/update/{commentId}(commentId=${comment.id})}" th:method="post">
-                <input type="hidden" th:field="*{id}">
+            <form action="/comment/update/{commentId}" method="post" th:object="${comment}" th:action="@{/comment/update/{commentId}(commentId=${comment.commentId})}" th:method="post">
+                <input type="hidden" th:field="*{commentId}">
                 <label for="commentContents">내용:</label>
                 <textarea id="commentContents" th:field="*{commentContents}" required></textarea>
                 <button type="submit">저장</button>
@@ -85,6 +85,7 @@
             <a href="/board/{boardId}">취소</a>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>
