@@ -185,13 +185,10 @@ public class BoardController {
         model.addAttribute("likeCount",likeCount);
         model.addAttribute("dislikeCount",dislikeCount);
         model.addAttribute("myFeeling",myFeeling);
-
-// 로그인한 사용자 정보를 가져와서 모델에 추가
-//        if (user != null) {
-//            Users loggedInUser = usersService.findByUserId(principal.getName());
-//            model.addAttribute("loggedInUser", loggedInUser);
-//        }
-
+        if (user != null) {
+            Users loggedInUser = usersService.findByUserId(principal.getName());
+            model.addAttribute("loggedInUser", loggedInUser);
+        }
         System.out.println("------------------------------" + restaurant.getResId());
         System.out.println("------------------------------" + restaurant.getResId());
         System.out.println("------------------------------" + restaurant.getResId());
