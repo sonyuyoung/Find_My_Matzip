@@ -151,7 +151,6 @@ public class BoardController {
     //-> boardDtl로 가자
     @GetMapping(value = "/board/{boardId}")
     public String boardDtl(Model model, @PathVariable("boardId") Long boardId,
-                           @AuthenticationPrincipal User user,
                            @RequestParam(required = false, defaultValue = "0") int page, Principal principal){
 
         BoardFormDto boardFormDto = boardService.getBoardDtl(boardId);
@@ -165,10 +164,6 @@ public class BoardController {
         model.addAttribute("commentsPage", commentsPage);
 
 
-        //현재 로그인된 user의 userDto
-        String loginUserId = principal.getName();
-        UsersFormDto loginUserDto = usersService.findById(loginUserId);
-
         //좋아요 & 싫어요 갯수
         int likeCount = feelingService.countFeeling(boardFormDto.getId(),1);
         int dislikeCount = feelingService.countFeeling(boardFormDto.getId(),-1);
@@ -176,19 +171,18 @@ public class BoardController {
         //내 좋아요, 싫어요 표시 여부
         Feeling myFeeling = feelingService.getFeeling(boardFormDto.getId(),principal.getName());
 
+        //로그인된 User
+        Users loggedInUser = usersService.findByUserId(principal.getName());
 
 
         model.addAttribute("users",users);
         model.addAttribute("board", boardFormDto);
         model.addAttribute("restaurant", restaurant);
-        model.addAttribute("loginUserDto", loginUserDto);
         model.addAttribute("likeCount",likeCount);
         model.addAttribute("dislikeCount",dislikeCount);
         model.addAttribute("myFeeling",myFeeling);
-        if (user != null) {
-            Users loggedInUser = usersService.findByUserId(principal.getName());
-            model.addAttribute("loggedInUser", loggedInUser);
-        }
+        model.addAttribute("loggedInUser", loggedInUser);
+
         System.out.println("------------------------------" + restaurant.getResId());
         System.out.println("------------------------------" + restaurant.getResId());
         System.out.println("------------------------------" + restaurant.getResId());

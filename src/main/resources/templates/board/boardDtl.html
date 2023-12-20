@@ -12,7 +12,7 @@
     <script th:inline="javascript">
 
         /*<![CDATA[*/
-        var userName = /*[[${loginUserDto.userid}]]*/ 'defaultUserName';
+        var userName = /*[[${loggedInUser.userid}]]*/ 'defaultUserName';
         console.log('userName:', userName);
 
         const commentWrite = (parentId) => {
@@ -251,6 +251,16 @@
         .box_margin {
             margin: 10px;
         }
+        .comment_img{
+            display: flex;
+            align-items: center; /* 세로 중앙 정렬 */
+            width: 50px;
+            height: 50px;
+            border-radius: 70%;
+            overflow: hidden;
+            background: #1F5D5E;
+            margin: 10px;
+        }
     </style>
 </th:block>
 
@@ -305,7 +315,7 @@
 
                             <th:block th:switch="*{users.userid}">
                                 <!--내가 쓴 글-->
-                                <div th:case="${loginUserDto.getUserid()}">
+                                <div th:case="${loggedInUser.getUserid()}">
                                     <button type="button" onClick="" class="btn btn-secondary">👍 <span th:text="${likeCount}"></span></button>
                                     <button type="button" onClick="" class="btn btn-secondary">👎 <span th:text="${dislikeCount}"></span></button>
                                 </div>
@@ -446,14 +456,22 @@
                                class="btn btn-danger delete-comment"
                                data-comment-id="${comment.commentId}"
                                onclick="return confirmDelete()">삭제</a>
+                        <td>
                             <!-- 대댓글 폼 -->
-
-                            <p class="reviewer"><span>작성자</span> : <span id="replyForm-${comment.commentId}" th:text="${loggedInUser.userid}"></span>
-                            <p>Comment ID: <span th:text="${comment.commentId}"></span></p>
-                            <!--                                <textarea id="replyContents-${comment.commentId}-${someUniqueValue}" placeholder="답글을 작성하세요"></textarea>-->
-                            <textarea class="form-control" id="replyContents-${comment.commentId}"rows="3" placeholder="대댓글을 작성하세요"></textarea>
+                            <div id="comment-list2" style="display: flex; align-items: center;">
+                                <div class="comment_img">
+                                    <img th:src="${users.user_image}" alt="profile_img">
+                                </div>
+                                <div class="comment_user"  th:text="${loggedInUser.userid}"></div>
+                            </div>
+                            <!--                                        <p>Comment ID: <span th:text="${comment.commentId}"></span></p>-->
+                            <textarea class="form-control" style="margin-bottom: 10px" id="replyContents-${comment.commentId}"rows="3" placeholder="대댓글을 작성하세요"></textarea>
                             <button th:onclick="submitReply(/*[[${comment.commentId}]]*/ + '${comment.commentId}')">대댓글</button>
+                            <!-- 대댓글이 추가될 위치 -->
+                            <!--                            <div class="reply-container" th:id="'replyContainer-' + ${comment.commentId}"></div>-->
 
+
+                        </td>
 
                         </td>
                     </tr>
